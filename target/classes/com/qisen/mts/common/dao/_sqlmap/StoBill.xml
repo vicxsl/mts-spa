@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.sto.StoBillDao">
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.sto.Bill">
+		<selectKey resultType="Integer" order="BEFORE" keyProperty="id">
+			SELECT SEQ_STO_BILL.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			insert into sto_bill(id,eid,sid,no,day,handler,empid,outsid,insid,num,money,btype,stype,remark,optid,optname,status,billid) 
+			values(#{id},#{eid},#{sid},#{no},#{day},#{handler},#{empId},#{outSid},#{inSid},#{num},#{money},#{bType},#{sType},#{remark},#{optId},#{optName},1,#{billId})
+		]]>
+	</insert>
+	<insert id="createDetails"
+		parameterType="com.qisen.mts.common.model.entity.sto.BillWithDetails">
+		INSERT INTO
+		STO_BILL_DETAIL(ID，EID，BILLID，DAY，OUTSID，INSID，ITEMID,ITEMNO，NUM，MONEY，BTYPE，STYPE，STATUS，INPRICE)
+		SELECT SEQ_STO_BILL_DETAIL.NEXTVAL,A.* FROM(
+		<foreach collection="items" item="item" index="index"
+			separator="UNION">
+			SELECT
+			#{eid},#{id},#{day},#{outSid},#{inSid},#{item.itemId},#{item.itemNo},#{item.num},#{item.money},#{bType},#{sType},1,#{item.inPrice}
+			FROM DUAL
+		</foreach>
+		) A
+	</insert>
+
+	<update id="cancel4Sale">
+		<![CDATA[
+			update sto_bill set status = 0 where eid = #{eid} and billid = #{billId}
+		]]>
+	</update>
+
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.sto.Bill">
+		<![CDATA[
+			update sto_bill 
+		]]>
+		<trim prefix="SET" suffixOverrides="," suffix="WHERE id = #{id}">
+			<if test="no != null"> 
+	    		<![CDATA[no=#{no},]]>
+			</if>
+			<if test="day != null">
+				day=#{day},
+			</if>
+			<if test="handler != null"> 
+	    		<![CDATA[
+	    			handler=#{handler},
+	    		]]>
+			</if>
+			<if test="empId != null"> 
+	    		<![CDATA[
+	    			empid=#{empId},
+	    		]]>
+			</if>
+			<if test="num != null"> 
+	    		<![CDATA[
+	    			num=#{num},
+	    		]]>
+			</if>
+			<if test="money != null"> 
+	    		<![CDATA[
+	    			money=#{money},
+	    		]]>
+			</if>
+			<if test="bType != null"> 
+	    		<![CDATA[
+	    			btype=#{bType},
+	    		]]>
+			</if>
+			<if test="sType != null"> 
+	    		<![CDATA[
+	    			stype=#{sType},
+	    		]]>
+			</if>
+			<if test="remark != null"> 
+	    		<![CDATA[
+	    			remark=#{remark},
+	    		]]>
+			</if>
+			<if test="optId != null"> 
+	    		<![CDATA[
+	    			optid=#{optId},
+	    		]]>
+			</if>
+			<if test="optName != null"> 
+	    		<![CDATA[
+	    			optname=#{optName},
+	    		]]>
+			</if>
+			<if test="examId != null"> 
+	    		<![CDATA[
+	    			examid=#{examId},
+	    		]]>
+			</if>
+			<if test="examName != null"> 
+	    		<![CDATA[
+	    			examname=#{examName},
+	    		]]>
+			</if>
+			<if test="status != null"> 
+	    		<![CDATA[
+	    			status=#{status},
+	    		]]>
+			</if>
+			<if test="billId != null"> 
+	    		<![CDATA[
+	    			billid=#{billId},
+	    		]]>
+			</if>
+		</trim>
+	</update>
+
+	<select id="listCounts" parameterType="com.qisen.mts.common.model.request.PageRequest"
+		resultType="com.qisen.mts.common.model.response.StoBillListResponse">
+		SELECT COUNT(ID) totalCount,SUM(MONEY) totalMoney FROM STO_BILL
+		<where>
+			EID = #{eid}
+			<if test="body.startDate != null">
+				<![CDATA[
+					AND DAY >= #{body.startDate}
+				]]>
+			</if>
+			<if test="body.endDate != null">
+				<![CDATA[
+					AND DAY <= #{body.endDate}
+				]]>
+			</if>
+			<if test="body.status != null">
+				AND STATUS = #{body.status}
+			</if>
+			<if test="body.stype != null">
+				AND STYPE = #{body.stype}
+			</if>
+			<choose><!-- 出库入库要处理特殊逻辑 -->
+				<when test='body.btype == "1"'><!-- 入库要加上调拨到这个店的调拨单 -->
+					<!-- <choose> <when test="sid != null"> AND ((BTYPE = #{body.btype} 
+						AND SID = #{sid}) OR (BTYPE = '3' AND INSID = #{sid})) </when> <otherwise> 
+						AND ((BTYPE = #{body.btype} AND SID IS NULL) OR (BTYPE = '3' AND INSID IS 
+						NULL)) </otherwise> </choose> -->
+					<choose>
+						<when test="sid != null">
+							AND (BTYPE = #{body.btype} AND SID = #{sid})
+						</when>
+						<otherwise>
+							AND (BTYPE = #{body.btype} AND SID IS NULL)
+						</otherwise>
+					</choose>
+				</when>
+				<when test='body.btype == "2"'><!-- 出库要加上调拨出这个店的调拨单 -->
+					<!-- <choose> <when test="sid != null"> AND ((BTYPE = #{body.btype} 
+						AND SID = #{sid}) OR (BTYPE = '3' AND OUTSID = #{sid})) </when> <otherwise> 
+						AND ((BTYPE = #{body.btype} AND SID IS NULL) OR (BTYPE = '3' AND OUTSID IS 
+						NULL)) </otherwise> </choose> -->
+					<choose>
+						<when test="sid != null">
+							AND (BTYPE = #{body.btype} AND SID = #{sid})
+						</when>
+						<otherwise>
+							AND (BTYPE = #{body.btype} AND SID IS NULL)
+						</otherwise>
+					</choose>
+				</when>
+				<when test='body.btype == "3"'>
+					AND BTYPE = #{body.btype}
+					<choose>
+						<when test="sid != null">
+							AND (SID = #{sid} OR (INSID = #{sid} AND STATUS = 2) OR OUTSID = #{sid})
+						</when>
+						<otherwise>
+							AND (SID IS NULL OR (INSID IS NULL  AND STATUS = 2) OR OUTSID IS NULL)
+						</otherwise>
+					</choose>
+				</when>
+			</choose>
+		</where>
+	</select>
+	<resultMap type="com.qisen.mts.common.model.entity.sto.BillWithDetails"
+		id="stoBillWithDetail">
+		<id property="id" column="id" />
+		<result property="eid" column="eid" />
+		<result property="sid" column="sid" />
+		<result property="no" column="no" />
+		<result property="day" column="day" />
+		<result property="handler" column="handler" />
+		<result property="empId" column="empId" />
+		<result property="outSid" column="outSid" />
+		<result property="inSid" column="inSid" />
+		<result property="num" column="num" />
+		<result property="money" column="money" />
+		<result property="bType" column="bType" />
+		<result property="sType" column="sType" />
+		<result property="remark" column="remark" />
+		<result property="optId" column="optId" />
+		<result property="optName" column="optName" />
+		<result property="examId" column="examId" />
+		<result property="examName" column="examName" />
+		<result property="status" column="status" />
+		<result property="billId" column="billId" />
+		<collection property="items"
+			ofType="com.qisen.mts.common.model.entity.sto.BillDetail">
+			<id property="id" column="bd_id" />
+			<result property="itemId" column="itemId" />
+			<result property="itemNo" column="itemNo" />
+			<result property="num" column="itemNum" />
+			<result property="money" column="itemMoney" />
+			<result property="version" column="itemVersion" />
+			<result property="inPrice" column="itemInPrice" />
+		</collection>
+	</resultMap>
+	<select id="stoBillList" parameterType="com.qisen.mts.common.model.request.PageRequest"
+		resultMap="stoBillWithDetail">
+		SELECT SB.*, SBD.ID bd_id,SBD.ITEMID itemId, SBD.ITEMNO itemNo,SBD.NUM
+		itemNum FROM (
+		SELECT PG.* FROM (
+		SELECT PG.*, ROWNUM RN FROM(
+		SELECT * FROM STO_BILL
+		<where>
+			EID = #{eid}
+			<if test="body.startDate != null">
+						<![CDATA[
+							AND DAY >= #{body.startDate}
+						]]>
+			</if>
+			<if test="body.endDate != null">
+						<![CDATA[
+							AND DAY <= #{body.endDate}
+						]]>
+			</if>
+			<if test="body.status != null">
+				AND STATUS = #{body.status}
+			</if>
+			<if test="body.stype != null">
+				AND STYPE = #{body.stype}
+			</if>
+			<choose><!-- 出库入库要处理特殊逻辑 -->
+				<when test='body.btype == "1"'><!-- 入库要加上调拨到这个店的调拨单 -->
+					<!-- <choose> <when test="sid != null"> AND ((BTYPE = #{body.btype} 
+						AND SID = #{sid}) OR (BTYPE = '3' AND INSID = #{sid})) </when> <otherwise> 
+						AND ((BTYPE = #{body.btype} AND SID IS NULL) OR (BTYPE = '3' AND INSID IS 
+						NULL)) </otherwise> </choose> -->
+					<choose>
+						<when test="sid != null">
+							AND (BTYPE = #{body.btype} AND SID = #{sid})
+						</when>
+						<otherwise>
+							AND (BTYPE = #{body.btype} AND SID IS NULL)
+						</otherwise>
+					</choose>
+				</when>
+				<when test='body.btype == "2"'><!-- 出库要加上调拨出这个店的调拨单 -->
+					<!-- <choose> <when test="sid != null"> AND ((BTYPE = #{body.btype} 
+						AND SID = #{sid}) OR (BTYPE = '3' AND OUTSID = #{sid})) </when> <otherwise> 
+						AND ((BTYPE = #{body.btype} AND SID IS NULL) OR (BTYPE = '3' AND OUTSID IS 
+						NULL)) </otherwise> </choose> -->
+					<choose>
+						<when test="sid != null">
+							AND (BTYPE = #{body.btype} AND SID = #{sid})
+						</when>
+						<otherwise>
+							AND (BTYPE = #{body.btype} AND SID IS NULL)
+						</otherwise>
+					</choose>
+				</when>
+				<when test='body.btype == "3"'>
+					AND BTYPE = #{body.btype}
+					<choose>
+						<when test="sid != null">
+							AND (SID = #{sid} OR (INSID = #{sid} AND STATUS = 2) OR OUTSID = #{sid})
+						</when>
+						<otherwise>
+							AND (SID IS NULL OR (INSID IS NULL  AND STATUS = 2) OR OUTSID IS NULL)
+						</otherwise>
+					</choose>
+				</when>
+			</choose>
+		</where>
+		ORDER BY DAY DESC,ID DESC) PG
+				<![CDATA[
+					WHERE ROWNUM <= #{endIndex}
+				]]>
+		) PG
+			<![CDATA[
+				WHERE PG.RN >= #{startIndex}
+			]]>
+		) SB
+		LEFT OUTER JOIN STO_BILL_DETAIL SBD ON SB.ID = SBD.BILLID
+		ORDER BY SB.RN ASC,SBD.ID DESC
+	</select>
+	<select id="loadBillWithDetails" parameterType="int"
+		resultMap="stoBillWithDetail">
+		SELECT SB.*, SBD.ID bd_id,SBD.ITEMID itemId, SBD.ITEMNO
+		itemNo,SBD.NUM itemNum,SBD.MONEY itemMoney,SBD.INPRICE
+		itemInPrice,SBD.VERSION itemVersion
+		FROM STO_BILL SB
+		LEFT OUTER JOIN STO_BILL_DETAIL SBD ON SB.ID = SBD.BILLID
+		WHERE SB.ID = #{id}
+	</select>
+
+</mapper>

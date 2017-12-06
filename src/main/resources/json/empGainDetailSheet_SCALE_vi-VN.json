@@ -1,0 +1,53 @@
+{
+	"basicData": {
+		"pointFee": "Chỉ định",
+		"unpointFee": "Phi chỉ định",
+		"f0PointFee": "Chỉ định dịch vụ nhỏ",
+		"f0UnpointFee": "Chỉ định dịch vụ nhỏ",
+		"f1PointFee": "Chỉ định dịch vụ lớn",
+		"f1UnpointFee": "Chỉ định dịch vụ lớn",
+		"f0CashFee": "Tiền mặt loại dịch vụ nhỏ",
+		"f0NonCashFee": "Không tiền mặt loại dịch vụ nhỏ",
+		"f1CashFee": "Tiền mặt loại dịch vụ lớn",
+		"f1NonCashFee": "Không tiền mặt loại dịch vụ lớn",
+		"pointCashFee": "Tiền mặt loại chỉ định",
+		"pointNonCashFee": "Không tiền mặt loại chỉ định",
+		"unpointCashFee": "Tiền mặt loại phi chỉ định",
+		"unpointNonCashFee": "Không tiền mặt loại phi chỉ định"
+	},
+	"config": {
+        "frozenHead": 2,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        },
+        "disableTotal": 1,
+        "frozenLeftColumns": 1,
+        "title": "Bảng chi tiết % tổng doanh số phục vụ của nhân viên",
+        "frozenRightColumns": 0
+    },
+    "head": ["Loại", "Doanh số", "Tỷ lệ", "%"],
+    "columns": [{
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }]
+}

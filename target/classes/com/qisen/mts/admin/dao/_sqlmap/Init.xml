@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.admin.dao.InitDao">
+	
+	<update id="createBusiBill">
+    	<![CDATA[
+    		create table E${eid}_BUSI_BILL (
+			   ID                   NUMBER                not null,
+			   SID                  NUMBER                not null,
+			   MEMID                NUMBER,
+			   MEMSID               NUMBER,
+			   MEMCARDID            NUMBER,
+			   MEMNAME              VARCHAR2(20  CHAR),
+			   MEMMOBILE            VARCHAR2(20  CHAR),
+			   SEX                  CHAR(1)               not null,
+			   CARDNO               VARCHAR2(20  CHAR),
+			   CARDTYPENO           VARCHAR2(20  CHAR),
+			   CARDNAME             VARCHAR2(50  CHAR),
+			   BALANCEPROP          VARCHAR2(200  CHAR),
+			   BTYPE                CHAR(1)               not null,
+			   NO                   VARCHAR2(20  CHAR)    not null,
+			   FEE                  NUMBER(*,2)           not null,
+			   BDAY                 DATE                  not null,
+			   REMARK               VARCHAR2(500  CHAR),
+			   STATUS               CHAR(1)               not null,
+			   OPTID                NUMBER                not null,
+			   OPTNAME              VARCHAR2(20  CHAR)    not null,
+			   INPUTDATE            DATE                  not null,
+			   CANCELDATE           DATE,
+			   constraint PK_E${eid}_BUSI_BILL primary key (ID)
+			)
+    	]]>
+    </update>
+	
+	<update id="createBusiBillDetail">
+    	<![CDATA[
+    		create table E${eid}_BUSI_BILL_DETAIL (
+			   ID                   NUMBER                not null,
+			   SID                  NUMBER                not null,
+			   BILLID               NUMBER                not null,
+			   DEPCODE              VARCHAR(20  CHAR)     not null,
+			   ITEMID               NUMBER                not null,
+			   ITEMNO               VARCHAR(20  CHAR)     not null,
+			   ITEMNAME             VARCHAR(50  CHAR)     not null,
+			   CTYPE                CHAR(1)               not null,
+			   RAWPRICE             NUMBER(*,2),
+			   PRICE                NUMBER(*,2),
+			   FEE                  NUMBER(*,2),
+			   NUM                  NUMBER,
+			   UNIT                 VARCHAR(20  CHAR),
+			   BTYPE                CHAR(1)               not null,
+			   BDAY                 DATE                  not null,
+			   STATUS               CHAR(1)               not null,
+			   constraint PK_E${eid}_BUSI_BILL_DETAIL primary key (ID)
+			)
+    	]]>
+    </update>
+	
+	<update id="createBusiEmpFee">
+    	<![CDATA[
+    		create table E${eid}_BUSI_EMPFEE (
+			   ID                   NUMBER                not null,
+			   SID                  NUMBER                not null,
+			   BILLID               NUMBER                not null,
+			   DETAILID             NUMBER,
+			   EMPID                NUMBER                not null,
+			   TOTALFEE             NUMBER(*,2)           not null,
+			   FEE                  VARCHAR2(500  CHAR)   not null,
+			   TOTALGAIN            NUMBER(*,2),
+			   GAIN                 VARCHAR2(500  CHAR),
+			   POINTTYPE            CHAR(1),
+			   GAINTYPE             CHAR(1)               not null,
+			   CTYPE                CHAR(1)               not null,
+			   ITEMTYPE             CHAR(1),
+			   STATION              CHAR(1),
+			   GTYPE                VARCHAR2(20  CHAR)    not null,
+			   GNO                  VARCHAR2(20  CHAR)    not null,
+			   BDAY                 DATE                  not null,
+			   STATUS               CHAR(1)               not null,
+			   constraint PK_E${eid}_BUSI_EMPFEE primary key (ID)
+			)
+    	]]>
+    </update>
+    
+    <update id="createBusiPay">
+    	<![CDATA[
+    		create table E${eid}_BUSI_PAY (
+			   ID                   NUMBER                not null,
+			   SID                  NUMBER                not null,
+			   BILLID               NUMBER                not null,
+			   DEPCODE              VARCHAR2(20  CHAR)    not null,
+			   TOTALPAY             NUMBER(*,2)           not null,
+			   PAY                  VARCHAR2(500  CHAR)   not null,
+			   BTYPE                CHAR(1)               not null,
+			   BDAY                 DATE                  not null,
+			   STATUS               CHAR(1)               not null,
+			   constraint PK_E${eid}_BUSI_PAY primary key (ID)
+			)
+    	]]>
+    </update>
+	
+	<update id="createMemCardRecord">
+    	<![CDATA[
+    		create table E${eid}_MEM_CARD_RECORD (
+			   ID                   NUMBER                not null,
+			   SID                  NUMBER                not null,
+			   MEMID                NUMBER,
+			   MEMSID               NUMBER,
+			   MEMCARDID            NUMBER,
+			   CARDFEE              NUMBER(*,2),
+			   PAYCARD              NUMBER(*,2)           not null,
+			   PRESENTFEE           NUMBER(*,2),
+			   PAYPRESENT           NUMBER(*,2)           not null,
+			   CARDTYPENO           VARCHAR2(20  CHAR),
+			   CARDNO               VARCHAR2(20  CHAR),
+			   CARDNAME             VARCHAR2(50  CHAR),
+			   BILLID               NUMBER,
+			   TYPE                 CHAR(1)               not null,
+			   STYPE                CHAR(1)               not null,
+			   INPUTDATE            DATE                  not null,
+			   constraint PK_E${eid}_MEM_CARD_RECORD primary key (ID)
+			)
+    	]]>
+    </update>
+	
+	<update id="createSysLog">
+    	<![CDATA[
+    		create table E${eid}_SYS_LOG (
+			   ID                   VARCHAR2(100  CHAR)   not null,
+			   EID                  NUMBER                not null,
+			   SID                  NUMBER                not null,
+			   TYPE                 CHAR(1)               not null,
+			   REMARK               VARCHAR2(500  CHAR)   not null,
+			   OPTID                NUMBER                not null,
+			   OPTNAME              VARCHAR2(50  CHAR),
+			   INPUTDATE            DATE                  not null,
+			   constraint PK_E${eid}_SYS_LOG primary key (ID)
+			)
+    	]]>
+    </update>
+	
+	<insert id="createEnterprise" parameterType="com.qisen.mts.common.model.entity.sys.Enterprise">
+		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">  
+			select seq_sys_enterprise.nextval as id from dual
+		</selectKey>
+		<![CDATA[
+			insert into sys_enterprise(id,name,address,linkman,mobile,phone,logo,flag,remark,inputdate,areaid,provid,orgno,servorgno,empid,tempid,tbuser)
+			values
+			(#{id},#{name},#{address},#{linkman},#{mobile},#{phone},#{logo},#{flag},#{remark},sysdate,
+			#{areaId},#{provId},#{orgNo},#{servorGno},#{empId},#{tempId},#{tbuser})
+		]]>
+	</insert>
+	
+	<insert id="createDepartmentBatch">
+		insert into sys_department(id,eid,depcode,name) 
+		select seq_sys_department.nextval, a.*
+		from (
+		<foreach collection="list" item="item" index="index" separator="union all">
+			select #{eid},#{item.depCode},#{item.name} from dual
+		</foreach>
+		) a
+	</insert>
+	
+	<insert id="createGtypeBatch">
+		insert into sys_gtype(id,eid,no,name,depcode,station) 
+		select seq_sys_gtype.nextval, a.*
+		from (
+		<foreach collection="list" item="item" index="index" separator="union all">
+			select #{eid},#{item.no},#{item.name},#{item.depCode},#{item.station} from dual
+		</foreach>
+		) a
+	</insert>
+	
+	<insert id="createBaseTypeBatch">
+		insert into base_type(id,eid,sid,no,name,type,status) 
+		select seq_base_type.nextval, a.*
+		from (
+		<foreach collection="list" item="item" index="index" separator="union all">
+			select #{eid},#{sid},#{item.no},#{item.name},#{item.type},1 from dual
+		</foreach>
+		) a
+	</insert>
+	
+	<insert id="createAccount" parameterType="com.qisen.mts.common.model.entity.sys.Account">
+		<![CDATA[
+			insert into sys_account(id,eid,sid,account,pwd,name,mobile,role,rights,regionid,status,inputdate) 
+			values 
+			(seq_sys_account.nextval,#{eid},#{sid},#{account},#{pwd},#{name},#{mobile},#{role},#{rights},#{regionId},1,sysdate)
+		]]>
+	</insert>
+	
+	<insert id="createShop">
+		<![CDATA[
+			insert into sys_shop(id,eid,dataeid,name,address,linkman,mobile,phone,logo,version,industry,remark,regionid,prop,areaid,provid,orgno,servorgno,empid,tempid,signflag,inputdate,status,validdate)
+			values
+			(#{shop.id},#{eid},#{dataEid},#{shop.name},#{shop.address},#{shop.linkman},#{shop.mobile},#{shop.phone},#{shop.logo},#{shop.version},#{shop.industry},#{shop.remark},#{shop.regionId},#{shop.prop},
+			#{shop.areaId},#{shop.provId},#{shop.orgNo},#{shop.servorGno},#{shop.empId},#{shop.tempId},0,sysdate,1,sysdate+365)
+		]]>
+	</insert>
+	
+	<select id="selectSid" resultType="java.lang.Integer">
+		select id from sys_shop where eid = #{eid} and name = #{name}
+	</select>
+	
+	<select id="getMaxShopId" resultType="java.lang.Integer">
+		<![CDATA[
+			select max(id) from sys_shop where eid = #{eid}
+		]]>
+	</select>
+	
+	<update id="updateShopFlag">
+    	<![CDATA[
+    		update sys_enterprise set flag = 1 where id = #{eid}
+    	]]>
+    </update>
+    
+    <update id="eidtShop" parameterType="com.qisen.mts.common.model.entity.sys.Shop">
+    	<![CDATA[
+    		update sys_shop
+    	]]>
+    	<trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name !=''">
+				<![CDATA[
+					name = #{name},
+				]]>
+			</if>
+			<if test="address != null and address !=''">
+				<![CDATA[
+					address = #{address},
+				]]>
+			</if>
+			<if test="linkman != null and linkman !=''">
+				<![CDATA[
+					linkman = #{linkman},
+				]]>
+			</if>
+			<if test="phone != null and phone !=''">
+				<![CDATA[
+					phone = #{phone},
+				]]>
+			</if>
+			<if test="mobile != null and mobile !=''">
+				<![CDATA[
+					mobile = #{mobile},
+				]]>
+			</if>
+			<if test="version != null and version !=''">
+				<![CDATA[
+					version = #{version},
+				]]>
+			</if>
+			<if test="industry != null and industry !=''">
+				<![CDATA[
+					industry = #{industry},
+				]]>
+			</if>
+			<if test="remark != null and remark !=''">
+				<![CDATA[
+					remark = #{remark},
+				]]>
+			</if>
+			<if test="regionId != null">
+				<![CDATA[
+					regionId = #{regionId},
+				]]>
+			</if>
+			<if test="prop != null">
+				<![CDATA[
+					prop = #{prop},
+				]]>
+			</if>
+			<if test="areaId != null">
+				<![CDATA[
+					areaId = #{areaId},
+				]]>
+			</if>
+			<if test="provId != null">
+				<![CDATA[
+					provId = #{provId},
+				]]>
+			</if>
+			<if test="orgNo != null">
+				<![CDATA[
+					orgNo = #{orgNo},
+				]]>
+			</if>
+			<if test="servorGno != null">
+				<![CDATA[
+					servorGno = #{servorGno},
+				]]>
+			</if>
+			<if test="empId != null">
+				<![CDATA[
+					empId = #{empId},
+				]]>
+			</if>
+			<if test="tempId != null">
+				<![CDATA[
+					tempid = #{tempId},
+				]]>
+			</if>
+			<if test="signFlag != null and signFlag !=''">
+				<![CDATA[
+					signflag = #{signFlag},
+				]]>
+			</if>
+			<if test="inputDate != null">
+				<![CDATA[
+					inputdate = #{inputDate},
+				]]>
+			</if>
+			<if test="validDate != null">
+				<![CDATA[
+					validDate = #{validDate},
+				]]>
+			</if>
+		</trim>
+		<where>
+			<![CDATA[
+				eid = #{eid} and id=#{id}
+			]]>
+		</where>
+    </update>
+</mapper>

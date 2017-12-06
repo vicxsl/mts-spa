@@ -1,0 +1,52 @@
+{
+	"departments": [{
+		"depCode": "1",
+		"name": "美发部"
+	}],
+	"gtypes": [{
+		"no": "1",
+		"name": "美发师",
+		"depCode": "1",
+		"station": 1
+	}, {
+		"no": "2",
+		"name": "技师",
+		"depCode": "1",
+		"station": 2
+	}, {
+		"no": "3",
+		"name": "助理",
+		"depCode": "1",
+		"station": 3
+	}],
+	"payTypes": [{
+    	"no": "CARD",
+    	"name": "卡金",
+    	"type": 7
+	}, {
+    	"no": "PRESENT",
+    	"name": "赠送金",
+    	"type": 7
+	}, {
+    	"no": "PACK",
+    	"name": "套餐卡金",
+    	"type": 7
+	}, {
+    	"no": "CASH",
+    	"name": "现金",
+    	"type": 6
+    }, {
+    	"no": "POS",
+    	"name": "POS",
+    	"type": 6
+    }],
+    "shopSetting":[
+		{"mid":1,"key":"GLO_decimal","value":"0"},
+		{"mid":1,"key":"GLO_gainRuleType","value":"SINGLE"},
+		{"mid":1,"key":"GLO_billNoGenerate","value":"AUTO"},
+		{"mid":2,"key":"RES_strategy","value":"HALF"},
+		{"mid":2,"key":"RES_startTime","value":"09:00"},
+		{"mid":2,"key":"RES_endTime","value":"23:00"},
+		{"mid":2,"key":"RES_ahead","value":"30"}
+	]
+}

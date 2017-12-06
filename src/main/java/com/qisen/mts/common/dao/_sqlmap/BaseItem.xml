@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.base.ItemDao">
+	
+	<select id="count" resultType="java.lang.Integer">
+		<![CDATA[
+			select count(id) from base_item 
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} 
+			]]>
+			<foreach collection="body.status" index="index" item="status" open="and (" close=")" separator="or">     
+				status = #{status}
+			</foreach>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					and (name like '%'||#{body.keyword}||'%' or no like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.type != null and body.type > 0">
+				<![CDATA[
+					and type = #{body.type}
+				]]>
+			</if>
+			<if test="body.flag != null">
+				<![CDATA[
+					and flag = #{body.flag}
+				]]>
+			</if>
+			<if test="body.typeNo != null and body.typeNo != '' ">
+				<![CDATA[
+					and typeno = #{body.typeNo}
+				]]>
+			</if>
+			<if test="body.typeno != null and body.typeno != '' ">
+					and typeno = #{body.typeno}
+			</if>
+			<if test="sid != null  and sid  !=''">
+				<if test="body.shopBlock != null  and body.shopBlock == 0">
+					<![CDATA[
+						and shopblock like '%,'||#{sid}||',%'
+					]]>
+				</if>
+				<if test="body.shopBlock != null  and body.shopBlock == 1">
+					<![CDATA[
+						and (shopblock is null or shopblock not like '%,'||#{sid}||',%')
+					]]>
+				</if>
+			</if>
+		</where>
+	</select>
+	<select id="list" resultType="com.qisen.mts.common.model.entity.base.Item">
+		<![CDATA[
+			select n.* from (
+			select m.*, rownum rn from(
+				select id,eid,name,no,price,type,img,typeno,shopblock,depauth,prop,status,flag,inputdate from base_item 
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and status in
+			]]>
+			<foreach item="status" index="index" collection="body.status" open="(" separator="," close=")">  
+				#{status}  
+			</foreach>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					and (name like '%'||#{body.keyword}||'%' or no like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.type != null and body.type > 0">
+				<![CDATA[
+					and type = #{body.type}
+				]]>
+			</if>
+			<if test="body.flag != null">
+				<![CDATA[
+					and flag = #{body.flag}
+				]]>
+			</if>
+			<if test="body.typeNo != null and body.typeNo != '' ">
+				<![CDATA[
+					and typeno = #{body.typeNo}
+				]]>
+			</if>
+			<if test="body.typeno != null and body.typeno != '' ">
+					and typeno = #{body.typeno}
+			</if>
+			<if test="sid != null  and sid  !=''">
+				<if test="body.shopBlock != null  and body.shopBlock == 0">
+					<![CDATA[
+						and shopblock like '%,'||#{sid}||',%'
+					]]>
+				</if>
+				<if test="body.shopBlock != null  and body.shopBlock == 1">
+					<![CDATA[
+						and (shopblock is null or shopblock not like '%,'||#{sid}||',%')
+					]]>
+				</if>
+			</if>
+			
+			<if test="body.containsKey('companyNo') and body.companyNo != null and body.companyNo != ''">
+				<![CDATA[
+					and json_value(prop,'$.companyNo') = #{body.companyNo}
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			order by cast(REGEXP_SUBSTR(no, '[0-9]+') as int) ) m) n
+		]]>
+		<if test="endIndex != null and endIndex > 0 and startIndex != null and startIndex >= 0 ">
+			<![CDATA[
+			 	where n.rn between #{startIndex} and #{endIndex}
+			]]>
+		</if>
+	</select>
+
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.base.Item">
+		<![CDATA[
+			insert into base_item(id,eid,name,no,price,type,img,typeno,shopblock,depauth,prop,flag,status,inputdate) 
+			values(seq_base_item.nextval,#{eid},#{name},#{no},#{price},#{type},#{img},#{typeNo},#{shopBlock},#{depAuth},#{prop},#{flag},1,sysdate)
+		]]>
+	</insert>
+
+	<update id="status">
+		<![CDATA[
+			update base_item
+		]]>
+		<choose>
+			<when test="sid != null and sid > 0">
+				<choose>
+					<when test="body.status == 2">
+						set shopblock = replace(shopblock, ','||#{sid}||',')||','||#{sid}||','
+					</when>
+					<when test="body.status == 1">
+						set shopblock = replace(shopblock, ','||#{sid}||',')
+					</when>
+				</choose>
+			</when>
+			<otherwise>
+				set status = #{body.status}
+			</otherwise>
+		</choose>
+		<where>
+			<![CDATA[
+				eid = #{eid}
+			]]>
+		</where>
+		<foreach collection="body.ids" index="index" item="id" open="and (" close=")" separator="or">     
+			id = #{id}
+		</foreach>
+	</update>
+
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.base.Item">
+		<![CDATA[
+			update base_item 
+				set name = #{name},price = #{price},img = #{img},typeno = #{typeNo},prop = #{prop},flag = #{flag}
+			where eid = #{eid} and id = #{id}
+		]]>
+	</update>
+
+	<select id="check" resultType="java.lang.Integer"
+		parameterType="com.qisen.mts.common.model.entity.base.Item">
+		<![CDATA[
+			select count(id) from base_item 
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid}
+			]]>
+			<if test="no != null and no != ''">
+				<![CDATA[
+					and no = #{no}
+				]]>
+			</if>
+			<if test="type != 0">
+				<![CDATA[
+					and type = #{type}
+				]]>
+			</if>
+			<if test="id != 0">
+				<![CDATA[
+					and id <> #{id}
+				]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="productListCount" parameterType="com.qisen.mts.common.model.request.PageRequest"
+		resultType="int">
+		<![CDATA[
+			SELECT COUNT(BI.ID) FROM BASE_ITEM BI
+			LEFT OUTER JOIN  STO_ITEM SI ON BI.EID = SI.EID AND  SI.SID = #{sid} AND BI.ID = SI.ITEMID
+		]]>
+		<where>
+				BI.EID = #{eid} AND BI.TYPE = 2
+			<if test="body.status != null">
+					AND BI.STATUS = #{body.status}
+			</if>
+			<if test="body.flag != null">
+					AND BI.FLAG = #{body.flag}
+			</if>
+			<if test="body.keyword != null">
+					AND (BI.NAME LIKE '%'||#{body.keyword}||'%' OR BI.NO LIKE '%'||#{body.keyword}||'%')
+			</if>
+			<if test="body.typeNo != null">
+					AND BI.TYPENO = #{body.typeNo}
+			</if>
+			<if test="body.inStock == true">
+					AND SI.STONUM > 0
+			</if>
+		</where>
+	</select>
+	<select id="productList" parameterType="com.qisen.mts.common.model.request.PageRequest"
+		resultType="com.qisen.mts.common.model.entity.base.ItemWithStoNum">
+		SELECT PG.* FROM (
+		SELECT PG.*, ROWNUM RN FROM(
+			SELECT BI.*,NVL(SI.STONUM,0) STONUM,NVL(SI.INPRICE,0) INPRICE,NVL(SI.STOMONEY,0) STOMONEY
+			FROM BASE_ITEM BI
+			LEFT OUTER JOIN  STO_ITEM SI ON BI.EID = SI.EID AND BI.ID = SI.ITEMID 
+			<choose>
+				<when test="sid != null">
+					AND SID = #{sid}
+				</when>
+				<otherwise>
+					AND SID IS NULL
+				</otherwise>
+			</choose>
+		<where>
+				BI.EID = #{eid} AND BI.TYPE = 2
+			<if test="body.status != null">
+					AND BI.STATUS = #{body.status}
+			</if>
+			<if test="body.flag != null">
+					AND BI.FLAG = #{body.flag}
+			</if>
+			<if test="body.keyword != null">
+					AND (BI.NAME LIKE '%'||#{body.keyword}||'%' OR BI.NO LIKE '%'||#{body.keyword}||'%')
+			</if>
+			<if test="body.typeNo != null">
+					AND BI.TYPENO = #{body.typeNo}
+			</if>
+			<if test="body.inStock == true">
+					AND SI.STONUM > 0
+			</if>
+		</where>
+			ORDER BY BI.ID DESC) PG
+			<![CDATA[
+				WHERE ROWNUM <= #{endIndex}
+			]]>
+		) PG
+		<![CDATA[
+			WHERE PG.RN >= #{startIndex}
+		]]>
+	</select>
+	<update id="bulkChangeTypeNo" parameterType="com.qisen.mts.common.model.request.BulkChangeTypeNoRequest">
+		UPDATE BASE_ITEM SET TYPENO = #{typeNo} WHERE ID IN
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+        	#{item}
+        </foreach>
+	</update>
+	<update id="bulkChangeStatus" parameterType="com.qisen.mts.common.model.request.BulkChangeStatusRequest">
+		UPDATE BASE_ITEM SET STATUS = #{status} WHERE ID IN
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+        	#{item}
+        </foreach>
+	</update>
+	<!-- 导入疗程检测项目编号是否存在 -->
+	<select id="checkItemNo" resultType="java.lang.Integer">
+		<![CDATA[
+			select count(id) from base_item 
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and status = 1 and type=1 and no=#{itemNo}
+			]]>
+		</where>
+	</select>
+	</mapper>

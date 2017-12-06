@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.inte.ReservationDao">
+	<insert id="add" parameterType="com.qisen.mts.common.model.entity.inte.Reservation">
+		<selectKey resultType="java.lang.Integer" order="BEFORE"
+			keyProperty="id">
+			SELECT SEQ_INTE_RESERVATION.NEXTVAL FROM DUAL
+		</selectKey>
+    <![CDATA[
+     INSERT INTO INTE_RESERVATION(ID,EID,SID,MEMID,MEMNAME,MEMMOBILE,EMPID,EMPNAME,RESERVATIONTIME,RESERVATIONSOURCE,OCCUPANCY,NUM,RESERVATIONTYPE,ITEMID,ITEMNAME,STATUS,"COMMENT",CREATETIME)
+      VALUES
+      	(#{id},#{eid},#{sid},#{memId},#{memName},#{memMobile},#{empId},#{empName},#{reservationTime},#{reservationSource},#{occupancy},#{num},#{reservationType},#{itemId},#{itemName},0,#{comment},SYSDATE)
+    ]]>
+	</insert>
+	<!-- 查询最近几天的预约个数 -->
+	<select id="queryReservationCount" parameterType="com.qisen.mts.common.model.entity.inte.Reservation"
+		resultType="map">
+		<![CDATA[
+			SELECT COUNT(ID) num,TO_CHAR(RESERVATIONTIME,'yyyy-mm-dd') resTime 
+			FROM INTE_RESERVATION 
+			WHERE  RESERVATIONTIME < to_date(SYSDATE + 3) AND RESERVATIONTIME>TO_DATE(SYSDATE)
+		]]>
+		<if test="eid !=null">
+			AND EID=#{eid}
+		</if>
+		<if test="sid !=null">
+			AND SID=#{sid}
+		</if>
+		<if test="empId !=null">
+			AND EMPID=#{empId}
+		</if>
+		<![CDATA[
+		    AND OCCUPANCY = 0 AND STATUS in (0,1) GROUP BY TO_CHAR(RESERVATIONTIME,'yyyy-mm-dd') reserTime 
+		]]>
+	</select>
+	<!-- 查询门店预约 -->
+	<select id="queryReservations" parameterType="com.qisen.mts.common.model.entity.inte.Reservation" resultType="com.qisen.mts.common.model.entity.inte.Reservation">
+		<![CDATA[
+		SELECT *
+		FROM INTE_RESERVATION
+		]]>
+		WHERE
+			<![CDATA[
+				EID=#{eid} AND SID = #{sid} AND RESERVATIONTIME >= TRUNC(#{reservationTime},'dd') AND RESERVATIONTIME < (TRUNC(#{reservationTime},'dd')+1) AND STATUS IN (0,1)
+			]]>
+		<if test="empId !=null">
+			AND EMPID=#{empId}
+		</if>
+	</select>
+	
+	<!-- 查询会员的预约 -->
+	<select id="memberReservations" parameterType="com.qisen.mts.common.model.entity.inte.Reservation" resultType="com.qisen.mts.common.model.entity.inte.Reservation">
+		<![CDATA[
+		select * from inte_reservation where eid=#{eid} and reservationtime >= TRUNC(sysdate,'dd') and status=0 and memid=#{memId}
+		]]>
+	</select>
+	<!-- 查询员工排班 -->
+	<select id="queryScheduling" parameterType="com.qisen.mts.common.model.entity.inte.Reservation"
+		resultType="map">
+		<![CDATA[
+		 	SELECT 
+		 		TO_CHAR(VACATIONDATE,'yyyy-mm-dd') RDATE,
+		 		NULL RESERVATIONTIME,
+		 		10 TYPE 
+		 		FROM INTE_VACATION
+			WHERE 
+				EMPID=#{empId} 
+				AND VACATIONDATE<#{reservationTime}
+				AND VACATIONDATE>=SYSDATE
+			UNION ALL 
+			SELECT 
+				TO_CHAR(RESERVATIONTIME,'yyyy-mm-dd'),RESERVATIONTIME,
+				STATUS TYPE
+				FROM INTE_RESERVATION 
+			WHERE EMPID=#{empId}  
+				AND RESERVATIONTIME>=SYSDATE
+				AND RESERVATIONTIME< #{reservationTime}
+				AND STATUS=0
+	 	]]>
+	</select>
+	<!-- 修改预约 -->
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.inte.Reservation">
+		UPDATE INTE_RESERVATION 
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="status !=null">
+				STATUS=#{status}
+			</if>
+			<if test="comment !=null">
+				"COMMENT"=#{comment}
+			</if>
+			<if test="reservationTime !=null">
+				RESERVATIONTIME=#{reservationTime}
+			</if>
+		</trim>
+		WHERE ID = #{id} 
+		<if test="status !=null">
+			AND STATUS!=#{status}
+		</if>
+	</update>
+	<!-- 根据门店id获取当日预约数 -->
+	<select id="getShopReservationsNum" parameterType="com.qisen.mts.common.model.entity.inte.Reservation" resultType="int">
+		<![CDATA[
+			 SELECT COUNT(ID) FROM INTE_RESERVATION WHERE EID =#{eid} AND SID = #{sid} AND STATUS = 0 AND RESERVATIONTIME >= TRUNC(SYSDATE,'dd') AND RESERVATIONTIME < (TRUNC(SYSDATE,'dd')+1) AND OCCUPANCY = 0
+		]]>
+	</select>
+	<select id="checkReservationAvailabilty"  parameterType="com.qisen.mts.common.model.entity.inte.Reservation" resultType="int">
+		SELECT
+			COUNT (ID)
+		FROM
+			INTE_RESERVATION
+		WHERE
+			EID = #{eid}
+		AND SID = #{sid}
+		AND STATUS IN (0, 1)
+		AND EMPID = #{empId}
+		AND RESERVATIONTIME = #{reservationTime}
+	</select>
+	<select id="load" parameterType="int" resultType="com.qisen.mts.common.model.entity.inte.Reservation">
+		SELECT *
+			FROM INTE_RESERVATION
+		WHERE
+			ID = #{id}
+	</select>
+	
+	<select id="fingBymemId" parameterType="int" resultType="com.qisen.mts.common.model.entity.inte.Reservation">
+		SELECT *
+			FROM INTE_RESERVATION
+		WHERE
+			memID = #{memId} and status = 0 
+	</select>
+	
+	<!-- 查询员工所有的预约数-->
+	<select id="empReservationList" parameterType="int" resultType="int">
+		SELECT COUNT (ID)
+			FROM INTE_RESERVATION
+		WHERE
+			empId = #{empId} and status in (0 , 1)  
+	</select>
+</mapper>

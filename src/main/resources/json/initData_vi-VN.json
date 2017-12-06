@@ -1,0 +1,52 @@
+{
+	"departments": [{
+		"depCode": "1",
+		"name": "Bộ phận tóc"
+	}],
+	"gtypes": [{
+		"no": "1",
+		"name": "Bộ phận thợ chính",
+		"depCode": "1",
+		"station": 1
+	}, {
+		"no": "2",
+		"name": "Kỹ thuật ( Thợ hóa chất)",
+		"depCode": "1",
+		"station": 2
+	}, {
+		"no": "3",
+		"name": "Thợ phụ ( Thợ gội)",
+		"depCode": "1",
+		"station": 3
+	}],
+	"payTypes": [{
+    	"no": "CARD",
+    	"name": "Tiền thẻ",
+    	"type": 7
+	}, {
+    	"no": "PRESENT",
+    	"name": "Tiền tặng thẻ",
+    	"type": 7
+	}, {
+    	"no": "PACK",
+    	"name": "Tiền thẻ gói",
+    	"type": 7
+	}, {
+    	"no": "CASH",
+    	"name": "Tiền mặt",
+    	"type": 6
+    }, {
+    	"no": "POS",
+    	"name": "POS",
+    	"type": 6
+    }],
+    "shopSetting":[
+		{"mid":1,"key":"GLO_decimal","value":"0"},
+		{"mid":1,"key":"GLO_gainRuleType","value":"SINGLE"},
+		{"mid":1,"key":"GLO_billNoGenerate","value":"AUTO"},
+		{"mid":2,"key":"RES_strategy","value":"HALF"},
+		{"mid":2,"key":"RES_startTime","value":"09:00"},
+		{"mid":2,"key":"RES_endTime","value":"23:00"},
+		{"mid":2,"key":"RES_ahead","value":"30"}
+	]
+}

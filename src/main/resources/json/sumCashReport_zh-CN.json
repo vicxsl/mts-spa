@@ -1,0 +1,40 @@
+{
+    "config": {
+        "title": "现金流水表",
+        "frozenHead": 1,
+        "frozenLeftColumns": 1,
+        "frozenRightColumns": 0,
+        "disableTotal": 0,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        }
+    },
+    "headTop": [{
+        "text": "日期",
+        "rowspan": "2"
+    }, {
+        "text": "劳动现金",
+        "colspan": "2"
+    }, {
+        "text": "卖品现金",
+        "colspan": "2"
+    }, {
+        "text": "开卡现金",
+        "colspan": "2"
+    }, {
+        "text": "充卡现金",
+        "colspan": "2"
+    }, {
+        "text": "套餐现金",
+        "colspan": "2"
+    }],
+    "head": ["日期"],
+    "columns": [{
+        "width": 150,
+        "sortable": 0,
+        "enableSetVisible": 0,
+        "decimal": 2
+    }]
+}

@@ -1,0 +1,132 @@
+{
+	"basicData": {
+		"status": ["删除", "在职", "离职"]
+	},
+    "headTop": [{
+        "rowspan": "2",
+        "text": "员工"
+    }, {
+        "rowspan": "2",
+        "text": "级别"
+    }, {
+        "colspan": "2",
+        "text": "项目"
+    }, {
+        "colspan": "2",
+        "text": "卖品"
+    }, {
+        "colspan": "2",
+        "text": "开卡"
+    }, {
+        "colspan": "2",
+        "text": "充值"
+    }, {
+        "colspan": "2",
+        "text": "套餐销售"
+    }, {
+        "rowspan": "2",
+        "text": "总提成"
+    }, {
+        "rowspan": "2",
+        "text": "银行卡号"
+    }, {
+        "rowspan": "2",
+        "text": "在职状态"
+    }],
+    "head": ["员工", "级别", "业绩", "提成", "业绩", "提成", "业绩", "提成", "业绩", "提成", "业绩", "提成", "总提成", "银行卡号", "在职状态"],
+    "columns": [{
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "template": "<span>%sumServiceGain% <a href='#' data-empId='%empId%'>明细</a></span>",
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 80,
+        "sortable": 0,
+        "decimal": 0
+    }],
+    "config": {
+        "frozenHead": 2,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        },
+        "disableTotal": 1,
+        "frozenLeftColumns": 2,
+        "title": "员工提成汇总表",
+        "frozenRightColumns": 0,
+        "custmizedBtn": [{
+            "text": "重算提成",
+            "icon": "icon4 recalc"
+        }]
+    }
+}

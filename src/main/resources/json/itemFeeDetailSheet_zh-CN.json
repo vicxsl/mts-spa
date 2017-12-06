@@ -1,0 +1,85 @@
+{
+    "config": {
+        "title": "项目分类业绩汇总表",
+        "frozenHead": 1,
+        "frozenLeftColumns": 0,
+        "frozenRightColumns": 0,
+        "disableTotal": 1,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        }
+    },
+    "head": ["项目", "总个数", "总业绩", "客单价", "指定数", "指定业绩", "非指定数", "非指定业绩", "男客数", "男客业绩", "女客数", "女客业绩"],
+    "columns": [{
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0,
+        "enableSetVisible": 0,
+        "defaultVisible": 1
+    },{
+        "width": 150,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    },{
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    },{
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }]
+}

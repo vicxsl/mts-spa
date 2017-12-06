@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.admin.dao.CityDao">
+	<insert id="create" parameterType="com.qisen.mts.admin.model.entity.City">
+		<![CDATA[
+			insert into sys_city(id,provid,areaid,name,orgno) values 
+			(seq_sys_city.nextval,#{provId},#{areaId},#{name},#{orgNo})
+		]]>
+	</insert>
+	<update id="update" parameterType="com.qisen.mts.admin.model.entity.City">
+		<![CDATA[
+			update sys_city set provid=#{provId},areaid=#{areaId},name=#{name},orgno=#{orgNo} where id=#{id}
+		]]>
+	</update>
+	<delete id="delete" parameterType="java.lang.Integer">
+		<![CDATA[
+			delete from  sys_city  where id=#{id}
+		]]>
+	</delete>
+	<select id="list" resultType="com.qisen.mts.admin.model.entity.City">
+		<![CDATA[
+			select *  from  sys_city 
+		]]>
+		<where>
+			<if test="keyword != null and keyword !=''">
+				<![CDATA[
+					 name like '%'||#{keyword}||'%' 
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="checkCity" resultType="int" parameterType="com.qisen.mts.admin.model.entity.City">
+		<![CDATA[
+			select count(id)  from  sys_city 
+		]]>
+		<where>
+			<![CDATA[
+				 areaId = #{areaId}
+			]]>
+			<if test="id != null and id >0">
+				<![CDATA[
+					 and id != #{id}
+				]]>
+			</if>
+		</where>
+	</select>
+</mapper>

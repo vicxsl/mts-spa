@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.base.TypeDao">
+
+	<select id="list" resultType="com.qisen.mts.common.model.entity.base.Type">
+		<![CDATA[
+			select id,eid,sid,no,name,type,status from base_type 
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and status = #{body.status}
+			]]>
+			<if test="body.type != null and body.type > 0">
+				<![CDATA[
+					and type = #{body.type}
+				]]>
+				<if test="sid != null and sid > 0 and (body.type == 3 || body.type == 4 || body.type == 5 || body.type == 6 || body.type == 7)">
+					<![CDATA[
+						and (sid = #{sid} or nvl(sid,0) = 0)
+					]]>
+				</if>
+			</if>
+		</where>
+		<![CDATA[
+			order by cast(REGEXP_SUBSTR(no, '[0-9]+') as int)
+		]]>
+	</select>
+
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.base.Type">
+		<![CDATA[
+			insert into base_type(id,eid,sid,no,name,type,status) values (seq_base_type.nextval,#{eid},#{sid},#{no},#{name},#{type},1)
+		]]>
+	</insert>
+
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.base.Type">
+		<![CDATA[
+			update base_type set name = #{name} where eid = #{eid} and id = #{id}
+		]]>
+	</update>
+
+	<update id="status">
+		<![CDATA[
+			update base_type set status = #{body.status} where eid = #{eid}
+		]]>
+		<foreach collection="body.ids" index="index" item="id" open="and (" close=")" separator="or">     
+			id = #{id}
+		</foreach>
+	</update>
+
+	<select id="check" resultType="java.lang.Integer"
+		parameterType="com.qisen.mts.common.model.entity.base.Type">
+		<![CDATA[
+			select count(id) from base_type 
+		]]>
+		<where>
+			<![CDATA[
+				status = '1'
+			]]>
+			<choose>
+                <when test="sid != null and sid > 0">
+	                <![CDATA[
+						and (eid = #{eid} or sid = #{sid})
+					]]>
+                </when>
+                <otherwise>
+                	<![CDATA[
+						and eid = #{eid}
+					]]>
+				</otherwise>
+         	</choose>
+			<if test="no != null and no != ''">
+				<![CDATA[
+					and no = #{no}
+				]]>
+			</if>
+			<if test="type != null and type > 0">
+				<choose>
+					<when test="type == 6 or type == 7">
+						<![CDATA[
+							and (type = 6 or type = 7) 
+						]]>
+					</when>
+					<otherwise>
+						<![CDATA[
+							and type = #{type}
+						]]>					
+					</otherwise>
+				</choose>
+			</if>
+			<if test="id != null and id > 0">
+				<![CDATA[
+					and id <> #{id}
+				]]>
+			</if>
+		</where>
+	</select>
+
+</mapper>

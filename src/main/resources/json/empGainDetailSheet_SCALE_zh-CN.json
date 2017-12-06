@@ -1,0 +1,53 @@
+{
+	"basicData": {
+		"pointFee": "指定",
+		"unpointFee": "非指定",
+		"f0PointFee": "小项指定",
+		"f0UnpointFee": "小项非指定",
+		"f1PointFee": "大项指定",
+		"f1UnpointFee": "大项非指定",
+		"f0CashFee": "小项现金类",
+		"f0NonCashFee": "小项非现类",
+		"f1CashFee": "大项现金类",
+		"f1NonCashFee": "大项非现类",
+		"pointCashFee": "指定现金类",
+		"pointNonCashFee": "指定非现类",
+		"unpointCashFee": "非指定现金类",
+		"unpointNonCashFee": "非指定非现类"
+	},
+	"config": {
+        "frozenHead": 2,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        },
+        "disableTotal": 1,
+        "frozenLeftColumns": 1,
+        "title": "员工总服务业绩提成明细表",
+        "frozenRightColumns": 0
+    },
+    "head": ["类型", "业绩", "比例", "提成"],
+    "columns": [{
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }]
+}

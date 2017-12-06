@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.sys.EnterpriseDao">
+	
+	<select id="find" parameterType="int" resultType="com.qisen.mts.common.model.entity.sys.Enterprise">
+		<![CDATA[
+			select id,name,address,linkman,mobile,phone,logo,flag,inputdate,provid,areaid,orgno,servorgno,empid,tempid,remark,tbuser from sys_enterprise where id = #{id}
+		]]>
+	</select>
+	
+	<select id="findTbuser" parameterType="int" resultType="java.lang.String">
+		<![CDATA[
+			select tbuser from sys_enterprise where id = #{id}
+		]]>
+	</select>
+</mapper>

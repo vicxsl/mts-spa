@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.beauty.dao.report.ReportDao">
+	
+	<select id="servicePerfSummary" resultType="java.util.Map">
+		<![CDATA[
+			select
+				sum(a.fee) "fee",
+				b.typeno "typeNo"
+			from ${tbuser}.e${eid}_busi_bill_detail a
+			left join base_item b on b.no = a.itemno and b.status != 0 and b.eid = #{eid} and b.type = 1
+		]]>
+		<where>
+			<![CDATA[
+				a.status = 1
+				and a.btype = 1
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					a.sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.date != null and body.date != ''">
+				and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') = to_date(to_char(#{body.date, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+			</if>
+		</where>
+		<![CDATA[
+			group by b.typeno
+		]]>
+	</select>
+	
+	<select id="sumPerfSummary" resultType="java.util.Map">
+		<![CDATA[
+			select
+				sum(fee) "fee",
+				btype "btype"
+			from ${tbuser}.e${eid}_busi_bill_detail
+		]]>
+		<where>
+			<![CDATA[
+				status = 1
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					sid = #{sid}
+				</foreach>
+			</if>
+			<choose>
+				<when test="body.date != null and body.date != ''">
+					<![CDATA[
+						and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') = to_date(to_char(#{body.date, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+					]]>
+				</when>
+				<otherwise>
+					<if test="body.startDate != null and body.startDate != ''">
+						<![CDATA[
+							and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+						]]>
+					</if>
+					<if test="body.endDate != null and body.endDate != ''">
+						<![CDATA[
+							and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+						]]>
+					</if>
+				</otherwise>
+			</choose>
+		</where>
+		<![CDATA[
+			group by btype
+		]]>
+	</select>
+	
+	<select id="customerSummary" resultType="java.util.Map">
+		<![CDATA[
+			select
+				count(distinct a.id) "count",
+				a.id "billId",
+				nvl(c.pointtype,0) "pointType",
+				a.sex "sex",
+				b.ctype "ctype",
+				sum(distinct b.fee) "fee"
+			from ${tbuser}.e${eid}_busi_bill a
+			left join ${tbuser}.e${eid}_busi_bill_detail b on b.billid = a.id
+			left join ${tbuser}.e${eid}_busi_empfee c on c.detailid = b.id and nvl(c.pointtype,0) = 1 and rownum = 1
+		]]>
+		<where>
+			<![CDATA[
+				and a.status != '0'
+				and a.btype = 1
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					a.sid = #{sid}
+				</foreach>
+			</if>
+			<choose>
+				<when test="body.date != null and body.date != ''">
+					<![CDATA[
+						and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') = to_date(to_char(#{body.date, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+					]]>
+				</when>
+				<otherwise>
+					<if test="body.startDate != null and body.startDate != ''">
+						<![CDATA[
+							and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+						]]>
+					</if>
+					<if test="body.endDate != null and body.endDate != ''">
+						<![CDATA[
+							and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+						]]>
+					</if>
+				</otherwise>
+			</choose>
+		</where>
+		<![CDATA[
+			group by c.pointtype,b.ctype,a.sex,a.id,b.id
+			order by "pointType" desc
+		]]>
+	</select>
+	
+	<select id="incomeSummary" resultType="java.util.Map">
+		<![CDATA[
+			select btype "btype",
+		]]>
+		<foreach collection="body.payTypes" index="index" item="payType" separator=",">     
+			sum(to_number(nvl(json_value(pay, '$."${payType.no}"'),0))) "${payType.no}"
+		</foreach>
+		<![CDATA[
+			from ${tbuser}.e${eid}_busi_pay
+		]]>
+		<where>
+			<![CDATA[
+				status = 1 and depcode = 'ALL'
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					sid = #{sid}
+				</foreach>
+			</if>
+			<choose>
+				<when test="body.date != null and body.date != ''">
+					<![CDATA[
+						and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') = to_date(to_char(#{body.date, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+					]]>
+				</when>
+				<otherwise>
+					<if test="body.startDate != null and body.startDate != ''">
+						<![CDATA[
+							and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+						]]>
+					</if>
+					<if test="body.endDate != null and body.endDate != ''">
+						<![CDATA[
+							and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+						]]>
+					</if>
+				</otherwise>
+			</choose>
+		</where>
+		<![CDATA[
+			group by btype
+		]]>
+	</select>
+	
+	<select id="itemSummary" resultType="java.util.Map">
+		<![CDATA[
+			select
+				a.id,
+				a.btype "btype",
+				a.itemname "itemName",
+				sum(distinct nvl(a.num,1)) "count",
+				nvl(b.pointtype,0) "pointType",
+				sum(distinct a.fee) "fee"
+			from ${tbuser}.e${eid}_busi_bill_detail a
+			left join ${tbuser}.e${eid}_busi_empfee b on b.detailid = a.id and b.gaintype = 1 and nvl(b.pointtype,0) = 1 and rownum = 1
+		]]>
+		<where>
+			<![CDATA[
+				a.status = 1
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					a.sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.startDate != null and body.startDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.endDate != null and body.endDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			group by a.id,a.btype,a.itemname,b.pointtype
+		]]>
+	</select>
+	
+	<select id="empFeeDetails" resultType="java.util.Map">
+		<![CDATA[
+			select
+				a.empid "empId",
+				nvl(a.pointtype,0) "pointType",
+				nvl(a.itemtype,0) "itemType",
+				a.gaintype "gainType",
+				b.sex "sex",
+				count(distinct a.billid) "count",
+				sum(nvl(a.totalfee,0)) "totalFee"
+		]]>
+		<foreach collection="body.payTypes" index="index" item="payType" open=",sum(" close=")" separator="+">     
+			<if test="payType.type != null and payType.type == 6">
+				to_number(nvl(json_value(a.fee, '$."${payType.no}"'),0))
+			</if>
+		</foreach>
+		"cashFee"
+		<foreach collection="body.payTypes" index="index" item="payType" open=",sum(" close=") " separator="+">     
+			<if test="payType.type != null and payType.type == 7">
+				to_number(nvl(json_value(a.fee, '$."${payType.no}"'),0))
+			</if>
+		</foreach>
+		"nonCashFee"
+		<![CDATA[
+			from ${tbuser}.e${eid}_busi_empfee a
+			left join ${tbuser}.e${eid}_busi_bill b on b.id = a.billid
+		]]>
+		<where>
+			<![CDATA[
+				a.status = 1
+			]]>
+			<if test="body.containsKey('gtype') and body.gtype != null">
+				<![CDATA[
+					and a.gtype = #{body.gtype}
+				]]>
+			</if>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					a.sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.startDate != null and body.startDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.endDate != null and body.endDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			group by a.empid,a.pointtype,a.itemtype,a.gaintype,b.sex
+			order by "pointType" desc
+		]]>
+	</select>
+	
+	<select id="empGainSum" resultType="java.util.Map">
+		<![CDATA[
+			select
+				empid "empId",
+				gaintype "gainType",
+				sum(nvl(totalfee,0)) "totalFee",
+				sum(nvl(totalgain,0)) "totalGain"
+		]]>
+		<![CDATA[
+			from ${tbuser}.e${eid}_busi_empfee
+		]]>
+		<where>
+			<![CDATA[
+				status = 1
+			]]>
+			<if test="body.containsKey('gtype') and body.gtype != null">
+				<![CDATA[
+					and gtype = #{body.gtype}
+				]]>
+			</if>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.startDate != null and body.startDate != ''">
+				<![CDATA[
+					and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.endDate != null and body.endDate != ''">
+				<![CDATA[
+					and to_date(to_char(bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			group by empid,gaintype
+		]]>
+	</select>
+	
+	<select id="empServiceGainDetails" resultType="java.util.Map">
+		<![CDATA[
+			select
+				b.itemName "itemName",
+				nvl(a.pointtype,0) "pointType",
+				nvl(a.itemtype,0) "itemType",
+				a.ctype "ctype",
+				count(a.id) "count",
+				sum(nvl(a.totalfee,0)) "totalFee",
+				sum(nvl(a.totalgain,0)) "totalGain",
+		]]>
+		<foreach collection="body.payTypes" index="index" item="payType" separator=",">     
+			sum(to_number(nvl(json_value(a.fee, '$."${payType.no}"'),0))) "fee_${payType.no}",
+			sum(to_number(nvl(json_value(a.gain, '$."${payType.no}"'),0))) "gain_${payType.no}"
+		</foreach>
+		<foreach collection="body.payTypes" index="index" item="payType" open=",sum(" close=")" separator="+">     
+			<if test="payType.type != null and payType.type == 6">
+				to_number(nvl(json_value(a.fee, '$."${payType.no}"'),0))
+			</if>
+		</foreach>
+		"cashFee"
+		<foreach collection="body.payTypes" index="index" item="payType" open=",sum(" close=") " separator="+">     
+			<if test="payType.type != null and payType.type == 7">
+				to_number(nvl(json_value(a.fee, '$."${payType.no}"'),0))
+			</if>
+		</foreach>
+		"nonCashFee"
+		<![CDATA[
+			from ${tbuser}.e${eid}_busi_empfee a
+			left join ${tbuser}.e${eid}_busi_bill_detail b on b.id = a.detailid
+		]]>
+		<where>
+			<![CDATA[
+				a.status = 1 and a.gaintype = 1 and a.empid = #{body.empId}
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					a.sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.startDate != null and body.startDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.endDate != null and body.endDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			group by a.pointtype,a.ctype,a.itemtype,b.itemname
+		]]>
+	</select>
+	
+	<select id="itemTypeFeeDetails" resultType="java.util.Map">
+		<![CDATA[
+			select
+				a.id,
+				nvl(b.pointtype,0) "pointType",
+				c.typeno "typeNo",
+				count(distinct a.id) "count",
+				sum(distinct a.fee) "fee"
+			from ${tbuser}.e${eid}_busi_bill_detail a
+			left join ${tbuser}.e${eid}_busi_empfee b on b.detailid = a.id and b.gaintype = 1 and nvl(b.pointtype,0) = 1 and rownum = 1
+			left join base_item c on c.no = a.itemno and c.status != 0 and c.eid = #{eid} and c.type = 1
+		]]>
+		<where>
+			<![CDATA[
+				a.status = 1 and a.btype = 1
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					a.sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.startDate != null and body.startDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.endDate != null and body.endDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			group by a.id,b.pointtype,c.typeno
+		]]>
+	</select>
+	
+	<select id="itemFeeDetails" resultType="java.util.Map">
+		<![CDATA[
+			select
+				a.id,
+				a.itemname "itemName",
+				count(distinct a.id) "count",
+				nvl(b.pointtype,0) "pointType",
+				sum(distinct a.fee) "fee",
+				c.sex "sex"
+			from ${tbuser}.e${eid}_busi_bill_detail a
+			left join ${tbuser}.e${eid}_busi_empfee b on b.detailid = a.id and b.gaintype = 1 and nvl(b.pointtype,0) = 1 and rownum = 1
+			left join ${tbuser}.e${eid}_busi_bill c on c.id = a.billid
+			left join base_item d on d.no = a.itemno and d.status != 0 and d.eid = #{eid} and d.type = 1
+		]]>
+		<where>
+			<![CDATA[
+				a.status = 1 and a.btype = 1
+			]]>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					a.sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.startDate != null and body.startDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') >= to_date(to_char(#{body.startDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.endDate != null and body.endDate != ''">
+				<![CDATA[
+					and to_date(to_char(a.bday, 'yyyy-mm-dd'), 'yyyy-mm-dd') <= to_date(to_char(#{body.endDate, jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.typeNo != null and body.typeNo != ''">
+				<![CDATA[
+					and d.typeno = #{body.typeNo}
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			group by a.id,a.itemname,b.pointtype,c.sex
+			order by "pointType" desc
+		]]>
+	</select>
+	
+	<select id="cardFeeWater" resultType="java.util.Map">
+		<![CDATA[
+			select sid,type,sum(paycard) paycardfee,sum(paypresent) paypresentfee,to_char(inputdate,'yyyy-mm-dd') workdate from ${tbuser}.e${eid}_mem_card_record
+		]]>
+		<where>
+			<![CDATA[
+				memsid=#{sid} 
+				and to_date(to_char(inputdate, 'yyyy-mm-dd'), 'yyyy-mm-dd')>=#{startDate}
+				and to_date(to_char(inputdate, 'yyyy-mm-dd'), 'yyyy-mm-dd')<=#{endDate}
+				and stype='1'
+			]]>
+		</where>
+		<![CDATA[
+			group by sid,type,to_char(inputdate,'yyyy-mm-dd')
+		]]>
+	</select>
+	
+	<select id="cardFeeMap" resultType="com.qisen.mts.common.model.entity.mem.CardRecord">
+		<![CDATA[
+			select sum(paycard) paycardfee,sum(paypresent) paypresentfee from ${tbuser}.e${eid}_mem_card_record
+		]]>
+		<where>
+			<![CDATA[
+				 memsid=#{sid} 
+				 and to_date(to_char(inputdate, 'yyyy-mm-dd'), 'yyyy-mm-dd')>#{endDate}
+				 and stype='1'
+			]]>
+		</where>
+	</select>
+	
+	<select id="sumCashReport"  resultType="java.util.Map">
+		<![CDATA[
+			select btype,to_char(BDAY,'yyyy-mm-dd') BDAY
+		]]>
+		<foreach collection="noList" index="index" item="no" open="," close="" separator=",">     
+			<![CDATA[
+				sum(json_value(pay,'$."${no}"')) as "${no}"
+			]]>
+		</foreach>
+			<![CDATA[
+			 	from ${tbuser}.e${eid}_busi_pay
+			 ]]>
+			<where>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					sid = #{sid}
+				</foreach>
+			</if>
+				<![CDATA[
+					and status = '1'
+				]]>
+			<if test="body.depcode != null and body.depcode !=''">
+				<![CDATA[
+					and depcode = ${body.depcode}
+				]]>
+			</if>
+			<if test="body.startDate != null">
+				<![CDATA[
+					and (to_date(to_char(BDAY,'yyyy-mm-dd'),'yyyy-mm-dd') >= to_date(to_char(#{body.startDate,jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd'))
+				]]>
+			</if>
+			<if test="body.endDate != null">
+				<![CDATA[
+					and (to_date(to_char(BDAY,'yyyy-mm-dd'),'yyyy-mm-dd') <= to_date(to_char(#{body.endDate,jdbcType=DATE}, 'yyyy-mm-dd'), 'yyyy-mm-dd'))
+				]]>
+			</if>
+			</where>
+		<![CDATA[
+			GROUP BY btype,to_char(BDAY,'yyyy-mm-dd') order by BDAY
+		]]>
+	</select>
+	
+	<!-- 查询日期集合 -->
+	<select id="sumBday"  resultType="java.util.Map">
+		<![CDATA[
+			select to_char(BDAY,'yyyy-mm-dd') BDAY from ${tbuser}.e${eid}_busi_pay
+		]]>
+		<where>
+			<if test="body.containsKey('sids') and body.sids != null">
+				<foreach collection="body.sids" index="index" item="sid" open="(" close=")" separator="or">     
+					sid = #{sid}
+				</foreach>
+			</if>
+			<if test="body.status != null and body.status !=''">
+				<![CDATA[
+					and status = ${body.status}
+				]]>
+			</if>
+			<if test="body.depcode != null and body.depcode !=''">
+				<![CDATA[
+					and depcode = ${body.depcode}
+				]]>
+			</if>
+			<if test="body.startDate != null">
+				<![CDATA[
+					and to_date(to_char(BDAY,'yyyy-mm-dd'),'yyyy-mm-dd') >= to_date(to_char(#{body.startDate,jdbcType=DATE},'yyyy-mm-dd'),'yyyy-mm-dd')
+				]]>
+			</if>
+			<if test="body.endDate != null">
+				<![CDATA[
+					and to_date(to_char(BDAY,'yyyy-mm-dd'),'yyyy-mm-dd') <= to_date(to_char(#{body.endDate,jdbcType=DATE},'yyyy-mm-dd'),'yyyy-mm-dd')
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			GROUP BY to_char(BDAY,'yyyy-mm-dd') order by BDAY
+		]]>
+	</select>
+</mapper>

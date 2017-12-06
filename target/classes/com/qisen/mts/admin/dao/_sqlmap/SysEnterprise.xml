@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.admin.dao.AdminEnterpriseDao">
+	
+	<select id="count" resultType="java.lang.Integer">
+		<![CDATA[
+			select count(id) from sys_enterprise 
+		]]>
+		<where>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					(name like '%'||#{body.keyword}||'%' or linkman like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.id != null and body.id >0 ">
+				<![CDATA[
+					and id=#{body.id}
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="list" resultType="com.qisen.mts.common.model.entity.sys.Enterprise">
+		<![CDATA[
+			select n.* from (
+			select m.*, rownum rn from(
+				select id,name,address,linkman,mobile,phone,logo,flag,inputdate,provid,areaid,orgno,servorgno,empid,tempid,remark,tbuser from sys_enterprise
+		]]>
+		<where>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					(name like '%'||#{body.keyword}||'%' or linkman like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.id != null and body.id >0 ">
+				<![CDATA[
+					and id=#{body.id}
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			order by inputdate desc ) m) n
+		]]>
+		<if test="endIndex != null and endIndex > 0 and startIndex != null and startIndex >= 0 ">
+			<![CDATA[
+			 	where n.rn between #{startIndex} and #{endIndex}
+			]]>
+		</if>
+	</select>
+	
+	<select id="listShop" resultType="com.qisen.mts.common.model.entity.sys.Shop">
+		<![CDATA[
+			select * from sys_shop 
+		]]>
+		<where>
+			<foreach collection="enterprises" index="index" item="enterprise" open="(" close=")" separator="or">
+				eid = ${enterprise.id}
+        	</foreach>
+			<!-- <if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					and (name like '%'||#{body.keyword}||'%' or linkman like '%'||#{body.keyword}||'%')
+				]]>
+			</if> -->
+		</where>
+		<![CDATA[
+			order by inputdate desc 
+		]]>
+	</select>
+	
+	<select id="shop" resultType="com.qisen.mts.common.model.entity.sys.Shop">
+		<![CDATA[
+			select * from sys_shop 
+		]]>
+		<where>
+			<if test="body.eid != null and body.eid > 0">
+				<![CDATA[
+					eid=#{body.eid}
+				]]>
+			</if>
+			<if test="body.id != null and body.id > 0">
+				<![CDATA[
+					and id=#{body.id}
+				]]>
+			</if>
+			<if test="body.name != null and body.name !=''">
+				<![CDATA[
+					and name=#{body.name}
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<update id="set" parameterType="com.qisen.mts.common.model.entity.sys.Enterprise">
+		<![CDATA[
+			update sys_enterprise
+		]]>
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name != ''">
+				<![CDATA[
+					name = #{name},
+				]]>
+			</if>
+			<if test="address != null and address != ''">
+				<![CDATA[
+					address = #{address},
+				]]>
+			</if>
+			<if test="linkman != null and linkman != ''">
+				<![CDATA[
+					linkman = #{linkman},
+				]]>
+			</if>
+			<if test="mobile != null">
+				<![CDATA[
+					mobile = #{mobile},
+				]]>
+			</if>
+			<if test="phone != null">
+				<![CDATA[
+					phone = #{phone},
+				]]>
+			</if>
+			<if test="flag != null and flag != ''">
+				<![CDATA[
+					flag = #{flag},
+				]]>
+			</if>
+			<if test="inputDate != null">
+				<![CDATA[
+					inputDate = #{inputDate},
+				]]>
+			</if>
+			<if test="remark != null ">
+				<![CDATA[
+					remark = #{remark},
+				]]>
+			</if>
+			<if test="orgNo != null">
+				<![CDATA[
+					orgNo = #{orgNo},
+				]]>
+			</if>
+			<if test="servorGno != null">
+				<![CDATA[
+					servorGno = #{servorGno},
+				]]>
+			</if>
+			<if test="empId != null">
+				<![CDATA[
+					empId = #{empId},
+				]]>
+			</if>
+			<if test="tempId != null">
+				<![CDATA[
+					tempId = #{tempId},
+				]]>
+			</if>
+		</trim>
+		<where>
+			<![CDATA[
+				id = #{id} 
+			]]>
+		</where>
+	</update>
+</mapper>

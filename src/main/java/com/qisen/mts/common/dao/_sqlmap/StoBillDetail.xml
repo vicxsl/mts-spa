@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.sto.StoBillDetailDao">
+	
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.sto.BillDetail">
+		<![CDATA[
+			insert into sto_bill_detail(id,eid,billid,day,outsid,insid,itemno,num,money,btype,stype,status) 
+			values(seq_sto_bill_detail_detail.nextval,#{eid},#{billid},#{day},#{outsid},#{insid},#{itemno},#{num},#{money},#{btype},#{stype},#{status})
+		]]>
+	</insert>
+
+	<insert id="createBatch4Sale">
+		insert into sto_bill_detail(id,eid,billid,day,outsid,insid,itemid,itemno,num,money,btype,stype,inprice,status)
+			select seq_sto_bill_detail.nextval,a.* from(
+			<foreach collection="list" item="detail" index="index" separator="union all">  
+        		select #{eid} "eid",#{billId} "billid",#{detail.bday} "day",#{sid} "outsid",null "insid",
+        			#{detail.itemId} "itemid",#{detail.itemNo} "itemno",#{detail.num} "num",#{detail.money} "money",
+        			#{detail.btype} "btype",#{detail.stype} "stype",null "inprice",1 "status" from dual
+    		</foreach>
+    	) a
+	</insert>
+
+	<update id="cancel4Sale">
+		<![CDATA[
+			update sto_bill_detail set status = 0 
+			where eid = #{eid} and billid = (select id from sto_bill where billid = #{billId})
+		]]>
+	</update>
+	
+	<select id="findByBillId" resultType="com.qisen.mts.common.model.entity.sto.BillDetail">
+		<![CDATA[
+			select id,eid,billid,day,outsid,insid,itemid,itemno,num,money,btype,stype,status,version,status,inprice
+			from sto_bill_detail
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and billid = (select id from sto_bill where billid = #{billId})
+			]]>
+		</where>
+	</select>
+	
+	<update id="update"
+		parameterType="com.qisen.mts.common.model.entity.sto.BillDetail">
+		<![CDATA[
+			update sto_bill_detail
+		]]>
+		<trim prefix="SET" suffixOverrides="," suffix="WHERE id = #{id} AND nvl(VERSION,0) = nvl(#{version},0)">
+			VERSION = VERSION + 1,
+			<if test="day != null"> 
+	    		<![CDATA[
+	    			day=#{day},
+	    		]]>
+			</if>
+			<if test="itemId != null"> 
+	    		<![CDATA[
+	    			itemid=#{itemId},
+	    		]]>
+			</if>
+			<if test="itemNo != null"> 
+	    		<![CDATA[
+	    			itemno=#{itemNo},
+	    		]]>
+			</if>
+			<if test="num != null"> 
+	    		<![CDATA[
+	    			num=#{num},
+	    		]]>
+			</if>
+			<if test="money != null"> 
+	    		<![CDATA[
+	    			money=#{money},
+	    		]]>
+			</if>
+			<if test="bType != null"> 
+	    		<![CDATA[
+	    			btype=#{bType},
+	    		]]>
+			</if>
+			<if test="sType != null"> 
+	    		<![CDATA[
+	    			stype=#{sType},
+	    		]]>
+			</if>
+			<if test="status != null"> 
+	    		<![CDATA[
+	    			status=#{status}
+	    		]]>
+			</if>
+		</trim>
+	</update>
+
+</mapper>

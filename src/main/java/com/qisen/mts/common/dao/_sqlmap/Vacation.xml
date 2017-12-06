@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.inte.VacationDao">
+	<insert id="add" parameterType="com.qisen.mts.common.model.entity.inte.Vacation">
+		<selectKey resultType="java.lang.Integer" order="BEFORE"
+			keyProperty="id">
+			SELECT SEQ_INTE_VACATION.NEXTVAL FROM DUAL
+		</selectKey>
+    <![CDATA[
+           INSERT INTO INTE_VACATION 
+      	(ID,
+		 EID,
+		 SID,
+		 EMPID,
+		 EMPNAME,
+		 VACATIONDATE)
+      VALUES
+      	(#{id},#{eid},#{sid},#{empId},#{empName},TRUNC(#{vacationDate},'dd'))
+    ]]>
+	</insert>
+
+	<delete id="delete" parameterType="com.qisen.mts.common.model.entity.inte.Vacation">
+	<![CDATA[
+	  DELETE FROM INTE_VACATION WHERE id=#{id}
+	 ]]>
+	</delete>
+	<select id="queryByMonth" parameterType="com.qisen.mts.common.model.entity.inte.Vacation" resultType="com.qisen.mts.common.model.entity.inte.Vacation">
+		SELECT * FROM INTE_VACATION
+		<where>
+		<![CDATA[
+			EID = #{eid} AND SID = #{sid} AND VACATIONDATE >= TRUNC(#{vacationDate},'MON') AND VACATIONDATE < TRUNC(ADD_MONTHS(#{vacationDate},1),'MON')
+		]]>
+		</where>
+	</select>
+	<select id="queryByDay" parameterType="com.qisen.mts.common.model.entity.inte.Vacation" resultType="com.qisen.mts.common.model.entity.inte.Vacation">
+		SELECT * FROM INTE_VACATION
+		<where>
+		<![CDATA[
+			EID = #{eid} AND SID = #{sid} AND VACATIONDATE = TRUNC(#{vacationDate},'dd')
+		]]>
+		</where>
+	</select>
+	<select id="checkVacationAvailabilty"  parameterType="com.qisen.mts.common.model.entity.inte.Reservation" resultType="int">
+		SELECT
+			COUNT (ID)
+		FROM
+			INTE_VACATION
+		WHERE
+			EID = #{eid}
+		AND SID = #{sid}
+		AND EMPID = #{empId}
+		AND VACATIONDATE = TRUNC(#{reservationTime},'dd')
+	</select>
+</mapper>

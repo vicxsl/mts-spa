@@ -1,0 +1,224 @@
+{
+    "config": {
+        "title": "Bảng tổng doanh số nhân viên",
+        "frozenHead": 2,
+        "frozenLeftColumns": 1,
+        "frozenRightColumns": 0,
+        "disableTotal": 1,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        }
+    },
+    "headTop": [{
+        "text": "Nhân viên",
+        "rowspan": "2"
+    }, {
+        "text": "Tổng",
+        "colspan": "3"
+    }, {
+        "text": "Doanh số lao động",
+        "colspan": "3"
+    }, {
+        "text": "Doanh số bán hàng",
+        "colspan": "3"
+    }, {
+        "text": "Doanh số bán gói",
+        "colspan": "3"
+    }, {
+        "text": "Doanh số mở thẻ",
+        "rowspan": "2"
+    }, {
+        "text": "Doanh số nạp thẻ",
+        "rowspan": "2"
+    }, {
+        "text": "Doanh số dịch vụ nhỏ",
+        "colspan": "3"
+    }, {
+        "text": "Doanh số dịch vụ lớn",
+        "colspan": "3"
+    }, {
+        "text": "Chỉ định số lượng",
+        "rowspan": "2"
+    }, {
+        "text": "Doanh số chỉ định",
+        "rowspan": "2"
+    }, {
+        "text": "Phi chỉ định số lượng",
+        "rowspan": "2"
+    }, {
+        "text": "Doanh số phi chỉ định",
+        "rowspan": "2"
+    }, {
+        "text": "Tỷ lệ chỉ định",
+        "rowspan": "2"
+    }, {
+        "text": "Tổng số",
+        "rowspan": "2"
+    }],
+    "head": ["Nhân viên", "Doanh số tổng", "Tổng tiền mặt", "Tổng Không phải là tiền mặt", "Doanh số tổng", "Tiền mặt", "Không phải là tiền mặt", "Doanh số tổng", "Tiền mặt", "Không phải là tiền mặt", "Doanh số tổng", "Tiền mặt", "Không phải là tiền mặt", "Doanh số mở thẻ", "Doanh số nạp thẻ", "Chỉ định", "Phi chỉ định", "Tổng số", "Chỉ định", "Phi chỉ định", "Tổng số", "Chỉ định số lượng", "Doanh số chỉ định", "Phi chỉ định số lượng", "Doanh số phi chỉ định", "Tỷ lệ chỉ định", "Tổng số"],
+    "columns": [{
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0,
+        "enableSetVisible": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 180,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 180,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 180,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 100,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 100,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 120,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 100,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 100,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }]
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.mem.CardRecordDao">
+	
+	<insert id="create">
+		<![CDATA[
+			insert into ${tbuser}.e${eid}_mem_card_record(id,sid,memid,memsid,memcardid,cardfee,paycard,presentfee,paypresent,cardtypeno,cardno,cardname,billid,type,inputdate,stype)
+			values 
+			(seq_mem_card_record.nextval,#{cardRecord.sid},#{cardRecord.memId},#{cardRecord.memSid},#{cardRecord.memCardId},#{cardRecord.cardFee},#{cardRecord.payCard},#{cardRecord.presentFee},
+			#{cardRecord.payPresent},#{cardRecord.cardTypeNo},#{cardRecord.cardNo},#{cardRecord.cardName},#{cardRecord.billId},#{cardRecord.type},sysdate,#{cardRecord.stype})
+		]]>
+	</insert>
+	
+	<update id="rollback4Bill">
+		<![CDATA[
+			update ${tbuser}.e${eid}_mem_card_record 
+			set stype = 0
+			where billid = #{billId}
+		]]>
+	</update>
+	
+	<select id="findByBillId" resultType="com.qisen.mts.common.model.entity.mem.CardRecord">
+		<![CDATA[
+			select id,sid,memid,memsid,memcardid,cardfee,paycard,presentfee,paypresent,cardtypeno,cardno,cardname,billid,type,inputdate,stype
+			from ${tbuser}.e${eid}_mem_card_record
+			where billid= #{billId}
+		]]>
+	</select>
+	
+</mapper>

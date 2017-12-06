@@ -1,0 +1,75 @@
+{
+	"basicData": {
+		"itemType": ["小项", "大项"],
+		"pointType": ["非指定", "指定"],
+		"ctype": ["散客", "用卡", "套餐"],
+		"SUM": "合计"
+	},
+    "config": {
+        "frozenHead": 2,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        },
+        "disableTotal": 1,
+        "frozenLeftColumns": 1,
+        "title": "员工服务业绩提成明细表",
+        "frozenRightColumns": 0
+    },
+    "head": ["项目名称", "项目类型", "指定类型", "消费类型", "数量", "提成"],
+    "headTop": [{
+        "rowspan": "2",
+        "text": "项目名称"
+    }, {
+        "rowspan": "2",
+        "text": "项目类型"
+    }, {
+        "rowspan": "2",
+        "text": "指定类型"
+    }, {
+        "rowspan": "2",
+        "text": "消费类型"
+    }, {
+        "rowspan": "2",
+        "text": "数量"
+    }, {
+        "rowspan": "2",
+        "text": "提成"
+    }, {
+        "colspan": "5",
+        "text": "业绩"
+    }],
+    "columns": [{
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }]
+}

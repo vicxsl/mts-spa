@@ -1,0 +1,62 @@
+{
+    "config": {
+        "title": "Bảng tổng doanh số phân loại dịch vụ",
+        "frozenHead": 1,
+        "frozenLeftColumns": 0,
+        "frozenRightColumns": 0,
+        "disableTotal": 1,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        }
+    },
+    "head": ["Phân loại dịch vụ", "Tổng số dịch vụ", "Tổng doanh số", "Đơn giá dịch vụ", "Số lượng chỉ định", "Doanh số chỉ định", "Tỷ lệ chỉ định", "Thao tác"],
+    "columns": [{
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0,
+        "enableSetVisible": 0,
+        "defaultVisible": 1
+    },{
+        "width": 150,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    },{
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    },{
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 2,
+        "defaultVisible": 1
+    }, {
+        "width": 150,
+        "percentage": 0,
+        "sortable": 1,
+        "decimal": 0,
+        "defaultVisible": 1
+    }, {
+    	"template": "<span><a href='#' data-typeNo='%data%'>Chi tiết</a></span>",
+        "width": 150,
+        "percentage": 0,
+        "sortable": 0,
+        "decimal": 0,
+        "defaultVisible": 1
+    }]
+}

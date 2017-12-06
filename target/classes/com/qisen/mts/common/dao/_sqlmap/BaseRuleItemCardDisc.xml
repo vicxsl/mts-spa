@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qisen.mts.common.dao.base.RuleItemCardDiscDao">
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.base.RuleItemCardDisc">
+	<![CDATA[
+		insert into base_rule_item_carddisc(id,eid,sid,itemno,cardtypeno,way,disc) values (seq_base_item_carddisc.nextval,#{eid},#{sid},#{itemNo},#{cardTypeNo},#{way},#{disc})
+	]]>
+	</insert>
+	
+	<delete id="delete">
+		delete from  base_rule_item_carddisc
+		<where>
+			eid = #{eid}
+			<if test="sid != null and sid > 0">
+				and sid = #{sid}
+			</if>
+			<foreach collection="body.ids" index="index" item="id" open="and (" close=")" separator="or">     
+				id = #{id}
+			</foreach>
+		</where>
+	</delete>
+	
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.base.RuleItemCardDisc">
+		<![CDATA[
+			update base_rule_item_carddisc
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="cardTypeNo != null and cardTypeNo != ''">
+				<![CDATA[
+					 cardtypeno = #{cardTypeNo},
+				]]>
+			</if>
+			<if test="way != null">
+				<![CDATA[
+					way = #{way},
+				]]>
+			</if>
+			<if test="disc != null and disc > 0">
+				<![CDATA[
+					disc = #{disc},
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+			where eid = #{eid} and sid = nvl(#{sid},'0') and id = #{id}
+		]]>
+	</update>
+
+	<select id="list" resultType="com.qisen.mts.common.model.entity.base.RuleItemCardDisc">
+		<![CDATA[
+			select id,eid,sid,itemno,cardtypeno,way,disc from base_rule_item_carddisc 
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} 
+			]]>
+			<if test="sid != null and sid != -1">
+			
+			</if>
+			<choose>
+				<when test="sid != null and sid > 0">
+					and sid = #{sid}
+				</when>
+				<when test="sid == null or (sid != null and sid != 0)">
+					and nvl(sid,0) = 0
+				</when>
+			</choose>
+			<if test="itemNo != null and itemNo != ''">
+				<![CDATA[
+					and itemNo = #{itemNo}
+				]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="find" parameterType="int" resultType="com.qisen.mts.common.model.entity.base.RuleItemCardDisc">
+		<![CDATA[
+			select id,eid,sid,itemno,cardtypeno,way,disc from base_rule_item_carddisc where id = #{id}
+		]]>
+	</select>
+
+	<select id="check" resultType="int">
+		<![CDATA[
+			select count(id) from base_rule_item_carddisc
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} 
+			]]>
+			<choose>
+				<when test="sid != null and sid > 0">
+					and	sid = #{sid} 
+				</when>
+				<otherwise>
+				and nvl(sid,0)=0
+				</otherwise>
+			</choose>
+			<if test="itemNo != null and itemNo != ''">
+				<![CDATA[
+					and itemno = #{itemNo}
+				]]>
+			</if>
+			<if test="cardTypeNo != null and cardTypeNo != ''">
+				<![CDATA[
+					and cardtypeno = #{cardTypeNo}
+				]]>
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.beauty.dao.busi.EmpFeeDao">
+	
+	<insert id="create">
+		<![CDATA[
+			insert into ${tbuser}.e${eid}_busi_empfee(id,sid,billid,detailid,empid,totalfee,fee,totalgain,gain,pointtype,gaintype,ctype,itemtype,station,gtype,gno,bday,status) 
+			values
+			(seq_busi_empfee.nextval,#{sid},#{billId},#{detailId},#{empFee.empId},#{empFee.totalFee},#{empFee.fee},#{empFee.totalGain},#{empFee.gain},#{empFee.pointType},
+			#{empFee.gainType},#{empFee.ctype},#{empFee.itemType},#{empFee.station},#{empFee.gtype},#{empFee.gno},#{empFee.bday},1)
+		]]>
+	</insert>
+	
+	<insert id="createBatch">
+		insert into ${tbuser}.e${eid}_busi_empfee(id,sid,billid,detailid,empid,totalfee,fee,totalgain,gain,pointtype,gaintype,ctype,itemtype,station,gtype,gno,bday,status) 
+		select seq_busi_empfee.nextval, a.*
+		from (
+		<foreach collection="list" item="empFee" index="index" separator="union all">
+			select #{sid},#{billId},#{detailId},#{empFee.empId},#{empFee.totalFee},#{empFee.fee},#{empFee.totalGain},#{empFee.gain},#{empFee.pointType},
+			#{empFee.gainType},#{empFee.ctype},#{empFee.itemType},#{empFee.station},#{empFee.gtype},#{empFee.gno},#{empFee.bday},1 from dual
+		</foreach>
+		) a
+	</insert>
+	
+	<update id="cancel">
+		<![CDATA[
+			update ${tbuser}.e${eid}_busi_empfee set status = 0 where sid = #{sid} and billid = #{billId}
+		]]>
+	</update>
+	
+	<select id="findByBillId" resultType="com.qisen.mts.beauty.model.entity.busi.EmpFee">
+		<![CDATA[
+			select id,sid,billid,detailid,empid,totalfee,fee,totalgain,gain,pointtype,gaintype,ctype,itemtype,station,gtype,gno,bday,status
+			from ${tbuser}.e${eid}_busi_empfee
+		]]>
+		<where>
+			<![CDATA[
+				sid = #{sid} and billid = #{billId} 
+			]]>
+		</where>
+	</select>
+	
+	<select id="find4Recalc" resultType="java.util.Map">
+		<![CDATA[
+			select 
+				a.id "id",
+				a.totalfee "totalFee",
+				a.fee "fee",
+				a.pointtype "pointType",
+				a.gaintype "gainType",
+				a.ctype "ctype",
+				a.itemtype "itemType",
+				a.gtype "gtype",
+				a.gno "gno",
+				d.no "eno",
+				b.fee "price",
+				b.itemno "itemNo",
+				nvl(c.typeno, '-1') "typeNo"
+			from 
+				${tbuser}.e${eid}_busi_empfee a
+			inner join 
+				${tbuser}.e${eid}_busi_bill_detail b 
+				on b.id = a.detailid and b.ctype != 3
+			left join 
+				base_item c 
+				on c.id = b.itemid and c.eid = #{eid}
+			left join 
+				base_emp d 
+				on d.id = a.empid
+		]]>
+		<where>
+			<![CDATA[
+				a.sid = #{sid} and a.billid = #{billId} 
+			]]>
+		</where>
+		<![CDATA[
+			union all
+			select 
+				a.id "id",
+				a.totalfee "totalFee",
+				a.fee "fee",
+				a.pointtype "pointType",
+				a.gaintype "gainType",
+				a.ctype "ctype",
+				a.itemtype "itemType",
+				a.gtype "gtype",
+				a.gno "gno",
+				d.no "eno",
+				b.fee "price",
+				b.itemno "itemNo",
+				nvl(c.typeno, '') "typeNo"
+			from 
+				${tbuser}.e${eid}_busi_empfee a
+			inner join 
+				${tbuser}.e${eid}_busi_bill_detail b 
+				on b.id = a.detailid and b.ctype = 3
+			left join 
+				base_item c 
+				on c.no = b.itemno and c.eid = #{eid} and c.type = 1
+			left join 
+				base_emp d 
+				on d.id = a.empid
+		]]>
+		<where>
+			<![CDATA[
+				a.sid = #{sid} and a.billid = #{billId} 
+			]]>
+		</where>
+	</select>
+	
+	<update id="update4Recalc">
+		<foreach collection="emps" item="emp" index="index" open="begin" close=";end;" separator=";">
+			update ${tbuser}.e${eid}_busi_empfee 
+			set totalgain = #{emp.totalGain},gain = #{emp.gain} where id = #{emp.id}
+		</foreach>
+	</update>
+	
+	<select id="list4Bill" resultType="com.qisen.mts.beauty.model.entity.busi.EmpFee">
+		<![CDATA[
+			select id,sid,billid,detailid,empid,totalfee,fee,totalgain,gain,pointtype,gaintype,ctype,itemtype,station,gtype,gno,bday,status from ${tbuser}.e${eid}_busi_empfee 
+		]]>
+		<where>
+			<![CDATA[
+				sid = #{sid} 
+			]]>
+			<foreach collection="bills" index="index" item="bill" open="and (" close=")" separator="or">     
+				billid = #{bill.id}
+			</foreach>
+		</where>
+	</select>
+	
+</mapper>

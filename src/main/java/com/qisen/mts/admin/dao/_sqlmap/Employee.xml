@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.admin.dao.EmployeeDao">
+
+	<insert id="create" parameterType="com.qisen.mts.admin.model.entity.Employee">
+		<![CDATA[
+			insert into com_employee(id,no,name,mobile,sex,idno,orgno,joindate,displayflag,complainflag,position,status,bizflag,remark) values 
+			(seq_com_employee.nextval,#{no},#{name},#{mobile},#{sex},#{idNo},#{orgNo},#{joinDate},#{displayFlag},#{complainFlag},#{position},'1',#{bizFlag},#{remark})
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="com.qisen.mts.admin.model.entity.Employee">
+		<![CDATA[
+			update com_employee
+		]]>
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null and name !=''">
+				<![CDATA[
+					name=#{name},
+				]]>
+			</if>
+			<if test="position != null and position !=''">
+				<![CDATA[
+					position=#{position},
+				]]>
+			</if>
+			<if test="bizFlag != null and bizFlag !=''">
+				<![CDATA[
+					bizFlag=#{bizFlag},
+				]]>
+			</if>
+			<if test="displayFlag != null and displayFlag !=''">
+				<![CDATA[
+					displayFlag=#{displayFlag},
+				]]>
+			</if>
+			<if test="complainFlag != null and complainFlag !=''">
+				<![CDATA[
+					complainFlag=#{complainFlag},
+				]]>
+			</if>
+			<if test="mobile != null">
+				<![CDATA[
+					mobile=#{mobile},
+				]]>
+			</if>
+			<if test="sex != null and sex !=''">
+				<![CDATA[
+					sex=#{sex},
+				]]>
+			</if>
+			<if test="idNo != null and idNo !=''" >
+				<![CDATA[
+					idno=#{idNo},
+				]]>
+			</if>
+			<if test="orgNo != null">
+				<![CDATA[
+					orgno=#{orgNo},
+				]]>
+			</if>
+			<if test="joinDate != null">
+				<![CDATA[
+					joindate=#{joinDate},
+				]]>
+			</if>
+			<if test="remark != null ">
+				<![CDATA[
+					remark=#{remark},
+				]]>
+			</if>
+		</trim>
+		<where>
+			<![CDATA[
+				id = #{id}
+			]]>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		<![CDATA[
+			delete from  com_employee  where id=#{id}
+		]]>
+	</delete>
+	
+	<select id="list" resultType="com.qisen.mts.admin.model.entity.Employee">
+		<![CDATA[
+			select *  from  com_employee 
+		]]>
+		<where>
+			<if test="keyword != null and keyword !=''">
+				<![CDATA[
+					 (name like '%'||#{keyword}||'%' or mobile like '%'||#{keyword}||'%')
+				]]>
+			</if>
+			<if test="orgNo != null and orgNo > 0">
+				<![CDATA[
+					and orgno=#{orgNo}
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			order by to_number(no)
+		]]>
+	</select>
+	
+	<select id="check" parameterType="com.qisen.mts.admin.model.entity.Employee" resultType="int">
+		<![CDATA[
+			select count(id)  from  com_employee 
+		]]>
+		<where>
+				<![CDATA[
+					 (name = #{name} or mobile = #{mobile} or  no = #{no})
+				]]>
+			<if test="id != null and id > 0">
+				<![CDATA[
+					and id != #{id}
+				]]>
+			</if>
+		</where>
+	</select>
+	
+</mapper>

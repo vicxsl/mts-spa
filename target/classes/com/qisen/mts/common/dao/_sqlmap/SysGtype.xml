@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.sys.GtypeDao">
+	
+	<select id="list" resultType="com.qisen.mts.common.model.entity.sys.Gtype">
+		<![CDATA[
+			select id,eid,no,name,depcode,station from sys_gtype where eid = #{eid} 
+		]]>
+	</select>
+	
+	<select id="count" resultType="int">
+		<![CDATA[
+			select count(id) from sys_gtype where eid = #{eid} and (name = #{name} or no = #{no})
+		]]>
+	</select>
+	
+	<insert id="save" parameterType="com.qisen.mts.common.model.entity.sys.Gtype">
+		<![CDATA[
+			insert into  sys_gtype (id,eid,depcode,name,no,station) values(seq_sys_gtype.nextval,#{eid},#{depCode},#{name},#{no},#{station})
+		]]>
+	</insert>
+	
+	<delete id="deleteEmp" parameterType="com.qisen.mts.common.model.entity.sys.Gtype">
+		<![CDATA[
+			delete from sys_gtype 
+		]]>
+		<where>
+				<![CDATA[
+					eid = #{eid} 
+				]]>
+			<if test="id != null and id > 0">
+				<![CDATA[
+					and id = #{id}
+				]]>
+			</if>
+			<if test="depCode != null">
+				<![CDATA[
+					and depCode = #{depCode}
+				]]>
+			</if>
+		</where>
+	</delete>
+	
+	<update id="editEmp" parameterType="com.qisen.mts.common.model.entity.sys.Gtype">
+		<![CDATA[
+			update sys_gtype 
+		]]>
+		<set>
+			<if test="depCode != null">
+				<![CDATA[
+					depCode = #{depCode},
+				]]>
+			</if>
+			<if test="no != null">
+				<![CDATA[
+					no = #{no},
+				]]>
+			</if>
+			<if test="name != null">
+				<![CDATA[
+					name = #{name},
+				]]>
+			</if>
+			<if test="station != null">
+				<![CDATA[
+					station = #{station}
+				]]>
+			</if>
+		</set>
+		<where>
+			<![CDATA[
+				eid = #{eid} and id = #{id}
+			]]>
+		</where>
+	</update>
+	
+</mapper>

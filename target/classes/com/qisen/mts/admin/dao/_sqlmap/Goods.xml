@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.admin.dao.GoodsDao">
+
+	<select id="list" resultType="com.qisen.mts.admin.model.entity.Goods">
+		<![CDATA[ 
+			select * from(
+				select a.id,a.no,a.name,a.price,a.cost,a.classNo,b.name as className from com_products a left join com_products_class b on a.classNo = b.no order by classNo,no) 
+		]]>
+		<where>
+			<if test="no != null and no > 0">
+				<![CDATA[ 
+					no = #{no}
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<insert id="create" parameterType="com.qisen.mts.admin.model.entity.Goods">
+		<![CDATA[
+			insert into com_products (id,no,name,price,cost,classNo) 
+			values (seq_com_products.nextval,#{no},#{name},#{price},#{cost},(select no from COM_PRODUCTS_CLASS WHERE name = '${className}'))
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="com.qisen.mts.admin.model.entity.Goods">
+		<![CDATA[
+			update com_products
+		]]>
+		<trim prefix="set" suffixOverrides=",">
+			<if test="no != null and no > 0">
+				<![CDATA[
+					no = #{no},
+				]]>
+			</if>
+			<if test="name != null and name != ''">
+				<![CDATA[
+					name = #{name},
+				]]>
+			</if>
+			<if test="price != null">
+				<![CDATA[
+					price = #{price},
+				]]>
+			</if>
+			<if test="cost != null">
+				<![CDATA[
+					cost = #{cost},
+				]]>
+			</if>
+			<if test="className != null and className != ''">
+				<![CDATA[
+					classNo = (select no from COM_PRODUCTS_CLASS WHERE name = '${className}'),
+				]]>
+			</if>
+		</trim>
+		<where>
+			<![CDATA[
+				id = #{id}
+			]]>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="com.qisen.mts.admin.model.entity.Goods">
+		<![CDATA[
+			delete from com_products
+		]]>
+		<where>
+			<![CDATA[
+				id = #{id} and no > 2 
+			]]>
+		</where>
+	</delete>
+	
+	<select id="check" parameterType="com.qisen.mts.admin.model.entity.Goods" resultType="int">
+		<![CDATA[
+			select count(id) from com_products
+		]]>
+		<where>
+			<![CDATA[
+				no = #{no}
+			]]>
+			<if test="id != null and id >0">
+				<![CDATA[
+					and id != #{id}
+				]]>
+			</if>
+		</where>
+	</select>
+</mapper>

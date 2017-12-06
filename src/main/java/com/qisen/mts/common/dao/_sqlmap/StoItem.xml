@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.sto.StoItemDao">
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.sto.Item">
+		<![CDATA[
+			insert into sto_item(id,eid,sid,itemid,initnum,innum,outnum,inmoney,outmoney,stonum,stomoney,salesnum,salesmoney,usenum,usemoney,selfbuynum,selfbuymoney,validto,inprice,cost,lastinstodate) values(seq_sto_item.nextval,#{eid},#{sid},#{itemId},#{initNum},#{inNum},#{outNum},#{inMoney},#{outMoney},#{stoNum},#{stoMoney},#{salesNum},#{salesMoney},#{useNum},#{useMoney},#{selfBuyNum},#{selfBuyMoney},#{validTo},#{inPrice},#{cost},SYSDATE)
+		]]>
+	</insert>
+
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from sto_item where id = #{id}
+		]]>
+	</delete>
+
+	<update id="update4Sale">
+		<![CDATA[
+			update sto_item 
+			set version = version + 1,
+				outnum = outnum + #{item.num},
+				stonum = stonum - #{item.num},
+				stomoney = stomoney - inprice * #{item.num},
+				salesnum = salesnum + #{item.num},
+				salesmoney = salesmoney + #{item.money}
+			where sid = #{sid} 
+				and itemid = #{item.itemId}
+				and stonum >= #{item.num}
+		]]>
+	</update>
+
+	<update id="rollback4Sale">
+		<foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+			update sto_item 
+			set version = version + 1,
+				outnum = outnum - #{item.num},
+				stonum = stonum + #{item.num},
+				stomoney = stomoney + inprice * #{item.num},
+				salesnum = salesnum - #{item.num},
+				salesmoney = salesmoney - #{item.money}
+			where sid = #{sid} and itemid = #{item.itemId}
+		</foreach>
+	</update>
+
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.sto.Item">
+		<![CDATA[
+			update sto_item
+		]]>
+		<trim prefix="SET" suffixOverrides=","
+			suffix="WHERE id = #{id} AND VERSION = #{version}">
+			VERSION = VERSION + 1,
+			<if test="initNum != null"> 
+	    		<![CDATA[
+	    			initnum=#{initNum},
+	    		]]>
+			</if>
+			<if test="inNum != null"> 
+	    		<![CDATA[
+	    			innum=#{inNum},
+	    		]]>
+			</if>
+			<if test="outNum != null"> 
+	    		<![CDATA[
+	    			outnum=#{outNum},
+	    		]]>
+			</if>
+			<if test="inMoney != null"> 
+	    		<![CDATA[
+	    			inmoney=#{inMoney},
+	    		]]>
+			</if>
+			<if test="outMoney != null "> 
+	    		<![CDATA[
+	    			outmoney=#{outMoney},
+	    		]]>
+			</if>
+			<if test="stoNum != null"> 
+	    		<![CDATA[
+	    			stonum=#{stoNum},
+	    		]]>
+			</if>
+			<if test="stoMoney != null"> 
+	    		<![CDATA[
+	    			stomoney=#{stoMoney},
+	    		]]>
+			</if>
+			<if test="salesNum != null "> 
+	    		<![CDATA[
+	    			salesnum=#{salesNum},
+	    		]]>
+			</if>
+			<if test="salesMoney != null"> 
+	    		<![CDATA[
+	    			salesmoney=#{salesMoney},
+	    		]]>
+			</if>
+			<if test="useNum != null "> 
+	    		<![CDATA[
+	    			usenum=#{useNum},
+	    		]]>
+			</if>
+			<if test="useMoney != null"> 
+	    		<![CDATA[
+	    			usemoney=#{useMoney},
+	    		]]>
+			</if>
+			<if test="selfBuyNum != null"> 
+	    		<![CDATA[
+	    			selfbuynum=#{selfBuyNum},
+	    		]]>
+			</if>
+			<if test="selfBuyMoney != null"> 
+	    		<![CDATA[
+	    			selfbuymoney=#{selfBuyMoney},
+	    		]]>
+			</if>
+			<if test="validTo != null "> 
+	    		<![CDATA[
+	    			validto=#{validTo},
+	    		]]>
+			</if>
+			<if test="inPrice != null"> 
+	    		<![CDATA[
+	    			inprice=#{inPrice},
+	    		]]>
+			</if>
+			<if test="cost != null"> 
+	    		<![CDATA[
+	    			cost=#{cost},
+	    		]]>
+			</if>
+			<if test="lastInStoDate != null"> 
+	    		<![CDATA[
+	    			LASTINSTODATE=#{lastInStoDate}
+	    		]]>
+			</if>
+		</trim>
+	</update>
+
+	<select id="list" parameterType="com.qisen.mts.common.model.entity.sto.Item"
+		resultType="com.qisen.mts.common.model.entity.sto.Item">
+		<![CDATA[
+			select id,eid,sid,itemid,initnum,innum,outnum,inmoney,outmoney,stonum,stomoney,salesnum,salesmoney,usenum,usemoney,selfbuynum,selfbuymoney,validto,inprice,cost from sto_item 
+		]]>
+		<where>
+	    	<![CDATA[
+	    		eid=#{eid}
+	    	]]>
+			<if test="sid != null and sid != '' "> 
+	    		<![CDATA[
+	    			and sid=#{sid},
+	    		]]>
+			</if>
+			<if test="itemid != null and itemid != '' "> 
+	    		<![CDATA[
+	    			and itemid=#{itemid},
+	    		]]>
+			</if>
+			<if test="initnum != null and initnum != '' "> 
+	    		<![CDATA[
+	    			and initnum=#{initnum},
+	    		]]>
+			</if>
+			<if test="innum != null and innum != '' "> 
+	    		<![CDATA[
+	    			and innum=#{innum},
+	    		]]>
+			</if>
+			<if test="outnum != null and outnum != '' "> 
+	    		<![CDATA[
+	    			and outnum=#{outnum},
+	    		]]>
+			</if>
+			<if test="inmoney != null and inmoney != '' "> 
+	    		<![CDATA[
+	    			and inmoney=#{inmoney},
+	    		]]>
+			</if>
+			<if test="outmoney != null and outmoney != '' "> 
+	    		<![CDATA[
+	    			and outmoney=#{outmoney},
+	    		]]>
+			</if>
+			<if test="stonum != null and stonum != '' "> 
+	    		<![CDATA[
+	    			and stonum=#{stonum},
+	    		]]>
+			</if>
+			<if test="stomoney != null and stomoney != '' "> 
+	    		<![CDATA[
+	    			and stomoney=#{stomoney},
+	    		]]>
+			</if>
+			<if test="salesnum != null and salesnum != '' "> 
+	    		<![CDATA[
+	    			and salesnum=#{salesnum},
+	    		]]>
+			</if>
+			<if test="usenum != null and usenum != '' "> 
+	    		<![CDATA[
+	    			and usenum=#{usenum},
+	    		]]>
+			</if>
+			<if test="usemoney != null and usemoney != '' "> 
+	    		<![CDATA[
+	    			and usemoney=#{usemoney},
+	    		]]>
+			</if>
+			<if test="selfbuynum != null and selfbuynum != '' "> 
+	    		<![CDATA[
+	    			and selfbuynum=#{selfbuynum},
+	    		]]>
+			</if>
+			<if test="selfbuymoney != null and selfbuymoney != '' "> 
+	    		<![CDATA[
+	    			and selfbuymoney=#{selfbuymoney},
+	    		]]>
+			</if>
+			<if test="validto != null and validto != '' "> 
+	    		<![CDATA[
+	    			and validto=#{validto},
+	    		]]>
+			</if>
+			<if test="inprice != null and inprice != '' "> 
+	    		<![CDATA[
+	    			and inprice=#{inprice},
+	    		]]>
+			</if>
+			<if test="cost != null and cost != '' "> 
+	    		<![CDATA[
+	    			and cost=#{cost}
+	    		]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="find" parameterType="int"
+		resultType="com.qisen.mts.common.model.entity.sto.Item">
+		<![CDATA[
+			select id,eid,sid,itemid,initnum,innum,outnum,inmoney,outmoney,stonum,stomoney,salesnum,salesmoney,usenum,usemoney,selfbuynum,selfbuymoney,validto,inprice,cost from sto_item where id = #{id}
+		]]>
+	</select>
+
+	<select id="check" resultType="int"
+		parameterType="com.qisen.mts.common.model.entity.sto.Item">
+		<![CDATA[
+			select count(id) from sto_item 
+		]]>
+		<where>
+		<![CDATA[
+	    		eid=#{eid}
+	    	]]>
+			<if test="sid != null and sid != '' "> 
+	    		<![CDATA[
+	    			and sid=#{sid},
+	    		]]>
+			</if>
+			<if test="itemId != null"> 
+	    		<![CDATA[
+	    			and itemId=#{itemId},
+	    		]]>
+			</if>
+			<if test="initNum != null"> 
+	    		<![CDATA[
+	    			and initnum=#{initNum},
+	    		]]>
+			</if>
+			<if test="inNum != null"> 
+	    		<![CDATA[
+	    			and innum=#{inNum},
+	    		]]>
+			</if>
+			<if test="outNum != null "> 
+	    		<![CDATA[
+	    			and outnum=#{outNum},
+	    		]]>
+			</if>
+			<if test="iNmoney != null "> 
+	    		<![CDATA[
+	    			and inmoney=#{iNmoney},
+	    		]]>
+			</if>
+			<if test="outMoney != null"> 
+	    		<![CDATA[
+	    			and outmoney=#{outMoney},
+	    		]]>
+			</if>
+			<if test="stoNum != null "> 
+	    		<![CDATA[
+	    			and stonum=#{stoNum},
+	    		]]>
+			</if>
+			<if test="stoMoney != null "> 
+	    		<![CDATA[
+	    			and stomoney=#{stoMoney},
+	    		]]>
+			</if>
+			<if test="salesNum != null "> 
+	    		<![CDATA[
+	    			and salesnum=#{salesNum},
+	    		]]>
+			</if>
+			<if test="useNum != null "> 
+	    		<![CDATA[
+	    			and usenum=#{useNum},
+	    		]]>
+			</if>
+			<if test="useMoney != null"> 
+	    		<![CDATA[
+	    			and usemoney=#{useMoney},
+	    		]]>
+			</if>
+			<if test="selfBuyNum != null"> 
+	    		<![CDATA[
+	    			and selfbuynum=#{selfBuyNum},
+	    		]]>
+			</if>
+			<if test="selfBuyMoney != null "> 
+	    		<![CDATA[
+	    			and selfbuymoney=#{selfBuyMoney},
+	    		]]>
+			</if>
+			<if test="validTo != null "> 
+	    		<![CDATA[
+	    			and validto=#{validTo},
+	    		]]>
+			</if>
+			<if test="inPrice != null"> 
+	    		<![CDATA[
+	    			and inprice=#{inPrice},
+	    		]]>
+			</if>
+			<if test="cost != null and cost != '' "> 
+	    		<![CDATA[
+	    			and cost=#{cost}
+	    		]]>
+			</if>
+			<if test="id != null and id != '' and id != 0">
+			<![CDATA[
+				and id <> #{id}
+			]]>
+			</if>
+		</where>
+
+	</select>
+	<select id="listCounts" parameterType="com.qisen.mts.common.model.request.PageRequest"
+		resultType="com.qisen.mts.common.model.response.StoItemListResponse">
+		SELECT COUNT(SI.ID) totalCount,SUM(SI.STONUM)
+		totalStoNum,SUM(SI.STOMONEY) totalStoMoney FROM STO_ITEM SI
+		LEFT OUTER
+		JOIN BASE_ITEM BI ON SI.ITEMID = BI.ID
+		<where>
+			SI.EID = #{eid}
+			<choose>
+				<when test="sid != null">
+					AND SID = #{sid}
+				</when>
+				<otherwise>
+					AND SID IS NULL
+				</otherwise>
+			</choose>
+			<if test="body.minSto != null">
+				<![CDATA[
+					AND SI.STONUM >= #{body.minSto}
+				]]>
+			</if>
+			<if test="body.validTo != null">
+				<![CDATA[
+					AND SI.VALIDTO <= #{body.validTo}
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword != '' ">
+				AND (BI.NAME LIKE '%'||#{body.keyword}||'%' OR BI.NO LIKE
+				'%'||#{body.keyword}||'%')
+			</if>
+			<if test="body.typeNo != null and body.typeNo != '' ">
+				AND BI.TYPENO = #{body.typeNo}
+			</if>
+		</where>
+	</select>
+	<select id="stoItemlist" parameterType="com.qisen.mts.common.model.request.PageRequest"
+		resultType="com.qisen.mts.common.model.entity.sto.StoItemWithPdInfo">
+		SELECT PG.* FROM (
+		SELECT PG.*, ROWNUM RN FROM(
+		SELECT SI.*, BI.NAME
+		itemName,BI.NO itemNo, BI.TYPENO itemTypeNo,BI.FLAG
+		itemFlag,BI.PROP
+		itemProp
+		FROM STO_ITEM SI
+		LEFT OUTER JOIN BASE_ITEM BI ON SI.ITEMID =
+		BI.ID
+		<where>
+			SI.EID = #{eid}
+			<choose>
+				<when test="sid != null">
+					AND SID = #{sid}
+				</when>
+				<otherwise>
+					AND SID IS NULL
+				</otherwise>
+			</choose>
+			<if test="body.minSto != null">
+					<![CDATA[
+						AND SI.STONUM >= #{body.minSto}
+					]]>
+			</if>
+			<if test="body.validTo != null">
+					<![CDATA[
+						AND SI.VALIDTO <= #{body.validTo}
+					]]>
+			</if>
+			<if test="body.keyword != null and body.keyword != '' ">
+				AND (BI.NAME LIKE '%'||#{body.keyword}||'%' OR BI.NO LIKE
+				'%'||#{body.keyword}||'%')
+			</if>
+			<if test="body.typeNo != null and body.typeNo != '' ">
+				AND BI.TYPENO = #{body.typeNo}
+			</if>
+		</where>
+		ORDER BY SI.ID DESC) PG
+			<![CDATA[
+				WHERE ROWNUM <= #{endIndex}
+			]]>
+		) PG
+		<![CDATA[
+			WHERE PG.RN >= #{startIndex}
+		]]>
+	</select>
+	<select id="findByProduct" parameterType="com.qisen.mts.common.model.entity.sto.Item"
+		resultType="com.qisen.mts.common.model.entity.sto.Item" flushCache="true"
+		useCache="false">
+		SELECT * FROM STO_ITEM
+		<where>
+			EID = #{eid} AND ITEMID = #{itemId}
+			<if test="sid ==null">
+				AND NVL(SID,0) = 0
+			</if>
+			<if test="sid !=null">
+				AND SID = #{sid}
+			</if>
+		</where>
+	</select>
+
+</mapper>

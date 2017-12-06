@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.sys.RegionDao">
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.sys.Region">
+		<![CDATA[
+			insert into sys_region(id,   eid,   name,  parentid) 
+			values 
+			  (seq_sys_region.nextval,#{eid},#{name},#{parentid})
+		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from sys_region where id = #{id}
+		]]>
+	</delete>
+	
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.sys.Region">
+		update sys_region 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null">name=#{name},</if>
+			<if test="parentid != null">parentid=#{parentid},</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<select id="list" parameterType="int" resultType="com.qisen.mts.common.model.entity.sys.Region">
+		<![CDATA[
+			select id,eid,name,parentid from sys_region where eid = #{eid} 
+		]]>		
+	</select>
+	
+	<select id="find" parameterType="int" resultType="com.qisen.mts.common.model.entity.sys.Region">
+		<![CDATA[
+			select id,eid,name,parentid from sys_region where id = #{id}
+		]]>
+	</select>
+	
+</mapper>

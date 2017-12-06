@@ -1,0 +1,132 @@
+{
+	"basicData": {
+		"status": ["Xóa", "Tại vị trí", "Rời vị trí"]
+	},
+    "headTop": [{
+        "rowspan": "2",
+        "text": "Nhân viên"
+    }, {
+        "rowspan": "2",
+        "text": "Cấp bậc"
+    }, {
+        "colspan": "2",
+        "text": "Dịch vụ"
+    }, {
+        "colspan": "2",
+        "text": "Bán sản phẩm"
+    }, {
+        "colspan": "2",
+        "text": "Mở thẻ"
+    }, {
+        "colspan": "2",
+        "text": "Nạp thẻ"
+    }, {
+        "colspan": "2",
+        "text": "Bán gói"
+    }, {
+        "rowspan": "2",
+        "text": "Tổng %"
+    }, {
+        "rowspan": "2",
+        "text": "Số thẻ ngân hàng"
+    }, {
+        "rowspan": "2",
+        "text": "Tình trạng"
+    }],
+    "head": ["Nhân viên", "Cấp bậc", "Doanh số", "%", "Doanh số", "%", "Doanh số", "%", "Doanh số", "%", "Doanh số", "%", "Tổng %", "Số thẻ ngân hàng", "Tình trạng"],
+    "columns": [{
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "template": "<span>%sumServiceGain% <a href='#' data-empId='%empId%'>Chi tiết</a></span>",
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 1,
+        "decimal": 2
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 120,
+        "sortable": 0,
+        "decimal": 0
+    }],
+    "config": {
+        "frozenHead": 2,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        },
+        "disableTotal": 1,
+        "frozenLeftColumns": 2,
+        "title": "Bảng tổng % nhân viên",
+        "frozenRightColumns": 0,
+        "custmizedBtn": [{
+            "text": "Tính toán lại %",
+            "icon": "icon4 recalc"
+        }]
+    }
+}

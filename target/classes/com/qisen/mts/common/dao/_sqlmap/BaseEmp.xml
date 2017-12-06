@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.base.EmpDao">
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			insert into base_emp(id,eid,sid,no,name,mobile,gtype,gno,img,sex,birthday,entdate,status,remark,pwd,inputdate,idnumber,bank,booking) values 
+			(seq_base_emp.nextval,#{eid},#{sid},#{no},#{name},#{mobile},#{gType},#{gNo},#{img},#{sex},#{birthDay},#{entDate},#{status},#{remark},#{pwd},sysdate,#{idNumber},#{bank},#{booking})
+		]]>
+	</insert>
+
+	<delete id="delete">
+		<![CDATA[
+			delete from base_emp where id = #{id} and eid=#{eid}
+		]]>
+	</delete>
+
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			update base_emp  
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null and name != '' ">
+				<![CDATA[
+					 name = #{name}
+				]]>
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				<![CDATA[
+					,mobile = #{mobile}
+				]]>
+			</if>
+			<if test="gType != null and gType != '' ">
+				<![CDATA[
+					,gtype = #{gType}
+				]]>
+			</if>
+			<if test="gNo != null and gNo != '' ">
+				<![CDATA[
+					,gno = #{gNo}
+				]]>
+			</if>
+			<if test="img != null and img != ''">
+				<![CDATA[
+					,img = #{img}
+				]]>
+			</if>
+			<if test="sex != null and sex != ''">
+				<![CDATA[
+					,sex = #{sex}
+				]]>
+			</if>
+			<if test="birthDay != null">
+				<![CDATA[
+					,birthday = #{birthDay} 
+				]]>
+			</if>
+			<if test="entDate != null ">
+				<![CDATA[
+					,entdate = #{entDate}
+				]]>
+			</if>
+			<if test="remark != null">
+				<![CDATA[
+					,remark = #{remark}
+				]]>
+			</if>
+			<if test="pwd != null and pwd != ''">
+				<![CDATA[
+					,pwd = #{pwd}
+				]]>
+			</if>
+			<if test="idNumber != null and idNumber != ''">
+				<![CDATA[
+					,idnumber = #{idNumber}
+				]]>
+			</if>
+			<if test="bank != null and bank != ''">
+				<![CDATA[
+					,bank = #{bank}
+				]]>
+			</if>
+			<if test="booking != null and booking != ''">
+				<![CDATA[
+					,booking = #{booking}
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+			where id = #{id} and eid=#{eid}
+		]]>
+	</update>
+
+	<select id="count" parameterType="com.qisen.mts.common.model.request.PageRequest"
+		resultType="int">
+		<![CDATA[
+			select count(id) from base_emp 
+			 
+		]]>
+		<where>
+			<![CDATA[
+				sid = #{sid} 
+			]]>
+			<if test="body.status != null and body.status == 1 ">
+				<![CDATA[
+					 and status !=0
+				]]>
+			</if>
+			<if test="body.status != null and body.status == 0 ">
+				<![CDATA[
+					 and status =0
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					 and (no like '%'||#{body.keyword}||'%'  or name like '%'||#{body.keyword}||'%' )
+				]]>
+			</if>
+			<if test="body.gType != null and body.gType != '' ">
+				<![CDATA[
+					 and gtype=#{body.gType}
+				]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="list" parameterType="com.qisen.mts.common.model.request.PageRequest" resultType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			select * from(
+			select a.*,rownum rnum from(
+			select id,eid,sid,no,name,mobile,gtype,gno,img,sex,birthday,entdate,status,remark,inputdate,idnumber,bank,booking from base_emp
+		]]>
+		<where>
+			<![CDATA[
+				sid = #{sid} 
+			]]>
+			<if test="body.status != null and body.status == 1 ">
+				<![CDATA[
+					 and status !=0
+				]]>
+			</if>
+			<if test="body.status != null and body.status == 0 ">
+				<![CDATA[
+					 and status =0
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					 and (no like '%'||#{body.keyword}||'%'  or name like '%'||#{body.keyword}||'%' )
+				]]>
+			</if>
+			<if test="body.gType != null and body.gType != '' ">
+				<![CDATA[
+					 and gtype=#{body.gType}
+				]]>
+			</if>
+			<![CDATA[
+				 ORDER BY cast(REGEXP_SUBSTR(no, '[0-9]+') as int))a)
+			]]>
+			<if test="startIndex != 0  and endIndex != 0">
+				<![CDATA[
+					  where rnum between #{startIndex} and #{endIndex}
+				]]>
+			</if>
+			
+		</where>
+	</select>
+
+	<select id="list4MetaData" parameterType="int"
+		resultType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			select id,eid,sid,no,name,mobile,gtype,gno,img,sex,birthday,entdate,status,remark,inputdate,idnumber,bank,booking from base_emp where sid = #{sid} and status = '1' order by no 
+		]]>
+	</select>
+	
+	<select id="listBoookingEmp" parameterType="int"
+		resultType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			select id,eid,sid,no,name,mobile,gtype,gno,img,sex,birthday,entdate,status,remark,inputdate,idnumber,bank,booking from base_emp where sid = #{sid} and status = '1' and booking = '1' order by no 
+		]]>
+	</select>
+
+	<select id="list4Shop" resultType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			select id,eid,sid,no,name,mobile,gtype,gno,img,sex,birthday,entdate,status,remark,inputdate,idnumber,bank,booking from base_emp
+		]]>
+		<where>
+			<![CDATA[
+				status = 1
+			]]>
+			<if test="body != null and body.containsKey('sids')">
+				<foreach collection="body.sids" index="index" item="sid" open="and (" close=")" separator="or">     
+					sid = #{sid}
+				</foreach>
+			</if>
+		</where>
+		<![CDATA[
+			 order by cast(REGEXP_SUBSTR(no, '[0-9]+') as int) 
+		]]>
+	</select>
+
+	<select id="find" parameterType="int"
+		resultType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			select id,eid,sid,no,name,mobile,gtype,gno,img,sex,birthday,entdate,status,remark,inputdate from base_emp where id = #{id}
+		]]>
+	</select>
+
+	<select id="check" resultType="int"
+		parameterType="com.qisen.mts.common.model.entity.base.Emp">
+		<![CDATA[
+			select count(id) from base_emp 
+		]]>
+		<where>
+			<![CDATA[
+				sid = #{sid} and (no = #{no} or mobile = #{mobile})
+			]]>
+		</where>
+	</select>
+
+	<update id="updatestatus" parameterType="com.qisen.mts.common.model.request.BaseRequest">
+		update base_emp 
+		<set>
+			status = #{body.status}
+		</set>
+		<where>
+			eid =  #{eid}
+			<foreach collection="body.ids" item="id" index="index" open="and (" close=")" separator="or">
+				id=#{id}
+			</foreach>
+		</where>
+	</update>
+
+</mapper>

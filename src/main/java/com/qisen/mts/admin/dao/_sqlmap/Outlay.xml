@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.admin.dao.OutlayDao">
+
+	<select id="list" resultType="com.qisen.mts.admin.model.entity.Outlay">
+		<![CDATA[
+			select * from (
+				select a.id,a.classNo,a.money,a.detail,a.outDate,a.employeeId,a.admin,a.auditFlag,a.orgNo,rownum as rnum,
+					b.name as className,
+					c.name as orgName,
+					d.name as empName
+				from com_outlay a 
+					LEFT JOIN COM_OUTLAY_CLASS b on a.classNo = b.no
+					LEFT JOIN COM_ORGAN c ON a.orgNo = c.no
+					LEFT JOIN COM_EMPLOYEE d on a.employeeId = d.id) 
+		]]>
+		<where>
+			<if test="endIndex != null and endIndex > 0 and startIndex != null and startIndex > 0 ">
+				<![CDATA[
+					 (rnum between #{startIndex} and #{endIndex})
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword !=''">
+				<![CDATA[
+					 and (orgName like '%'||#{body.keyword}||'%' or empName like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.auditFlag != null and body.auditFlag !=''">
+				<![CDATA[
+					 and auditFlag = #{body.auditFlag}
+				]]>
+			</if>
+			<if test="body.startDate != null">
+				<![CDATA[
+					and outDate >= #{body.startDate}
+				]]>
+			</if>
+			<if test="body.endDate != null">
+				<![CDATA[
+					and outDate <= #{body.endDate}
+				]]>
+			</if>
+		</where>
+			<![CDATA[
+				order by outDate desc
+			]]>
+	</select>
+
+	<insert id="create" parameterType="com.qisen.mts.admin.model.entity.Outlay">
+		<![CDATA[
+			insert into com_outlay (id,classNo,money,detail,outDate,employeeId,admin,auditFlag,orgNo) 
+			values (seq_com_outlay.nextval,#{classNo},#{money},#{detail},#{outDate},#{employeeId},#{admin},0,#{orgNo})
+		]]>
+	</insert>
+
+	<update id="update" parameterType="com.qisen.mts.admin.model.entity.Outlay">
+		<![CDATA[
+			update com_outlay
+		]]>
+		<trim prefix="set" suffixOverrides=",">
+			<if test="classNo != null">
+				<![CDATA[
+					classNo = #{classNo},
+				]]>
+			</if>
+			<if test="outDate != null">
+				<![CDATA[
+					outDate = #{outDate},
+				]]>
+			</if>
+			<if test="type != null and type !=''">
+				<![CDATA[
+					type = #{type},
+				]]>
+			</if>
+			<if test="orgNo != null">
+				<![CDATA[
+					orgNo = #{orgNo},
+				]]>
+			</if>
+			<if test="employeeId != null">
+				<![CDATA[
+					employeeId = #{employeeId},
+				]]>
+			</if>
+			<if test="money != null and money >0">
+				<![CDATA[
+					money = #{money},
+				]]>
+			</if>
+			<if test="detail != null and detail !=''">
+				<![CDATA[
+					detail = #{detail},
+				]]>
+			</if>
+			<if test="auditFlag != null and auditFlag !=''">
+				<![CDATA[
+					auditFlag = #{auditFlag},
+				]]>
+			</if>
+		</trim>
+		<where>
+			<![CDATA[
+				id = #{id}
+			]]>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="com.qisen.mts.admin.model.entity.Outlay">
+		<![CDATA[
+			delete from com_outlay
+		]]>
+		<where>
+			<![CDATA[
+				id = #{id}
+			]]>
+		</where>
+	</delete>
+
+	<select id="check" parameterType="com.qisen.mts.admin.model.entity.Outlay" resultType="int">
+		<![CDATA[
+			select count(id) from(
+				select a.id,a.classNo,a.money,a.detail,a.outDate,a.employeeId,a.admin,a.auditFlag,a.orgNo,rownum as rnum,
+					b.name as className,
+					c.name as orgName,
+					d.name as empName
+				from com_outlay a 
+					LEFT JOIN COM_OUTLAY_CLASS b on a.classNo = b.no
+					LEFT JOIN COM_ORGAN c ON a.orgNo = c.no
+					LEFT JOIN COM_EMPLOYEE d on a.employeeId = d.id) 
+		]]>
+		<where>
+			<if test="body.keyword != null and body.keyword !=''">
+				<![CDATA[
+					(orgName = '%'||#{body.keyword}||'%' or empName = '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.className != null and body.className != ''"> 
+				<![CDATA[
+					and className = #{body.className}
+				]]>
+			</if>
+			<if test="body.auditFlag != null"> 
+				<![CDATA[
+					and auditFlag = #{body.auditFlag}
+				]]>
+			</if>
+			<if test="body.startDate != null"> 
+				<![CDATA[
+					and (outDate >= #{body.startDate})
+				]]>
+			</if>
+			<if test="body.endDate != null"> 
+				<![CDATA[
+					and (outDate <= #{body.endDate})
+				]]>
+			</if>
+		</where>
+	</select>
+	
+</mapper>

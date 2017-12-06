@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.admin.dao.ConsumeLogDao">
+	<select id="list" resultType="com.qisen.mts.admin.model.entity.ConsumeLog">
+		<![CDATA[
+			select * from(
+			select m.*,rownum rnum from
+			( select a.*,s.name sname,e.name ename
+				from com_consumelog a 
+				left join sys_shop s on a.sid=s.id 
+				left join sys_enterprise e on a.eid=e.id 
+		]]>
+		<where>
+			<if test="eid != null and eid != 0 ">
+				<![CDATA[
+					 and a.eid=#{eid}
+				]]>
+				<choose>
+					<when test="sid != null and sid > 0">
+						and a.sid = #{sid}
+					</when>
+					<otherwise>
+						and nvl(sid,0)=0
+					</otherwise>
+				</choose>
+			</if>
+			<if test="body.cashNo != null and body.cashNo != 0 ">
+				<![CDATA[
+					 and a.cashno=#{body.cashNo}
+				]]>
+			</if>
+			<if test="body.classNo != null and body.classNo != 0 ">
+				<![CDATA[
+					 and a.classno=#{body.classNo}
+				]]>
+			</if>
+			<if test="body.productNo != null and body.productNo != 0 ">
+				<![CDATA[
+					 and a.productno=#{body.productNo}
+				]]>
+			</if>
+			<if test="body.clientType != null and body.clientType != '' ">
+				<![CDATA[
+					 and a.clienttype=#{body.clientType}
+				]]>
+			</if>
+			<if test="body.auditFlag != null and body.auditFlag != '' ">
+				<![CDATA[
+					 and a.auditflag=#{body.auditFlag}
+				]]>
+			</if>
+			<if test="body.payFlag != null and body.payFlag != '' ">
+				<![CDATA[
+					 and a.payflag=#{body.payFlag}
+				]]>
+			</if>
+			<if test="body.id != null and body.id != 0 ">
+				<![CDATA[
+					 and a.id=#{body.id}
+				]]>
+			</if>
+			<if test="body.orgNo != null and body.orgNo != 0 ">
+				<![CDATA[
+					 and a.orgno=#{body.orgNo}
+				]]>
+			</if>
+			<if test="body.byEmpId != null and body.byEmpId != 0 ">
+				<![CDATA[
+					 and a.byempid=#{body.byEmpId}
+				]]>
+			</if>
+			<if test="body.soEmpId != null and body.soEmpId != 0 ">
+				<![CDATA[
+					 and a.soempid=#{body.soEmpId}
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					 and (s.name like '%'||#{body.keyword}||'%' or e.name like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.beginConsumeTime != null">
+				<![CDATA[
+					 and a.consumetime>= #{body.beginConsumeTime} 
+				]]>
+			</if>
+			<if test="body.endConsumeTime != null">
+				<![CDATA[
+					 and a.consumetime<= #{body.endConsumeTime} 
+				]]>
+			</if>
+			<if test="body.beginPayTime != null">
+				<![CDATA[
+					 and a.paytime>= #{body.beginPayTime} 
+				]]>
+			</if>
+			<if test="body.endPayTime != null">
+				<![CDATA[
+					 and a.paytime<= #{body.endPayTime} 
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			ORDER BY a.id desc )m)
+		]]>
+		<where>
+			<if test="startIndex != 0  and endIndex != 0">
+			<![CDATA[
+			  rnum between #{startIndex} and #{endIndex}
+			]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		<![CDATA[
+			select count(a.id)
+				from com_consumelog a 
+				left join sys_shop s on a.sid=s.id 
+				left join sys_enterprise e on a.eid=e.id 
+		]]>
+		<where>
+			<if test="eid != null and eid != 0 ">
+				<![CDATA[
+					 and a.eid=#{eid}
+				]]>
+				<choose>
+					<when test="sid != null and sid > 0">
+						and a.sid = #{sid}
+					</when>
+					<otherwise>
+						and nvl(a.sid,0)=0
+					</otherwise>
+				</choose>
+			</if>
+			<if test="body.classNo != null and body.classNo != 0 ">
+				<![CDATA[
+					 and a.classno=#{body.classNo}
+				]]>
+			</if>
+			<if test="body.cashNo != null and body.cashNo != 0 ">
+				<![CDATA[
+					 and a.cashno=#{body.cashNo}
+				]]>
+			</if>
+			<if test="body.productNo != null and body.productNo != 0 ">
+				<![CDATA[
+					 and a.productno=#{body.productNo}
+				]]>
+			</if>
+			<if test="body.clientType != null and body.clientType != '' ">
+				<![CDATA[
+					 and a.clienttype=#{body.clientType}
+				]]>
+			</if>
+			<if test="body.auditFlag != null and body.auditFlag != '' ">
+				<![CDATA[
+					 and auditflag=#{body.auditFlag}
+				]]>
+			</if>
+			<if test="body.payFlag != null and body.payFlag != '' ">
+				<![CDATA[
+					 and a.payflag=#{body.payFlag}
+				]]>
+			</if>
+			<if test="body.id != null and body.id != 0 ">
+				<![CDATA[
+					 and a.id=#{body.id}
+				]]>
+			</if>
+			<if test="body.orgNo != null and body.orgNo != 0 ">
+				<![CDATA[
+					 and a.orgno=#{body.orgNo}
+				]]>
+			</if>
+			<if test="body.byEmpId != null and body.byEmpId != 0 ">
+				<![CDATA[
+					 and a.byempid=#{body.byEmpId}
+				]]>
+			</if>
+			<if test="body.soEmpId != null and body.soEmpId != 0 ">
+				<![CDATA[
+					 and a.soempid=#{body.soEmpId}
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					 and (s.name like '%'||#{body.keyword}||'%' or e.name like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<if test="body.beginConsumeTime != null">
+				<![CDATA[
+					 and a.consumetime>= #{body.beginConsumeTime} 
+				]]>
+			</if>
+			<if test="body.endConsumeTime != null">
+				<![CDATA[
+					 and a.consumetime<= #{body.endConsumeTime} 
+				]]>
+			</if>
+			<if test="body.beginPayTime != null">
+				<![CDATA[
+					 and a.paytime>= #{body.beginPayTime} 
+				]]>
+			</if>
+			<if test="body.endPayTime != null">
+				<![CDATA[
+					 and a.paytime<= #{body.endPayTime} 
+				]]>
+			</if>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.qisen.mts.admin.model.entity.ConsumeLog">
+		<![CDATA[
+			update com_consumelog
+		]]>
+		<trim prefix="set" suffixOverrides=",">
+			<if test="consumeFee != null and consumeFee != '' ">
+				<![CDATA[
+					  consumeFee=#{consumeFee},
+				]]>
+			</if>
+			<if test="num != null">
+				<![CDATA[
+					  num=#{num},
+				]]>
+			</if>
+			<if test="price != null ">
+				<![CDATA[
+					  price=#{price},
+				]]>
+			</if>
+			<if test="cost != null">
+				<![CDATA[
+					  cost=#{cost},
+				]]>
+			</if>
+			<if test="profit != null">
+				<![CDATA[
+					  profit=#{profit},
+				]]>
+			</if>
+			<if test="orgNo != null">
+				<![CDATA[
+					  orgNo=#{orgNo},
+				]]>
+			</if>
+			<if test="admin != null and admin != '' ">
+				<![CDATA[
+					  admin=#{admin},
+				]]>
+			</if>
+			<if test="payFlag != null and payFlag != '' ">
+				<![CDATA[
+					  payFlag=#{payFlag},
+				]]>
+			</if>
+			<if test="payTime != null">
+				<![CDATA[
+					 payTime= #{payTime},
+				]]>
+			</if>
+			<if test="clientType != null and clientType != '' ">
+				<![CDATA[
+					 clientType=#{clientType},
+				]]>
+			</if>
+			<if test="byEmpId != null and byEmpId != 0 ">
+				<![CDATA[
+					 byEmpId=#{byEmpId},
+				]]>
+			</if>
+			<if test="soEmpId != null and soEmpId != 0 ">
+				<![CDATA[
+					 soEmpId=#{soEmpId},
+				]]>
+			</if>
+			<if test="auditFlag != null">
+				<![CDATA[
+					 auditFlag=#{auditFlag},
+				]]>
+			</if>
+			<if test="cashNo != null and cashNo != 0 ">
+				<![CDATA[
+					 cashNo=#{cashNo},
+				]]>
+			</if>
+			<if test="payCloseFlag != null">
+				<![CDATA[
+					 payCloseFlag=#{payCloseFlag},
+				]]>
+			</if>
+			<if test="closeFlag != null">
+				<![CDATA[
+					 closeFlag=#{closeFlag},
+				]]>
+			</if>
+			<if test="closeDate != null">
+				<![CDATA[
+					 closeDate=#{closeDate},
+				]]>
+			</if>
+			<if test="remark != null ">
+				<![CDATA[
+					 remark=#{remark},
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+			 where eid = #{eid} and id=#{id}
+		]]>
+	</update>
+
+	<update id="updateAuditFlag">
+		<![CDATA[
+			update com_consumelog set auditflag=#{auditFlag} where id=#{id}
+		]]>
+	</update>
+
+	<insert id="create">
+	<![CDATA[
+	insert into com_consumelog(id,eid,sid,classno,productno,consumefee,num,price,cost,profit,consumetime,orgno,
+	admin,payflag,paytime,clienttype,byempid,soempid,auditflag,cashno,paycloseflag,closeflag,closeDate,remark)
+			values(seq_com_consumelog.nextval,#{eid},#{sid},#{classNo},#{productNo},#{consumeFee},#{num},#{price},#{cost},#{profit},#{consumeTime},#{orgNo},
+			nvl(#{admin},'admin'),#{payFlag},#{payTime},#{clientType},#{byEmpId},#{soEmpId},#{auditFlag},#{cashNo},#{payCloseFlag},#{closeFlag},#{closeDate},#{remark})
+		]]>
+	</insert>
+</mapper>

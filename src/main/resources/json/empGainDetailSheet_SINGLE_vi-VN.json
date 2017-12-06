@@ -1,0 +1,75 @@
+{
+	"basicData": {
+		"itemType": ["Dịch vụ nhỏ", "Dịch vụ lớn"],
+		"pointType": ["Phi chỉ định", "Chỉ định"],
+		"ctype": ["Khách lẻ", "Khách thẻ", "Gói"],
+		"SUM": "Tổng cộng"
+	},
+    "config": {
+        "frozenHead": 2,
+        "systemBtn": {
+            "disableColumnsSettingBtn": 0,
+            "disablePrintBtn": 0,
+            "disableExportBtn": 0
+        },
+        "disableTotal": 1,
+        "frozenLeftColumns": 1,
+        "title": "Bảng chi tiết % doanh số phục vụ của nhân viên",
+        "frozenRightColumns": 0
+    },
+    "head": ["Tên dịch vụ", "Loại dịch vụ", "Loại chỉ định", "Loại tiêu dùng", "Số lượng", "%"],
+    "headTop": [{
+        "rowspan": "2",
+        "text": "Tên dịch vụ"
+    }, {
+        "rowspan": "2",
+        "text": "Loại dịch vụ"
+    }, {
+        "rowspan": "2",
+        "text": "Loại chỉ định"
+    }, {
+        "rowspan": "2",
+        "text": "Loại tiêu dùng"
+    }, {
+        "rowspan": "2",
+        "text": "Số lượng"
+    }, {
+        "rowspan": "2",
+        "text": "%"
+    }, {
+        "colspan": "5",
+        "text": "Doanh số"
+    }],
+    "columns": [{
+        "defaultVisible": 1,
+        "enableSetVisible": 0,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 0
+    }, {
+        "defaultVisible": 1,
+        "width": 150,
+        "sortable": 0,
+        "decimal": 2
+    }]
+}

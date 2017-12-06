@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.common.dao.sys.AccountDao">
+	<insert id="create" parameterType="com.qisen.mts.common.model.entity.sys.Account">
+		<![CDATA[
+			insert into sys_account(id,eid,sid,account,pwd,name,mobile,role,rights,lastLogin,regionid,status,inputdate,authToken,authScope) 
+			values 
+			(seq_sys_account.nextval,#{eid},#{sid},#{account},#{pwd},#{name},#{mobile},#{role},#{rights},#{lastLogin},#{regionId},1,sysdate,#{authToken},#{authScope})
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="com.qisen.mts.common.model.entity.sys.Account">
+		<![CDATA[
+			update sys_account
+		]]>
+		<trim prefix="set" suffixOverrides=",">
+			<if test="account != null">
+				account = #{account},
+			</if>
+			<if test="pwd != null">
+				pwd = #{pwd},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile},
+			</if>
+			<if test="role != null">
+				role = #{role},
+			</if>
+			<if test="rights != null and rights != ''">
+				rights = #{rights},
+			</if>
+			<if test="regionId != null and regionId > 0">
+				regionid = #{regionId},
+			</if>
+		</trim>
+		<where>
+			<![CDATA[
+				eid = #{eid} and id = #{id} 
+			]]>
+		</where>
+	</update>
+	
+	<update id="status">
+		<foreach collection="body.ids" item="id" index="index" open="begin"
+			close=";end;" separator=";">
+			update sys_account
+			<set>
+				status = #{body.status}
+			</set>
+			where eid = #{eid} and id = #{id}
+		</foreach>
+	</update>
+	
+	<select id="list" parameterType="com.qisen.mts.common.model.request.PageRequest" resultType="com.qisen.mts.common.model.entity.sys.Account">
+		<![CDATA[
+		select n.* from(
+		select m.*,rownum as rnum from
+			(select id,eid,sid,account,pwd,name,mobile,role,rights,lastlogin,inputdate,status,regionid from sys_account
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} 
+			]]>
+			<choose>  
+	            <when test="body.status != null and body.status == '0'">  
+	               and status = '0' 
+	            </when >  
+	            <when test="body.status == 0">  
+	               and status = '0' 
+	            </when >
+	            <otherwise> 
+	             	and (status = '1' or status = '2')
+	            </otherwise>  
+	        </choose>
+	       <choose>  
+	            <when test="sid != null and sid > 0">  
+	               and sid = #{sid}
+	            </when >  
+	            <otherwise> 
+	             	and nvl(sid,0)=0 and( role = '1' or role = '2')
+	            </otherwise>
+	        </choose>
+			<if test="body.role != null and body.role !=''">
+				<![CDATA[
+					and role = #{body.role}
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword != '' ">
+				<![CDATA[
+					 and (mobile like '%'||#{body.keyword}||'%'  or name like '%'||#{body.keyword}||'%' or account like '%'||#{body.keyword}||'%')
+				]]>
+			</if>
+			<![CDATA[
+				 ORDER BY id )m )n
+			]]>
+		</where>
+		<if test="endIndex != null and endIndex > 0 and startIndex != null and startIndex >= 0 ">
+			<![CDATA[
+				 where n.rnum between #{startIndex} and #{endIndex}
+			]]>
+		</if>
+	</select>
+	
+	<select id="count" parameterType="com.qisen.mts.common.model.request.PageRequest" resultType="int">
+		<![CDATA[
+			select count(id) from sys_account
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid}
+			]]>
+			<choose>  
+	            <when test="body.status != null and body.status == '0'">  
+	               and status = '0' 
+	            </when >  
+	            <when test="body.status == 0">  
+	               and status = '0' 
+	            </when >  
+	            <otherwise> 
+	             	and (status = '1' or status = '2')
+	            </otherwise>  
+	        </choose>
+	        <choose>  
+	            <when test="sid != null and sid > 0">  
+	               and sid = #{sid}
+	            </when >  
+	            <otherwise> 
+	             	and (role = '1' or role = '2')
+	            </otherwise>
+	        </choose>
+			<if test="body.role != null and body.role !=''">
+				<![CDATA[
+					and role = #{body.role}
+				]]>
+			</if>
+			<if test="body.keyword != null and body.keyword !=''">
+				<![CDATA[
+					 and (mobile like '%'||#{body.keyword}||'%'  or name like '%'||#{body.keyword}||'%' or account like '%'||#{body.keyword}||'%' )
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="check" resultType="java.lang.Integer">
+		<![CDATA[
+			select count(id) from sys_account where account = #{account}
+		]]>
+		<if test="id != null and id > 0">
+		<![CDATA[
+			and id != #{id}
+		]]>
+		</if>
+	</select>
+	
+	<select id="find4Login" resultType="com.qisen.mts.common.model.entity.sys.Account">
+		<![CDATA[
+			select id,eid,sid,account,pwd,name,mobile,role,rights,status,authtoken,authscope,regionid from sys_account where account = #{account}
+		]]>
+	</select>
+	
+	<select id="findByToken" resultType="com.qisen.mts.common.model.entity.sys.Account">
+		<![CDATA[
+			select id,eid,sid,account,pwd,name,mobile,role,rights,status,authtoken,authscope,regionid from sys_account where authtoken = #{token}
+		]]>
+	</select>
+	
+	<update id="update4Login">
+		<![CDATA[
+			update sys_account set lastlogin = sysdate,authtoken = #{token},authscope = #{scope} where id = #{id}
+		]]>
+	</update>
+	
+	<update id="rights">
+		<![CDATA[
+			update sys_account set rights = #{body.rights} where eid = #{eid} and id = #{body.id}
+		]]>
+	</update>
+	
+	<select id="findAccount" resultType="com.qisen.mts.common.model.entity.sys.Account">
+		<![CDATA[
+			select id,eid,sid,account,pwd,name,mobile,role,rights,status,authtoken,authscope,regionid from sys_account where eid = #{eid} and id = #{id}
+		]]>
+	</select>
+</mapper>
