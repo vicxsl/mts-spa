@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.qisen</groupId>
-	<artifactId>mts-mrb</artifactId>
+	<artifactId>mts-spa</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mts-mrb</name>
+	<name>mts-spa</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -152,7 +152,7 @@
 				<filtering>false</filtering>
 			</resource>
 		</resources>
-		<finalName>mts-mrb</finalName>
+		<finalName>mts-spa</finalName>
 	</build>
 	<profiles>
 		<profile>
