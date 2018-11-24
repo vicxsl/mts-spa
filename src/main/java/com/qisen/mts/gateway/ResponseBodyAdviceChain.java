@@ -29,24 +29,24 @@ public class ResponseBodyAdviceChain implements ResponseBodyAdvice<BaseResponse>
 
 	@Override
 	public BaseResponse beforeBodyWrite(BaseResponse baseResp, MethodParameter parameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> converterType, ServerHttpRequest request, ServerHttpResponse response) {
-		HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
-		if (baseResp != null) {
-			try {
-				String lang = servletRequest.getAttribute("lang").toString();
-				JSONObject msgCode = jsonUtil.readJSON("msgCode.json", lang);
-				if (StringUtils.isNotBlank(baseResp.getCode())) {
-					if (msgCode.containsKey(baseResp.getCode())) {
-						baseResp.setMsg(msgCode.getString(baseResp.getCode()));
-					}
-				} else {
-					if (msgCode.containsKey(baseResp.getResult().toString())) {
-						baseResp.setMsg(msgCode.getString(baseResp.getResult().toString()));
-					}
-				}
-			} catch (Exception e) {
-				logger.error("read msg code error, code: " + baseResp.getCode(), e);
-			}
-		}
+//		HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
+//		if (baseResp != null) {
+//			try {
+//				String lang = servletRequest.getAttribute("lang").toString();
+//				JSONObject msgCode = jsonUtil.readJSON("msgCode.json", lang);
+//				if (StringUtils.isNotBlank(baseResp.getCode())) {
+//					if (msgCode.containsKey(baseResp.getCode())) {
+//						baseResp.setMsg(msgCode.getString(baseResp.getCode()));
+//					}
+//				} else {
+//					if (msgCode.containsKey(baseResp.getResult().toString())) {
+//						baseResp.setMsg(msgCode.getString(baseResp.getResult().toString()));
+//					}
+//				}
+//			} catch (Exception e) {
+//				logger.error("read msg code error, code: " + baseResp.getCode(), e);
+//			}
+//		}
 		return baseResp;
 	}
 
