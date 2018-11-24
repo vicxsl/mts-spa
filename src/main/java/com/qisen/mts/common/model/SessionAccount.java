@@ -9,7 +9,8 @@ import com.qisen.mts.common.model.entity.BaseEntity;
 public class SessionAccount extends BaseEntity {
 
 	/**
-	 * 
+	 * 公共的账号
+	 * 带有token
 	 */
 	private static final long serialVersionUID = 4403566503925103117L;
 

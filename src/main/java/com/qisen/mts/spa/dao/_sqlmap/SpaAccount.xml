@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.SpaAccountDao">
+	
+	<select id="check" resultType="int" parameterType="com.qisen.mts.admin.model.entity.Admin">
+		<![CDATA[
+			select count(id)  from  com_admin 
+		]]>
+		<where>
+			<!-- <if test="name != null and name !=''">
+				<![CDATA[
+					name = #{name} 
+				]]>
+			</if> -->
+			<if test="mobile != null and mobile !=''">
+				<![CDATA[
+					 or mobile = #{mobile} 
+				]]>
+			</if>
+			<if test="id != null and id >0">
+				<![CDATA[
+					 and id != #{id} 
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<insert id="create"  parameterType="com.qisen.mts.admin.model.entity.Admin">
+		<![CDATA[
+			insert  into com_admin  (id,name,mobile,passwd,orgNo,createDate,menuStr,optStr,allowFlag)
+			values(seq_com_admin.nextval,#{name},#{mobile},#{passwd},#{orgNo},sysDate,#{menuStr},#{optStr},#{allowFlag})
+		]]>
+	</insert>
+	
+	
+	
+	<!-- 通过手机号码查询SPA账号 -->
+	<select id="findSpaAccount" resultType="com.qisen.mts.spa.model.entity.SpaAccount">
+		<![CDATA[
+			select * from spa_account where mobile = #{mobile}
+		]]>
+	</select>
+
+</mapper>

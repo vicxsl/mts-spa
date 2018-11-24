@@ -30,6 +30,11 @@ public class ConfigConsts {
 	public static final String SESSION_ADMIN = "MTS_ADMIN_";
 	
 	/**
+	 * memcached sessionSpa key前缀
+	 */
+	public static final String SESSION_SPA = "MTS_SPA_";
+	
+	/**
 	 * memcached metaData key前缀
 	 */
 	public static final String METADATA_E = "MTS_META_DATA_E_";

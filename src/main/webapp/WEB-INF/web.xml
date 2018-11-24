@@ -61,6 +61,31 @@
     <filter-name>mykTokenFilterProxy</filter-name>
     <url-pattern>/myk/*</url-pattern>
   </filter-mapping>
+ <!--  spa配置拦截器 -->
+  <filter>
+    <filter-name>spaTokenFilter</filter-name>
+    <filter-class>com.qisen.mts.spa.gateway.TokenFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>spaTokenFilterProxy</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    <init-param>
+      <param-name>targetBeanName</param-name>
+      <param-value>spaTokenFilter</param-value>
+    </init-param>
+    <init-param>
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>ignoreList</param-name>
+      <param-value></param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>spaTokenFilterProxy</filter-name>
+    <url-pattern>/spa/*</url-pattern>
+  </filter-mapping>
   <filter>
     <filter-name>adminTokenFilter</filter-name>
     <filter-class>com.qisen.mts.admin.gateway.TokenFilter</filter-class>
