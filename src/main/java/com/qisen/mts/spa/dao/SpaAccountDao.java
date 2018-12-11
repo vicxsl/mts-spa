@@ -1,5 +1,7 @@
 package com.qisen.mts.spa.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.qisen.mts.spa.model.entity.SpaAccount;
@@ -25,4 +27,11 @@ public interface SpaAccountDao {
 	 * @return
 	 */
 	public SpaAccount findSpaAccount(@Param("mobile")String mobile);
+
+	/**
+	 * 查询spa账号列表
+	 * @param mobile
+	 * @return
+	 */
+	public List<SpaAccount> list(SpaAccount spaAccount);
 }
