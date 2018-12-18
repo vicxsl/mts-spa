@@ -25,18 +25,26 @@ public class SpaAccountController {
 	@Autowired
 	private SpaAccountService spaAccountService;
 
-//	保存账号接口
+
+//	查询账号列表接口
 	@RequestMapping("/list")
 	@ResponseBody
 	public CommObjResponse<List<SpaAccount>> list(@RequestBody SpaRequest<SpaAccount> req) throws Exception {
 		return spaAccountService.list(req);
 	}
 	
-//	查询账号列表接口
+//	保存账号接口
 	@RequestMapping("/save")
 	@ResponseBody
 	public BaseResponse save(@RequestBody SpaRequest<SpaAccount> req) throws Exception {
 		return spaAccountService.save(req);
+	}
+	
+//	删除账号接口
+	@RequestMapping("/delete")
+	@ResponseBody
+	public BaseResponse delete(@RequestBody SpaRequest<SpaAccount> req) throws Exception {
+		return spaAccountService.delete(req);
 	}
 	
 //	登录接口

@@ -30,17 +30,44 @@
 		]]>
 	</insert>
 	
-	<update id="update">
-		<foreach collection="body.ids" item="id" index="index" open="begin" close=";end;" separator=";">
+	<!-- 删除账号 -->
+	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
+		<![CDATA[
+			delete from spa_account
+		]]>
+		<where>
 			<![CDATA[
-				update busi_daily set status = #{body.status}
+				eid = #{eid} and sid = #{sid} and id=#{id}
 			]]>
-			<where>
+		</where>
+	</delete>
+	
+	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
+		<![CDATA[
+			update spa_account
+		]]>
+		<set>
+			<if test="name != null and name !=''">
 				<![CDATA[
-					 eid = #{eid} and sid = #{sid} and id = #{id}
-				]]>
-			</where>
-		</foreach>
+					 name = #{name},
+				 ]]>
+			 </if>
+			 <if test="mobile != null and mobile !=''">
+				<![CDATA[
+					 mobile = #{mobile},
+				 ]]>
+			 </if>
+			 <if test="status != null and status !=''">
+				<![CDATA[
+					 status = #{status},
+				 ]]>
+			 </if>
+		</set>
+		<where>
+			<![CDATA[
+				 eid = #{eid} and sid = #{sid} and id = #{id}
+			]]>
+		</where>
 	</update>
 	
 	<!-- 通过手机号码查询SPA账号 -->

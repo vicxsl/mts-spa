@@ -33,15 +33,36 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 		BaseResponse resp = new BaseResponse();
 		SpaAccount spaAccount = req.getBody();
 		int count = spaAccountDao.check(spaAccount);
-		if (count == 0 ) {
-			spaAccountDao.create(spaAccount);
-		}else {
-			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+		if(spaAccount.getId() > 0){
+			if (count == 0 ) {
+				spaAccountDao.update(spaAccount);
+			}else {
+				resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+			}
+		}else{
+			if (count == 0 ) {
+				spaAccountDao.create(spaAccount);
+			}else {
+				resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+			}
 		}
 		return resp;
 	}
 
-
+	/**
+	 * 删除spa账号
+	 */
+	@Override
+	public BaseResponse delete(SpaRequest<SpaAccount> req) {
+		BaseResponse resp = new BaseResponse();
+		SpaAccount spaAccount = req.getBody();
+		int count = spaAccountDao.delete(spaAccount);
+		if (count == 0 ) {
+			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+		}
+		
+		return resp;
+	}
 
 	@Override
 	public CommObjResponse<SessionSpa> login(SpaRequest<SpaAccount> req) throws Exception {

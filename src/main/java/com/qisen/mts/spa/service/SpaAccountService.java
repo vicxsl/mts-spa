@@ -18,6 +18,13 @@ public interface SpaAccountService {
 	public BaseResponse save(SpaRequest<SpaAccount> req);
 	
 	/**
+	 * 删除spa账号
+	 * @param req
+	 * @return
+	 */
+	public BaseResponse delete(SpaRequest<SpaAccount> req);
+	
+	/**
 	 * 查询spa账号
 	 * @param req
 	 * @return

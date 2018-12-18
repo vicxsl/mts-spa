@@ -10,16 +10,29 @@ public interface SpaAccountDao {
 
 	/**
 	 * 检查spa账号是否已存在
-	 * @param admin
+	 * @param spaAccount
 	 * @return
 	 */
 	public int check(SpaAccount spaAccount);
+	
+	/**
+	 * 删除spa账号
+	 * @param spaAccount
+	 * @return
+	 */
+	public int delete(SpaAccount spaAccount);
 
 	/**
 	 * 新增spa账号 
-	 * @param admin
+	 * @param spaAccount
 	 */
 	public void create(SpaAccount spaAccount);
+	
+	/**
+	 * 编辑spa账号 
+	 * @param spaAccount
+	 */
+	public void update(SpaAccount spaAccount);
 	
 	/**
 	 * 通过手机号码查询spa账号
