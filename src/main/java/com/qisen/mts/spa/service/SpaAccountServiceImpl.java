@@ -33,7 +33,7 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 		BaseResponse resp = new BaseResponse();
 		SpaAccount spaAccount = req.getBody();
 		int count = spaAccountDao.check(spaAccount);
-		if(spaAccount.getId() > 0){
+		if(spaAccount.getId() != null && spaAccount.getId() > 0){
 			if (count == 0 ) {
 				spaAccountDao.update(spaAccount);
 			}else {

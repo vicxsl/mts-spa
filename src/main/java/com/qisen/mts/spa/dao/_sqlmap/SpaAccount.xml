@@ -62,6 +62,16 @@
 					 status = #{status},
 				 ]]>
 			 </if>
+			 <if test="menuStr != null and menuStr !=''">
+				<![CDATA[
+					 menuStr = #{menuStr},
+				 ]]>
+			 </if>
+			 <if test="optStr != null and optStr !=''">
+				<![CDATA[
+					 optStr = #{optStr},
+				 ]]>
+			 </if>
 		</set>
 		<where>
 			<![CDATA[
