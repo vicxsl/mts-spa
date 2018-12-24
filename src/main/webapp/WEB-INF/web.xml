@@ -13,54 +13,7 @@
     <filter-name>characterEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  <filter>
-    <filter-name>beautyTokenFilter</filter-name>
-    <filter-class>com.qisen.mts.beauty.gateway.TokenFilter</filter-class>
-  </filter>
-  <filter>
-    <filter-name>beautyTokenFilterProxy</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    <init-param>
-      <param-name>targetBeanName</param-name>
-      <param-value>beautyTokenFilter</param-value>
-    </init-param>
-    <init-param>
-      <param-name>targetFilterLifecycle</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
-      <param-name>ignoreList</param-name>
-      <param-value></param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>beautyTokenFilterProxy</filter-name>
-    <url-pattern>/beauty/*</url-pattern>
-  </filter-mapping>
-  <filter>
-    <filter-name>mykTokenFilter</filter-name>
-    <filter-class>com.qisen.mts.myk.gateway.TokenFilter</filter-class>
-  </filter>
-  <filter>
-    <filter-name>mykTokenFilterProxy</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    <init-param>
-      <param-name>targetBeanName</param-name>
-      <param-value>mykTokenFilter</param-value>
-    </init-param>
-    <init-param>
-      <param-name>targetFilterLifecycle</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
-      <param-name>ignoreList</param-name>
-      <param-value></param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>mykTokenFilterProxy</filter-name>
-    <url-pattern>/myk/*</url-pattern>
-  </filter-mapping>
+ 
  <!--  spa配置拦截器 -->
   <filter>
     <filter-name>spaTokenFilter</filter-name>
@@ -86,30 +39,7 @@
     <filter-name>spaTokenFilterProxy</filter-name>
     <url-pattern>/spa/*</url-pattern>
   </filter-mapping>
-  <filter>
-    <filter-name>adminTokenFilter</filter-name>
-    <filter-class>com.qisen.mts.admin.gateway.TokenFilter</filter-class>
-  </filter>
-  <filter>
-    <filter-name>adminTokenFilterProxy</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    <init-param>
-      <param-name>targetBeanName</param-name>
-      <param-value>adminTokenFilter</param-value>
-    </init-param>
-    <init-param>
-      <param-name>targetFilterLifecycle</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
-      <param-name>ignoreList</param-name>
-      <param-value></param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>adminTokenFilterProxy</filter-name>
-    <url-pattern>/admin/*</url-pattern>
-  </filter-mapping>
+  
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
@@ -135,7 +65,5 @@
   <listener>
     <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
   </listener>
-  <listener>
-    <listener-class>com.qisen.mts.beauty.listener.SystemInitListener</listener-class>
-  </listener>
+
 </web-app>

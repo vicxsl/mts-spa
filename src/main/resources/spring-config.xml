@@ -71,7 +71,7 @@
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.qisen.mts.spa.dao,com.qisen.mts.common.dao,com.qisen.mts.beauty.dao,com.qisen.mts.admin.dao" />
+		<property name="basePackage" value="com.qisen.mts.spa.dao,com.qisen.mts.common.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 

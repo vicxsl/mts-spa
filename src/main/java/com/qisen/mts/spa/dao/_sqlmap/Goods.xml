@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.qisen.mts.spa.dao.SpaAccountDao">
+<mapper namespace="com.qisen.mts.spa.dao.GoodsDao">
 
 	<!-- 通过手机号码检测账号是否存在 -->
-	<select id="check" resultType="int" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
+	<select id="check" resultType="int" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			select count(id)  from  spa_account 
+			select count(id)  from  goods 
 		]]>
 		<where>
 			<if test="mobile != null and mobile !=''">
@@ -23,17 +23,17 @@
 	</select>
 	
 	<!--新增账号  -->
-	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			insert into spa_account(eid,sid,name,mobile,createDate,menuStr,optStr,role,password,status) 
+			insert into goods(eid,sid,name,mobile,createDate,menuStr,optStr,role,password,status) 
 			values(#{eid},#{sid},#{name},#{mobile},now(),#{menuStr},#{optStr},#{role},#{password},0)
 		]]>
 	</insert>
 	
 	<!-- 删除账号 -->
-	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
+	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			delete from spa_account
+			delete from goods
 		]]>
 		<where>
 			<![CDATA[
@@ -42,9 +42,9 @@
 		</where>
 	</delete>
 	
-	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
+	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			update spa_account
+			update goods
 		]]>
 		<set>
 			<if test="name != null and name !=''">
@@ -80,32 +80,20 @@
 		</where>
 	</update>
 	
-	<!-- 通过手机号码查询SPA账号 -->
-	<select id="findSpaAccount" resultType="com.qisen.mts.spa.model.entity.SpaAccount">
-		<![CDATA[
-			select * from spa_account
-		]]>
-		<where>
-			<if test="mobile != null and mobile !=''">
-				<![CDATA[
-					mobile = #{mobile} 
-				]]>
-			</if>
-		</where>
-	</select>
+
 	
 	<!-- 查询SPA账号列表 -->
-	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaAccount"  parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoods"  parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			select * from spa_account
+			select * from goods
 		]]>
 		<where>
 			<![CDATA[
 				eid = #{eid} and sid = #{sid}
 			]]>
-			<if test="mobile != null and mobile !=''">
+			<if test="No != null and No !=''">
 				<![CDATA[
-					and mobile = #{mobile} 
+					and No = #{No} 
 				]]>
 			</if>
 			<if test="name != null and name !=''">
