@@ -9,24 +9,34 @@
 			select count(id)  from  goods 
 		]]>
 		<where>
-			<if test="mobile != null and mobile !=''">
+			<if test="no != null and no !=''">
 				<![CDATA[
-					 mobile = #{mobile} 
+					 no = #{no} 
+				]]>
+			</if>
+			<if test="name != null and name !=''">
+				<![CDATA[
+					and name = #{name} 
+				]]>
+			</if>
+			<if test="bar_code != null and bar_code !=''">
+				<![CDATA[
+					and bar_code = #{bar_code} 
 				]]>
 			</if>
 			<if test="id != null and id >0">
 				<![CDATA[
-					 and id != #{id} 
+					and id != #{id} 
 				]]>
 			</if>
 		</where>
 	</select>
 	
-	<!--新增账号  -->
+	<!--新增商品  -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			insert into goods(eid,sid,name,mobile,createDate,menuStr,optStr,role,password,status) 
-			values(#{eid},#{sid},#{name},#{mobile},now(),#{menuStr},#{optStr},#{role},#{password},0)
+			insert into goods(eid,sid,name,no,bar_code,type,son_type,unit,spec,num,buyingPrice,costPrice,salePrice,goodsCompanyId,supplierId,status) 
+			values(#{eid},#{sid},#{name},#{no},#{bar_code},#{type},#{son_type},#{unit},#{spec},#{num},#{buyingPrice},#{costPrice},#{salePrice},#{goodsCompanyId},#{supplierId},0)
 		]]>
 	</insert>
 	
@@ -52,9 +62,9 @@
 					 name = #{name},
 				 ]]>
 			 </if>
-			 <if test="mobile != null and mobile !=''">
+			 <if test="no != null and no !=''">
 				<![CDATA[
-					 mobile = #{mobile},
+					 no = #{no},
 				 ]]>
 			 </if>
 			 <if test="status != null and status !=''">
@@ -62,14 +72,44 @@
 					 status = #{status},
 				 ]]>
 			 </if>
-			 <if test="menuStr != null and menuStr !=''">
+			 <if test="bar_code != null and bar_code !=''">
 				<![CDATA[
-					 menuStr = #{menuStr},
+					 bar_code = #{bar_code},
 				 ]]>
 			 </if>
-			 <if test="optStr != null and optStr !=''">
+			 <if test="type != null and type !=''">
 				<![CDATA[
-					 optStr = #{optStr},
+					 type = #{type},
+				 ]]>
+			 </if>
+			 <if test="son_type != null and son_type !=''">
+				<![CDATA[
+					 son_type = #{son_type},
+				 ]]>
+			 </if>
+			 <if test="unit != null and unit !=''">
+				<![CDATA[
+					 unit = #{unit},
+				 ]]>
+			 </if>
+			 <if test="spec != null and spec !=''">
+				<![CDATA[
+					 spec = #{spec},
+				 ]]>
+			 </if>
+			 <if test="salePrice != null and salePrice !=''">
+				<![CDATA[
+					 salePrice = #{salePrice},
+				 ]]>
+			 </if>
+			 <if test="goodsCompanyId != null and goodsCompanyId !=''">
+				<![CDATA[
+					 goodsCompanyId = #{goodsCompanyId},
+				 ]]>
+			 </if>
+			 <if test="supplierId != null and supplierId !=''">
+				<![CDATA[
+					 supplierId = #{supplierId},
 				 ]]>
 			 </if>
 		</set>
@@ -82,7 +122,7 @@
 	
 
 	
-	<!-- 查询SPA账号列表 -->
+	<!-- 查询SPA商品列表 -->
 	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoods"  parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
 			select * from goods
@@ -91,9 +131,9 @@
 			<![CDATA[
 				eid = #{eid} and sid = #{sid}
 			]]>
-			<if test="No != null and No !=''">
+			<if test="no != null and no !=''">
 				<![CDATA[
-					and No = #{No} 
+					and no = #{no} 
 				]]>
 			</if>
 			<if test="name != null and name !=''">

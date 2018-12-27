@@ -22,17 +22,24 @@ public class GoodsServiceImpl implements GoodsService{
 	@Override
 	public CommObjResponse<List<SpaGoods>> save(SpaRequest<SpaGoods> req) {
 		CommObjResponse<List<SpaGoods>> resp = new CommObjResponse<List<SpaGoods>>();
-		SpaGoods spaAccount = req.getBody();
-		int count = goodsDao.check(spaAccount);
-		if(spaAccount.getId() != null && spaAccount.getId() > 0){
+		SpaGoods spaGoods = req.getBody();
+		SpaGoods queryGoods = new SpaGoods();
+		queryGoods.setEid(spaGoods.getEid());
+		queryGoods.setSid(spaGoods.getSid());
+		int count = goodsDao.check(spaGoods);
+		if(spaGoods.getId() != null && spaGoods.getId() > 0){
 			if (count == 0 ) {
-				goodsDao.update(spaAccount);
+				goodsDao.update(spaGoods);
+				List<SpaGoods>  goodsList = goodsDao.list(queryGoods);
+				resp.setBody(goodsList);
 			}else {
 				resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
 			}
 		}else{
 			if (count == 0 ) {
-				goodsDao.create(spaAccount);
+				goodsDao.create(spaGoods);
+				List<SpaGoods>  goodsList = goodsDao.list(queryGoods);
+				resp.setBody(goodsList);
 			}else {
 				resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
 			}
@@ -46,12 +53,17 @@ public class GoodsServiceImpl implements GoodsService{
 	@Override
 	public CommObjResponse<List<SpaGoods>> delete(SpaRequest<SpaGoods> req) {
 		CommObjResponse<List<SpaGoods>> resp = new CommObjResponse<List<SpaGoods>>();
-		SpaGoods spaAccount = req.getBody();
-		int count = goodsDao.delete(spaAccount);
+		SpaGoods spaGoods = req.getBody();
+		SpaGoods queryGoods = new SpaGoods();
+		queryGoods.setEid(spaGoods.getEid());
+		queryGoods.setSid(spaGoods.getSid());
+		int count = goodsDao.delete(spaGoods);
 		if (count == 0 ) {
 			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+		}else{
+			List<SpaGoods>  spaList = goodsDao.list(queryGoods);
+			resp.setBody(spaList);
 		}
-		
 		return resp;
 	}
 
@@ -61,8 +73,8 @@ public class GoodsServiceImpl implements GoodsService{
 	@Override
 	public CommObjResponse<List<SpaGoods>> list(SpaRequest<SpaGoods> req) {
 		CommObjResponse<List<SpaGoods>> resp = new CommObjResponse<List<SpaGoods>>();
-		SpaGoods spaAccount = req.getBody();
-		List<SpaGoods>  spaList = goodsDao.list(spaAccount);
+		SpaGoods spaGoods = req.getBody();
+		List<SpaGoods>  spaList = goodsDao.list(spaGoods);
 		resp.setBody(spaList);
 		return resp;
 	}

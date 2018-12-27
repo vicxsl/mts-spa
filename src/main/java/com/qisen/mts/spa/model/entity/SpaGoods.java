@@ -17,11 +17,13 @@ public class SpaGoods extends BaseEntity {
 	private Integer eid;
 	private Integer sid;
 	private String name;
-	private String No;//商品编号
+	private String no;//商品编号
 	private String bar_code;//商品编码
+	private Integer type;//商品类型id
+	private Integer son_type;//商品子类型id
 	private String unit;//商品单位
 	private String spec;//商品规格
-	private double Num;//数量
+	private double num;//数量
 	private double buyingPrice;//进货价
 	private double costPrice;//成本价
 	private double salePrice;//销售价
@@ -55,16 +57,28 @@ public class SpaGoods extends BaseEntity {
 		this.name = name;
 	}
 	public String getNo() {
-		return No;
+		return no;
 	}
 	public void setNo(String no) {
-		No = no;
+		this.no = no;
 	}
 	public String getBar_code() {
 		return bar_code;
 	}
 	public void setBar_code(String bar_code) {
 		this.bar_code = bar_code;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public Integer getSon_type() {
+		return son_type;
+	}
+	public void setSon_type(Integer son_type) {
+		this.son_type = son_type;
 	}
 	public String getUnit() {
 		return unit;
@@ -79,10 +93,10 @@ public class SpaGoods extends BaseEntity {
 		this.spec = spec;
 	}
 	public double getNum() {
-		return Num;
+		return num;
 	}
 	public void setNum(double num) {
-		Num = num;
+		this.num = num;
 	}
 	public double getBuyingPrice() {
 		return buyingPrice;
@@ -133,5 +147,4 @@ public class SpaGoods extends BaseEntity {
 		this.status = status;
 	}
 	
-
 }
