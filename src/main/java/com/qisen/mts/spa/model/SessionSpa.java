@@ -11,12 +11,6 @@ public class SessionSpa extends SessionAccount {
 	 */
 	private static final long serialVersionUID = -3920174407288686753L;
 
-//	@Override
-//	public String toString() {
-//		return "SessionSpa [id=" + id + ", name=" + name + ", mobile=" + mobile + ", createDate=" + createDate
-//				+ ", menuStr=" + menuStr + ", optStr=" + optStr + ", role=" + role + ", status=" + status + ", eid="
-//				+ eid + ", sid=" + sid + "]";
-//	}
 	private Integer id;
 	private String name;
 	private String mobile;// 手机号码
@@ -91,6 +85,5 @@ public class SessionSpa extends SessionAccount {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 
 }
