@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.qisen.mts.spa.dao.SpaGoodsCompanyDao">
-	<resultMap id="BaseResultMap"
-		type="com.qisen.mts.spa.model.entity.SpaGoodsCompany">
+<mapper namespace="com.qisen.mts.spa.dao.SpaGoodsType">
+	<resultMap id="BaseResultMap" type="com.qisen.mts.spa.model.entity.SpaGoodsType">
 		<id column="Id" property="id" jdbcType="INTEGER" />
-		<result column="Name" property="name" jdbcType="VARCHAR" />
-		<result column="No" property="no" jdbcType="VARCHAR" />
+		<result column="TypeName" property="typeName" jdbcType="VARCHAR" />
+		<result column="TypeNo" property="typeNo" jdbcType="VARCHAR" />
 		<result column="Status" property="status" jdbcType="CHAR" />
 		<result column="eid" property="eid" jdbcType="INTEGER" />
 		<result column="sid" property="sid" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		Id, Name, No, Status,sid,eid
+		Id, TypeName, TypeNo, Status,sid,eid
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
-		from goodsCompany
+		from goodsType
 		where Id = #{id,jdbcType=INTEGER}
 	</select>
 
-	<select id="selectGoodsCompanys" resultMap="BaseResultMap">
-		select * from goodsCompany
+	<select id="selectGoodsTypes" resultMap="BaseResultMap">
+		select * from goodsType
 		<where>
 			1=1
 			<if test="id != null">
 				and id=#{id}
 			</if>
-			<if test="name != null">
-				<bind name="parttern_name" value="'%'+name+'%'" />
+			<if test="typeName != null">
+				<bind name="parttern_name" value="'%'typeName'%'" />
 				and name like #{parttern_name}
 			</if>
 			<if test="sid != null">
@@ -38,8 +37,8 @@
 			<if test="eid != null">
 				and eid = #{eid}
 			</if>
-			<if test="no != null">
-				and no=#{no}
+			<if test="typeNo != null">
+				and TypeNo=#{typeNo}
 			</if>
 			<if test="status != null">
 				and Status = #{status}
@@ -50,16 +49,16 @@
 	</select>
 
 	<update id="updateByPrimaryKey">
-		update goodsCompany
+		update goodsType
 		<set>
-			<if test="name != null and name !=''">
-				name = #{name},
+			<if test="typeName != null and typeName !=''">
+				TypeName = #{typeName},
 			</if>
-			<if test="no != null and no !=''">
-				sid = #{sid},
+			<if test="typeNo != null and typeNo !=''">
+				TypeNo = #{typeNo},
 			</if>
 			<if test="status != null and status !=''">
-				status = #{status},
+				Status = #{status},
 			</if>
 		</set>
 		<where>
@@ -68,15 +67,17 @@
 	</update>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from goodsCompany
+		delete from
+		goodsType
 		where Id = #{id,jdbcType=INTEGER}
 	</delete>
-	<insert id="insert"
-		parameterType="com.qisen.mts.spa.model.entity.SpaGoodsCompany">
-		insert into goodsCompany (Id, Name, No,
+	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+		insert into goodsType (Id,
+		TypeName, TypeNo,
 		Status,eid,sid)
-		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
-		#{no,jdbcType=VARCHAR},
+		values (#{id,jdbcType=INTEGER},
+		#{typeName,jdbcType=VARCHAR},
+		#{typeNo,jdbcType=VARCHAR},
 		#{status,jdbcType=CHAR},#{eid,jdbcType=INTEGER},#{sid,jdbcType=INTEGER})
 	</insert>
 </mapper>
