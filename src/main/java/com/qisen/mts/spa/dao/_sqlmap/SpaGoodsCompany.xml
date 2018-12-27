@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qisen.mts.spa.dao.SpaGoodsCompanyDao">
+	<resultMap id="BaseResultMap"
+		type="com.qisen.mts.spa.model.entity.SpaGoodsCompany">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="No" property="no" jdbcType="VARCHAR" />
+		<result column="Status" property="status" jdbcType="CHAR" />
+		<result column="eid" property="eid" jdbcType="INTEGER" />
+		<result column="sid" property="sid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, Name, No, Status,sid,eid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from goodsCompany
+		where Id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectGoodsCompanys" resultMap="BaseResultMap">
+		select * from goodsCompany
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="name != null">
+				<bind name="parttern_name" value="'%'+name+'%'" />
+				and name like #{parttern_name}
+			</if>
+			<if test="sid != null">
+				and sid=#{sid}
+			</if>
+			<if test="eid != null">
+				and eid = #{eid}
+			</if>
+			<if test="no != null">
+				and no=#{no}
+			</if>
+			<if test="no != null">
+				and no = #{no}
+			</if>
+		</where>
+
+
+	</select>
+
+	<update id="updateByPrimaryKey">
+		update goodsCompany
+		<set>
+			<if test="name != null and name !=''">
+				name = #{name},
+			</if>
+			<if test="no != null and no !=''">
+				sid = #{sid},
+			</if>
+			<if test="status != null and status !=''">
+				status = #{status},
+			</if>
+		</set>
+		<where>
+			eid = #{eid} and sid = #{sid} and id = #{id}
+		</where>
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from goodsCompany
+		where Id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.stock.capital.enterprise.common.model.entity.SpaGoodsCompany">
+		insert into goodsCompany (Id, Name, No,
+		Status,eid,sid)
+		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{no,jdbcType=VARCHAR},
+		#{status,jdbcType=CHAR},#{eid,jdbcType=INTEGER},#{sid,jdbcType=INTEGER})
+	</insert>
+</mapper>
