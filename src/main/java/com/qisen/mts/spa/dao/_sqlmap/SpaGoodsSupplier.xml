@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qisen.mts.spa.dao.SpaGoodsSupplierDao">
+	<resultMap id="BaseResultMap"
+		type="com.qisen.mts.spa.model.entity.SpaGoodsSupplier">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="Address" property="address" jdbcType="VARCHAR" />
+		<result column="Linkman" property="linkman" jdbcType="VARCHAR" />
+		<result column="LinkMobile" property="linkmobile" jdbcType="VARCHAR" />
+		<result column="OtherLinkman" property="otherlinkman" jdbcType="VARCHAR" />
+		<result column="OtherLinkMobile" property="otherlinkmobile"
+			jdbcType="VARCHAR" />
+		<result column="Status" property="status" jdbcType="CHAR" />
+		<result column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="eid" property="eid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, Name, Address, Linkman, LinkMobile, OtherLinkman,
+		OtherLinkMobile,
+		Status, sid,
+		eid
+	</sql>
+	<select id="selectSuppliers" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from goodsSupplier
+		<where>
+			1=1
+			<if test="name != null">
+				<bind name="parttern_name" value="'%'+name+'%'" />
+				and Name like #{parttern_name}
+			</if>
+			<if test="address != null">
+				<bind name="parttern_add" value="'%'+address+'%'" />
+				and Address like #{parttern_add}
+			</if>
+			<if test="linkman != null">
+				<bind name="parttern_man" value="'%'+linkman+'%'" />
+				and Linkman like #{parttern_man},
+			</if>
+			<if test="linkmobile != null">
+			<bind name="parttern_mobile" value="'%'+linkmobile+'%'" />
+				and LinkMobile like #{parttern_mobile}
+			</if>
+			<if test="otherlinkman != null">
+				<bind name="otherman" value="'%'+otherlinkman+'%'" />
+				and OtherLinkman like #{otherman}
+			</if>
+			<if test="otherlinkmobile != null">
+				<bind name="othermobile" value="'%'+otherlinkmobile+'%'" />
+				and OtherLinkMobile like #{othermobile}
+			</if>
+			<if test="status != null">
+				and Status = #{status,jdbcType=CHAR}
+			</if>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=INTEGER}
+			</if>
+			<if test="eid != null">
+				and eid = #{eid,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		goodsSupplier
+		where Id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsSupplier">
+		insert into goodsSupplier (Id,
+		Name, Address,
+		Linkman, LinkMobile, OtherLinkman,
+		OtherLinkMobile,
+		Status, sid,
+		eid)
+		values (#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR},
+		#{linkman,jdbcType=VARCHAR}, #{linkmobile,jdbcType=VARCHAR},
+		#{otherlinkman,jdbcType=VARCHAR},
+		#{otherlinkmobile,jdbcType=VARCHAR},
+		#{status,jdbcType=CHAR},
+		#{sid,jdbcType=INTEGER},
+		#{eid,jdbcType=INTEGER})
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.stock.capital.enterprise.common.model.entity.SpaGoodsSupplier">
+		update goodsSupplier
+		<set>
+			<if test="name != null">
+				Name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				Address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="linkman != null">
+				Linkman = #{linkman,jdbcType=VARCHAR},
+			</if>
+			<if test="linkmobile != null">
+				LinkMobile = #{linkmobile,jdbcType=VARCHAR},
+			</if>
+			<if test="otherlinkman != null">
+				OtherLinkman = #{otherlinkman,jdbcType=VARCHAR},
+			</if>
+			<if test="otherlinkmobile != null">
+				OtherLinkMobile = #{otherlinkmobile,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				Status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=INTEGER},
+			</if>
+			<if test="eid != null">
+				eid = #{eid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
