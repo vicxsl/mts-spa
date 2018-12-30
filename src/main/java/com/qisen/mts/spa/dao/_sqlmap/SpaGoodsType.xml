@@ -28,7 +28,7 @@
 				and id=#{id}
 			</if>
 			<if test="typeName != null">
-				<bind name="parttern_name" value="'%'typeName'%'" />
+				<bind name="parttern_name" value="'%'+typeName+'%'" />
 				and name like #{parttern_name}
 			</if>
 			<if test="sid != null">
