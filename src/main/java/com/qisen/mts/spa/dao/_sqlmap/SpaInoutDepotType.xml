@@ -1,83 +1,86 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.qisen.mts.spa.dao.SpaInoutDepotTypeDao" >
-  <resultMap id="BaseResultMap" type="com.qisen.mts.spa.model.entity.SpaInoutDepotType" >
-    <id column="Id" property="id" jdbcType="INTEGER" />
-    <result column="Name" property="name" jdbcType="VARCHAR" />
-    <result column="No" property="no" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="Status" property="status" jdbcType="CHAR" />
-    <result column="sid" property="sid" jdbcType="INTEGER" />
-    <result column="eid" property="eid" jdbcType="INTEGER" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    Id, Name, No, type, Status, sid, eid
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from inOutDepotType
-    where Id = #{id,jdbcType=INTEGER}
-  </select>
-  
-  <select id="selectDepotTypes" resultMap="BaseResultMap" >
-  select * from inOutDepotType
-  where 1=1 
-   <if test="name != null" >
-   <bind name="query_name" value="'%'+name+'%'"/>
-       and Name like #{query_name}
-      </if>
-      <if test="no != null" >
-      <bind name="query_no" value="'%'no'%'"/>
-        and No like #{query_no}
-      </if>
-      <if test="type != null" >
-       and type = #{type,jdbcType=CHAR}
-      </if>
-      <if test="status != null" >
-       and Status = #{status,jdbcType=CHAR}
-      </if>
-      <if test="sid != null" >
-       and sid = #{sid,jdbcType=INTEGER}
-      </if>
-      <if test="eid != null" >
-       and eid = #{eid,jdbcType=INTEGER}
-      </if>
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from inOutDepotType
-    where Id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType" >
-    insert into inOutDepotType ( Name, No, 
-      type, Status, sid, eid
-      )
-    values ( #{name,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR}, 
-      #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
-      )
-  </insert>
-  <update id="updateByPrimaryKey" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType" >
-    update inOutDepotType
-    <set >
-      <if test="name != null" >
-        Name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="no != null" >
-        No = #{no,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=CHAR},
-      </if>
-      <if test="status != null" >
-        Status = #{status,jdbcType=CHAR},
-      </if>
-      <if test="sid != null" >
-        sid = #{sid,jdbcType=INTEGER},
-      </if>
-      <if test="eid != null" >
-        eid = #{eid,jdbcType=INTEGER},
-      </if>
-    </set>
-    where Id = #{id,jdbcType=INTEGER}
-  </update>
+<mapper namespace="com.qisen.mts.spa.dao.SpaInoutDepotTypeDao">
+	<resultMap id="BaseResultMap"
+		type="com.qisen.mts.spa.model.entity.SpaInoutDepotType">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="No" property="no" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="CHAR" />
+		<result column="Status" property="status" jdbcType="CHAR" />
+		<result column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="eid" property="eid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, Name, No, type, Status, sid, eid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from inOutDepotType
+		where Id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectDepotTypes" resultMap="BaseResultMap">
+		select * from inOutDepotType
+		where 1=1
+		<if test="name != null">
+			<bind name="query_name" value="'%'+name+'%'" />
+			and Name like #{query_name}
+		</if>
+		<if test="no != null">
+			<bind name="query_no" value="'%'no'%'" />
+			and No like #{query_no}
+		</if>
+		<if test="type != null">
+			and type = #{type,jdbcType=CHAR}
+		</if>
+		<if test="status != null">
+			and Status = #{status,jdbcType=CHAR}
+		</if>
+		<if test="sid != null">
+			and sid = #{sid,jdbcType=INTEGER}
+		</if>
+		<if test="eid != null">
+			and eid = #{eid,jdbcType=INTEGER}
+		</if>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from inOutDepotType
+		where Id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType">
+		insert into inOutDepotType ( Name, No,
+		type, Status, sid, eid
+		)
+		values ( #{name,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR},
+		#{type,jdbcType=CHAR}, #{status,jdbcType=CHAR},
+		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType">
+		update inOutDepotType
+		<set>
+			<if test="name != null">
+				Name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="no != null">
+				No = #{no,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				Status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=INTEGER},
+			</if>
+			<if test="eid != null">
+				eid = #{eid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
 </mapper>
