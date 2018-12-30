@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qisen.mts.spa.dao.SpaGoodsSubTypeDao">
+	<resultMap id="BaseResultMap"
+		type="com.qisen.mts.spa.model.entity.SpaGoodsSubType">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="SubTypeName" property="subtypename" jdbcType="VARCHAR" />
+		<result column="SubTypeNo" property="subtypeno" jdbcType="VARCHAR" />
+		<result column="Status" property="status" jdbcType="CHAR" />
+		<result column="eid" property="eid" jdbcType="INTEGER" />
+		<result column="sid" property="sid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, SubTypeName, SubTypeNo, Status,sid,eid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from goodsSubType
+		where Id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectGoodsSubTys" resultMap="BaseResultMap">
+		select * from goodsSubType
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="subtypename != null">
+				<bind name="parttern_name" value="'%'+subtypename+'%'" />
+				and SubTypeName like #{parttern_name}
+			</if>
+			<if test="sid != null">
+				and sid=#{sid}
+			</if>
+			<if test="eid != null">
+				and eid = #{eid}
+			</if>
+			<if test="subtypeno != null">
+				and SubTypeNo=#{subtypeno}
+			</if>
+			<if test="status != null">
+				and Status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateByPrimaryKey">
+		update goodsSubType
+		<set>
+			<if test="subtypename != null and subtypename !=''">
+				SubTypeName = #{subtypename},
+			</if>
+			<if test="subtypeno != null and subtypeno !=''">
+				SubTypeNo = #{subtypeno},
+			</if>
+			<if test="status != null and status !=''">
+				status = #{status},
+			</if>
+		</set>
+		<where>
+			eid = #{eid} and sid = #{sid} and id = #{id}
+		</where>
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		goodsSubType
+		where Id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsSubType">
+		insert into goodsSubType (Id,
+		SubTypeName, SubTypeNo,
+		Status,eid,sid)
+		values (#{id,jdbcType=INTEGER},
+		#{subtypename,jdbcType=VARCHAR},
+		#{subtypeno,jdbcType=VARCHAR},
+		#{status,jdbcType=CHAR},#{eid,jdbcType=INTEGER},#{sid,jdbcType=INTEGER})
+	</insert>
+</mapper>
