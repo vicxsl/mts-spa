@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
-import com.qisen.mts.spa.model.entity.SpaGoods;
 import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
 import com.qisen.mts.spa.model.request.SpaRequest;
 import com.qisen.mts.spa.service.SpaGoodsCompanyService;

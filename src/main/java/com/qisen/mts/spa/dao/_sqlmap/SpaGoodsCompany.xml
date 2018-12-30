@@ -68,14 +68,16 @@
 	</update>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from goodsCompany
+		delete from
+		goodsCompany
 		where Id = #{id,jdbcType=INTEGER}
 	</delete>
-	<insert id="insert"
-		parameterType="com.qisen.mts.spa.model.entity.SpaGoodsCompany">
-		insert into goodsCompany (Id, Name, No,
+	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsCompany">
+		insert into goodsCompany (Id,
+		Name, No,
 		Status,eid,sid)
-		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		values (#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
 		#{no,jdbcType=VARCHAR},
 		#{status,jdbcType=CHAR},#{eid,jdbcType=INTEGER},#{sid,jdbcType=INTEGER})
 	</insert>

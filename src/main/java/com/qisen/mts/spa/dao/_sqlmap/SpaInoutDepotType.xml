@@ -47,14 +47,17 @@
 		</if>
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from inOutDepotType
+		delete from
+		inOutDepotType
 		where Id = #{id,jdbcType=INTEGER}
 	</delete>
 	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType">
-		insert into inOutDepotType ( Name, No,
+		insert into inOutDepotType (
+		Name, No,
 		type, Status, sid, eid
 		)
-		values ( #{name,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR},
+		values ( #{name,jdbcType=VARCHAR},
+		#{no,jdbcType=VARCHAR},
 		#{type,jdbcType=CHAR}, #{status,jdbcType=CHAR},
 		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
 		)

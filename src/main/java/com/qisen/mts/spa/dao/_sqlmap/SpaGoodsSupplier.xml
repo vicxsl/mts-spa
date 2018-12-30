@@ -40,7 +40,7 @@
 				and Linkman like #{parttern_man},
 			</if>
 			<if test="linkmobile != null">
-			<bind name="parttern_mobile" value="'%'+linkmobile+'%'" />
+				<bind name="parttern_mobile" value="'%'+linkmobile+'%'" />
 				and LinkMobile like #{parttern_mobile}
 			</if>
 			<if test="otherlinkman != null">
@@ -85,8 +85,7 @@
 		#{sid,jdbcType=INTEGER},
 		#{eid,jdbcType=INTEGER})
 	</insert>
-	<update id="updateByPrimaryKeySelective"
-		parameterType="com.stock.capital.enterprise.common.model.entity.SpaGoodsSupplier">
+	<update id="updateByPrimaryKeySelective" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsSupplier">
 		update goodsSupplier
 		<set>
 			<if test="name != null">

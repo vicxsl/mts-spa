@@ -21,9 +21,11 @@
 		<result column="eid" property="eid" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		Id, inOutDepotTypeName, No, inOutDepotTypeNo, inOutDepotType, Remark,
+		Id, inOutDepotTypeName, No, inOutDepotTypeNo,
+		inOutDepotType, Remark,
 		CreateDate,
-		AuditingDate, AccountName, AccountId, Money, Status, sid, eid
+		AuditingDate, AccountName,
+		AccountId, Money, Status, sid, eid
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
@@ -42,18 +44,18 @@
 			and inOutDepotTypeName like #{query_name}
 		</if>
 		<if test="no != null">
-		<bind name="query_no" value="'%'+no+'%'" />
+			<bind name="query_no" value="'%'+no+'%'" />
 			and No like #{query_no}
 		</if>
 		<if test="inoutdepottypeno != null">
-		<bind name="query_typeno" value="'%'+inoutdepottypeno+'%'" />
+			<bind name="query_typeno" value="'%'+inoutdepottypeno+'%'" />
 			and inOutDepotTypeNo like #{query_typeno}
 		</if>
 		<if test="inoutdepottype != null">
 			and inOutDepotType = #{inoutdepottype,jdbcType=CHAR}
 		</if>
 		<if test="remark != null">
-		<bind name="query_remark" value="'%'+remark+'%'" />
+			<bind name="query_remark" value="'%'+remark+'%'" />
 			and Remark like #{query_remark}
 		</if>
 		<if test="createdate != null">
@@ -63,7 +65,7 @@
 			and AuditingDate = #{auditingdate,jdbcType=TIMESTAMP}
 		</if>
 		<if test="accountname != null">
-		<bind name="query_accountname" value="'%'+accountname+'%'" />
+			<bind name="query_accountname" value="'%'+accountname+'%'" />
 			and AccountName like #{query_accountname}
 		</if>
 		<if test="accountid != null">
@@ -84,28 +86,36 @@
 
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from inOutDepot
+		delete from
+		inOutDepot
 		where Id = #{id,jdbcType=INTEGER}
 	</delete>
 	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
-		insert into inOutDepot ( inOutDepotTypeName, No,
+		insert into inOutDepot (
+		inOutDepotTypeName, No,
 		inOutDepotTypeNo, inOutDepotType, Remark,
 		CreateDate, AuditingDate, AccountName,
 		AccountId, Money, Status,
-		sid, eid)
-		values ( #{inoutdepottypename,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR},
-		#{inoutdepottypeno,jdbcType=VARCHAR}, #{inoutdepottype,jdbcType=CHAR},
+		sid,
+		eid)
+		values ( #{inoutdepottypename,jdbcType=VARCHAR},
+		#{no,jdbcType=VARCHAR},
+		#{inoutdepottypeno,jdbcType=VARCHAR},
+		#{inoutdepottype,jdbcType=CHAR},
 		#{remark,jdbcType=VARCHAR},
-		now(), #{auditingdate,jdbcType=TIMESTAMP}, #{accountname,jdbcType=VARCHAR},
+		now(),
+		#{auditingdate,jdbcType=TIMESTAMP}, #{accountname,jdbcType=VARCHAR},
 		#{accountid,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE},
 		#{status,jdbcType=CHAR},
-		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER})
+		#{sid,jdbcType=INTEGER},
+		#{eid,jdbcType=INTEGER})
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		update inOutDepot
 		<set>
 			<if test="inoutdepottypename != null">
-				inOutDepotTypeName = #{inoutdepottypename,jdbcType=VARCHAR},
+				inOutDepotTypeName =
+				#{inoutdepottypename,jdbcType=VARCHAR},
 			</if>
 			<if test="no != null">
 				No = #{no,jdbcType=VARCHAR},
