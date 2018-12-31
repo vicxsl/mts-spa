@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.GoodsTypeDao">
+
+	<!-- 通过商品类型是否存在 -->
+	<select id="check" resultType="int" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+		<![CDATA[
+			select count(id)  from  goodsType 
+		]]>
+		<where>
+			<if test="typeNo != null and typeNo !=''">
+				<![CDATA[
+					 typeNo = #{typeNo} 
+				]]>
+			</if>
+			<if test="typeName != null and typeName !=''">
+				<![CDATA[
+					and typeName = #{typeName} 
+				]]>
+			</if>
+			<if test="id != null and id >0">
+				<![CDATA[
+					and id != #{id} 
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<!--新增商品类型  -->
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+		<![CDATA[
+			insert into goodsType(eid,sid,typeName,typeNo,status) 
+			values(#{eid},#{sid},#{typeName},#{typeNo},0)
+		]]>
+	</insert>
+	
+	<!-- 删除商品类型 -->
+	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+		<![CDATA[
+			delete from goodsType
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and sid = #{sid} and id=#{id}
+			]]>
+		</where>
+	</delete>
+	
+	<!-- 更新商品类型 -->
+	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+		<![CDATA[
+			update goodsType
+		]]>
+		<set>
+			<if test="typeName != null and typeName !=''">
+				<![CDATA[
+					 typeName = #{typeName},
+				 ]]>
+			 </if>
+			 <if test="typeNo != null and typeNo !=''">
+				<![CDATA[
+					 typeNo = #{typeNo},
+				 ]]>
+			 </if>
+			 <if test="status != null and status !=''">
+				<![CDATA[
+					 status = #{status},
+				 ]]>
+			 </if>
+		</set>
+		<where>
+			<![CDATA[
+				 eid = #{eid} and sid = #{sid} and id = #{id}
+			]]>
+		</where>
+	</update>
+	
+	<!-- 查询SPA商品类型列表 -->
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoodsType"  parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+		<![CDATA[
+			select * from goodsType
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and sid = #{sid}
+			]]>
+			<if test="typeNo != null and typeNo !=''">
+				<![CDATA[
+					and typeNo = #{typeNo} 
+				]]>
+			</if>
+			<if test="typeName != null and typeName !=''">
+				<![CDATA[
+					and typeName = #{typeName} 
+				]]>
+			</if>
+			<if test="status != null and status !=''">
+				<![CDATA[
+					and status = #{status} 
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			ORDER BY typeNo
+		]]>
+	</select>
+
+</mapper>
