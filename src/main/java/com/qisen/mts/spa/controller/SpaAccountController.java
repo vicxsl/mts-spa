@@ -55,5 +55,12 @@ public class SpaAccountController {
 		return spaAccountService.login(req);
 	}
 
+//	退出登录
+	
+	@RequestMapping("/loginOut")
+	@ResponseBody
+	public BaseResponse loginOut(@RequestBody SpaRequest<SpaAccount> req) throws Exception {
+		return spaAccountService.loginOut(req);
+	}
 }
 

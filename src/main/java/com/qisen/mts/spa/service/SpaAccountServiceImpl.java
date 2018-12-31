@@ -2,6 +2,7 @@ package com.qisen.mts.spa.service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeoutException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,10 @@ import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.constant.ConfigConsts;
 import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.spa.dao.GoodsSubTypeDao;
 import com.qisen.mts.spa.dao.GoodsTypeDao;
 import com.qisen.mts.spa.dao.SpaAccountDao;
 import com.qisen.mts.spa.dao.SpaGoodsCompanyDao;
-import com.qisen.mts.spa.dao.SpaGoodsSubTypeDao;
 import com.qisen.mts.spa.dao.SpaGoodsSupplierDao;
 import com.qisen.mts.spa.model.SessionSpa;
 import com.qisen.mts.spa.model.entity.SpaAccount;
@@ -24,6 +25,7 @@ import com.qisen.mts.spa.model.entity.SpaGoodsType;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 import net.rubyeye.xmemcached.MemcachedClient;
+import net.rubyeye.xmemcached.exception.MemcachedException;
 @Service
 public class SpaAccountServiceImpl implements SpaAccountService{
 	
@@ -38,7 +40,7 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 	@Autowired
 	private SpaGoodsCompanyDao spaGoodsCompanyDao;
 	@Autowired
-	private SpaGoodsSubTypeDao spaGoodsSubTypeDao;
+	private GoodsSubTypeDao goodsSubTypeDao;
 	
 	
 	/**
@@ -88,16 +90,22 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 			if (spaAccount.getPassword().equals(req.getBody().getPassword().trim())) {
 				if (spaAccount.getStatus().equals("0")) {
 					SessionSpa sessionSpa = spaAccount.toJSON().toJavaObject(SessionSpa.class);
+					Integer eid = spaAccount.getEid();
+					Integer sid = spaAccount.getSid();
 					SpaGoodsSupplier goodsSupplier = new SpaGoodsSupplier();//获取供应商
 					SpaGoodsCompany goodsCompany = new SpaGoodsCompany();//获取公司品牌
 					SpaGoodsType goodsType = new SpaGoodsType();//商品类型
 					SpaGoodsSubType goodsSubType = new SpaGoodsSubType();//商品子类型
-					
+					goodsType.setEid(eid);
+					goodsType.setSid(sid);
+					goodsSubType.setEid(eid);
+					goodsSubType.setSid(sid);
 					List<SpaGoodsType> goodsTypeList= goodsTypeDao.list(goodsType);
-					List<SpaGoodsSubType> goodsSubTypeList= spaGoodsSubTypeDao.list(goodsSubType);
-					List<SpaGoodsSupplier> goodsSupplierList= spaGoodsSupplierDao.list(goodsSupplier);
-					List<SpaGoodsCompany> goodsCompanyList= spaGoodsCompanyDao.list(goodsCompany);
-//					sessionSpa.setMeta(key, value);
+					List<SpaGoodsSubType> goodsSubTypeList= goodsSubTypeDao.list(goodsSubType);
+//					List<SpaGoodsSupplier> goodsSupplierList= spaGoodsSupplierDao.list(goodsSupplier);
+//					List<SpaGoodsCompany> goodsCompanyList= spaGoodsCompanyDao.list(goodsCompany);
+					sessionSpa.setMeta("goodsTypeList", goodsTypeList);
+					sessionSpa.setMeta("goodsSubTypeList", goodsSubTypeList);
 					String token = UUID.randomUUID().toString();
 					sessionSpa.setToken(token);
 					String sessionSpaKey = ConfigConsts.SESSION_SPA + token;
@@ -118,7 +126,17 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 		return resp;
 	}
 
-
+	/*
+	 * 退出登录
+	 */
+	@Override
+	public BaseResponse loginOut(SpaRequest<SpaAccount> req) throws Exception {
+		BaseResponse resp = new BaseResponse();
+		String sessionSpaKey = ConfigConsts.SESSION_SPA + req.getToken();
+		memcachedClient.delete(sessionSpaKey);
+		return resp;
+	}
+	
 	/**
 	 * 查询spa账号
 	 */

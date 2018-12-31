@@ -107,7 +107,7 @@
 			</if>
 		</where>
 		<![CDATA[
-			ORDER BY typeNo
+			ORDER BY subTypeNo
 		]]>
 	</select>
 

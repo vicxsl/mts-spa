@@ -39,4 +39,13 @@ public interface SpaAccountService {
 	 * @throws Exception 
 	 */
 	public CommObjResponse<SessionSpa> login(SpaRequest<SpaAccount> req) throws Exception;
+	
+	
+	/**
+	 * 退出登录
+	 * @param req
+	 * @return
+	 * @throws Exception 
+	 */
+	public BaseResponse loginOut(SpaRequest<SpaAccount> req) throws Exception;
 }

@@ -9,10 +9,18 @@ import com.qisen.mts.common.model.entity.BaseEntity;
 public class SpaGoodsSubType extends BaseEntity {
 
 	private Integer id;
+	private Integer typeId;
+	private String subTypeName;
 
-	private String subtypename;
+	public Integer getTypeId() {
+		return typeId;
+	}
 
-	private String subtypeno;
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+
+	private String subTypeNo;
 
 	private String status;
 	
@@ -30,20 +38,20 @@ public class SpaGoodsSubType extends BaseEntity {
 		this.id = id;
 	}
 
-	public String getSubtypename() {
-		return subtypename;
+	public String getSubTypeName() {
+		return subTypeName;
 	}
 
-	public void setSubtypename(String subtypename) {
-		this.subtypename = subtypename;
+	public void setSubTypeName(String subTypeName) {
+		this.subTypeName = subTypeName;
 	}
 
-	public String getSubtypeno() {
-		return subtypeno;
+	public String getSubTypeNo() {
+		return subTypeNo;
 	}
 
-	public void setSubtypeno(String subtypeno) {
-		this.subtypeno = subtypeno;
+	public void setSubTypeNo(String subTypeNo) {
+		this.subTypeNo = subTypeNo;
 	}
 
 	public String getStatus() {
