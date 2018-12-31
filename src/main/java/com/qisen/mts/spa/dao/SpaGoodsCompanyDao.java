@@ -5,13 +5,14 @@ import java.util.List;
 import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
 
 public interface SpaGoodsCompanyDao {
+	int check(SpaGoodsCompany record);
 	
-	int deleteByPrimaryKey(Integer id);
+	int delete(SpaGoodsCompany record);
 
-    int insert(SpaGoodsCompany record);
+	void create(SpaGoodsCompany record);
+	
+	void update(SpaGoodsCompany record);
     
-    int updateByPrimaryKey(SpaGoodsCompany record);
-    
-    List<SpaGoodsCompany> selectGoodsCompanys(SpaGoodsCompany record);
+    List<SpaGoodsCompany> list(SpaGoodsCompany record);
 
 }

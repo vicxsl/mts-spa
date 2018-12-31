@@ -5,10 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qisen.mts.common.model.response.BaseResponse;
+import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.SpaGoodsCompanyDao;
 import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
+import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
 public class SpaGoodsCompanyServiceImpl implements SpaGoodsCompanyService{
@@ -17,30 +18,55 @@ public class SpaGoodsCompanyServiceImpl implements SpaGoodsCompanyService{
 	private SpaGoodsCompanyDao spaGoodsCompanyDao;
 	
 	@Override
-	public BaseResponse deleteByPrimaryKey(Integer id) {
-		BaseResponse resp = new BaseResponse();
-		spaGoodsCompanyDao.deleteByPrimaryKey(id);
+	public CommObjResponse<List<SpaGoodsCompany>> delete(SpaRequest<SpaGoodsCompany> req) {
+		CommObjResponse<List<SpaGoodsCompany>> resp = new CommObjResponse<List<SpaGoodsCompany>>();
+		SpaGoodsCompany spa = req.getBody();
+		SpaGoodsCompany query = new SpaGoodsCompany();
+		query.setEid(spa.getEid());
+		query.setSid(spa.getSid());
+		int count = spaGoodsCompanyDao.delete(spa);
+		if (count == 0 ) {
+			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+		}else{
+			List<SpaGoodsCompany>  queryList = spaGoodsCompanyDao.list(query);
+			resp.setBody(queryList);
+		}
 		return resp;
 	}
 
 	@Override
-	public BaseResponse insert(SpaGoodsCompany record) {
-		BaseResponse resp = new BaseResponse();
-		spaGoodsCompanyDao.insert(record);
+	public CommObjResponse<List<SpaGoodsCompany>> save(SpaRequest<SpaGoodsCompany> req) {
+		CommObjResponse<List<SpaGoodsCompany>> resp = new CommObjResponse<List<SpaGoodsCompany>>();
+		SpaGoodsCompany spa = req.getBody();
+		SpaGoodsCompany query = new SpaGoodsCompany();
+		query.setEid(spa.getEid());
+		query.setSid(spa.getSid());
+		int count = spaGoodsCompanyDao.check(spa);
+		if(spa.getId() != null && spa.getId() > 0){
+			if (count == 0 ) {
+				spaGoodsCompanyDao.update(spa);
+				List<SpaGoodsCompany>  spaList = spaGoodsCompanyDao.list(query);
+				resp.setBody(spaList);
+			}else {
+				resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+			}
+		}else{
+			if (count == 0 ) {
+				spaGoodsCompanyDao.create(spa);
+				List<SpaGoodsCompany>  spaList = spaGoodsCompanyDao.list(query);
+				resp.setBody(spaList);
+			}else {
+				resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
+			}
+		}
 		return resp;
 	}
 
-	@Override
-	public BaseResponse updateByPrimaryKey(SpaGoodsCompany record) {
-		BaseResponse resp = new BaseResponse();
-		spaGoodsCompanyDao.updateByPrimaryKey(record);
-		return resp;
-	}
 
 	@Override
-	public CommObjResponse<List<SpaGoodsCompany>> selectGoodsCompanys(SpaGoodsCompany record) {
+	public CommObjResponse<List<SpaGoodsCompany>> list(SpaRequest<SpaGoodsCompany> req) {
 		CommObjResponse<List<SpaGoodsCompany>> response = new CommObjResponse<List<SpaGoodsCompany>>();
-		response.setBody(spaGoodsCompanyDao.selectGoodsCompanys(record));
+		response.setBody(spaGoodsCompanyDao.list(req.getBody()));
 		return response;
 	}
 

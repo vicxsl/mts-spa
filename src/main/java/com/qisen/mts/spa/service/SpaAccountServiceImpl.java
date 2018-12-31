@@ -18,7 +18,9 @@ import com.qisen.mts.spa.dao.SpaGoodsSupplierDao;
 import com.qisen.mts.spa.model.SessionSpa;
 import com.qisen.mts.spa.model.entity.SpaAccount;
 import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
+import com.qisen.mts.spa.model.entity.SpaGoodsSubType;
 import com.qisen.mts.spa.model.entity.SpaGoodsSupplier;
+import com.qisen.mts.spa.model.entity.SpaGoodsType;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 import net.rubyeye.xmemcached.MemcachedClient;
@@ -86,9 +88,15 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 			if (spaAccount.getPassword().equals(req.getBody().getPassword().trim())) {
 				if (spaAccount.getStatus().equals("0")) {
 					SessionSpa sessionSpa = spaAccount.toJSON().toJavaObject(SessionSpa.class);
-					SpaGoodsSupplier supplier = new SpaGoodsSupplier();//获取供应商
-					SpaGoodsCompany spaGoodsCompany = new SpaGoodsCompany();//获取公司品牌
-//					spaGoodsSupplierDao.list(SpaGoodsSupplier.class);
+					SpaGoodsSupplier goodsSupplier = new SpaGoodsSupplier();//获取供应商
+					SpaGoodsCompany goodsCompany = new SpaGoodsCompany();//获取公司品牌
+					SpaGoodsType goodsType = new SpaGoodsType();//商品类型
+					SpaGoodsSubType goodsSubType = new SpaGoodsSubType();//商品子类型
+					
+					List<SpaGoodsType> goodsTypeList= goodsTypeDao.list(goodsType);
+					List<SpaGoodsSubType> goodsSubTypeList= spaGoodsSubTypeDao.list(goodsSubType);
+					List<SpaGoodsSupplier> goodsSupplierList= spaGoodsSupplierDao.list(goodsSupplier);
+					List<SpaGoodsCompany> goodsCompanyList= spaGoodsCompanyDao.list(goodsCompany);
 //					sessionSpa.setMeta(key, value);
 					String token = UUID.randomUUID().toString();
 					sessionSpa.setToken(token);

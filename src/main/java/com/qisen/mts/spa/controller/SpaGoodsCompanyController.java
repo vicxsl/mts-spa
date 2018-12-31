@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -21,28 +20,22 @@ public class SpaGoodsCompanyController {
 	@Autowired
 	private SpaGoodsCompanyService spaGoodsCompanyService;
 	
-	@RequestMapping("/saveGoodsCompany")
+	@RequestMapping("/save")
 	@ResponseBody
-	public BaseResponse save(@RequestBody SpaRequest<SpaGoodsCompany> req) throws Exception {
-		return spaGoodsCompanyService.insert(req.getBody());
+	public CommObjResponse<List<SpaGoodsCompany>> save(@RequestBody SpaRequest<SpaGoodsCompany> req) throws Exception {
+		return spaGoodsCompanyService.save(req);
 	}
 	
-	@RequestMapping("/editGoodsCompany")
+	@RequestMapping("/delete")
 	@ResponseBody
-	public BaseResponse edit(@RequestBody SpaRequest<SpaGoodsCompany> req) throws Exception {
-		return spaGoodsCompanyService.updateByPrimaryKey(req.getBody());
+	public CommObjResponse<List<SpaGoodsCompany>> delete(@RequestBody SpaRequest<SpaGoodsCompany> req) throws Exception {
+		return spaGoodsCompanyService.delete(req);
 	}
 	
-	@RequestMapping("/delGoodsCompany")
+	@RequestMapping("/list")
 	@ResponseBody
-	public BaseResponse del(@RequestBody SpaRequest<SpaGoodsCompany> req) throws Exception {
-		return spaGoodsCompanyService.deleteByPrimaryKey(req.getBody().getId());
-	}
-	
-	@RequestMapping("/getGoodsCompanys")
-	@ResponseBody
-	public CommObjResponse<List<SpaGoodsCompany>> selectGoodsCompanys(@RequestBody SpaRequest<SpaGoodsCompany> req) throws Exception {
-		return spaGoodsCompanyService.selectGoodsCompanys(req.getBody());
+	public CommObjResponse<List<SpaGoodsCompany>> list(@RequestBody SpaRequest<SpaGoodsCompany> req) throws Exception {
+		return spaGoodsCompanyService.list(req);
 	}
 	
 }
