@@ -10,9 +10,15 @@ import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.constant.ConfigConsts;
 import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.spa.dao.GoodsTypeDao;
 import com.qisen.mts.spa.dao.SpaAccountDao;
+import com.qisen.mts.spa.dao.SpaGoodsCompanyDao;
+import com.qisen.mts.spa.dao.SpaGoodsSubTypeDao;
+import com.qisen.mts.spa.dao.SpaGoodsSupplierDao;
 import com.qisen.mts.spa.model.SessionSpa;
 import com.qisen.mts.spa.model.entity.SpaAccount;
+import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
+import com.qisen.mts.spa.model.entity.SpaGoodsSupplier;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 import net.rubyeye.xmemcached.MemcachedClient;
@@ -23,6 +29,14 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 	private MemcachedClient memcachedClient;
 	@Autowired
 	private SpaAccountDao spaAccountDao;
+	@Autowired
+	private GoodsTypeDao goodsTypeDao;
+	@Autowired
+	private SpaGoodsSupplierDao spaGoodsSupplierDao;
+	@Autowired
+	private SpaGoodsCompanyDao spaGoodsCompanyDao;
+	@Autowired
+	private SpaGoodsSubTypeDao spaGoodsSubTypeDao;
 	
 	
 	/**
@@ -72,6 +86,10 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 			if (spaAccount.getPassword().equals(req.getBody().getPassword().trim())) {
 				if (spaAccount.getStatus().equals("0")) {
 					SessionSpa sessionSpa = spaAccount.toJSON().toJavaObject(SessionSpa.class);
+					SpaGoodsSupplier supplier = new SpaGoodsSupplier();//获取供应商
+					SpaGoodsCompany spaGoodsCompany = new SpaGoodsCompany();//获取公司品牌
+//					spaGoodsSupplierDao.list(SpaGoodsSupplier.class);
+//					sessionSpa.setMeta(key, value);
 					String token = UUID.randomUUID().toString();
 					sessionSpa.setToken(token);
 					String sessionSpaKey = ConfigConsts.SESSION_SPA + token;

@@ -154,4 +154,6 @@ public class SpaInoutDepot extends BaseEntity {
 		this.eid = eid;
 	}
 
+	
+
 }

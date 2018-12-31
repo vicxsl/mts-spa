@@ -8,6 +8,11 @@ import com.qisen.mts.common.model.entity.BaseEntity;
  */
 public class SpaGoodsSupplier extends BaseEntity{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Integer id;
 
     private String name;
@@ -28,8 +33,6 @@ public class SpaGoodsSupplier extends BaseEntity{
     private Integer sid;
 
     private Integer eid;
-
-    private static final long serialVersionUID = 1L;
 
 	public Integer getId() {
 		return id;
@@ -110,5 +113,7 @@ public class SpaGoodsSupplier extends BaseEntity{
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
+
+
     
 }

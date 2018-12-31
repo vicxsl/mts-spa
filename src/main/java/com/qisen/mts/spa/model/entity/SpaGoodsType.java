@@ -56,4 +56,5 @@ public class SpaGoodsType extends BaseEntity {
 		this.status = status;
 	}
 	
+	
 }

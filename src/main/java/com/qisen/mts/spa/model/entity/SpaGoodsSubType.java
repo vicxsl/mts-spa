@@ -69,5 +69,6 @@ public class SpaGoodsSubType extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
+
 	
 }

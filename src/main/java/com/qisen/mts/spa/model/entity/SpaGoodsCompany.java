@@ -25,7 +25,15 @@ public class SpaGoodsCompany extends BaseEntity{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Integer getSid() {
 		return sid;
 	}
@@ -40,14 +48,6 @@ public class SpaGoodsCompany extends BaseEntity{
 
 	public void setEid(Integer eid) {
 		this.eid = eid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getNo() {
@@ -65,6 +65,8 @@ public class SpaGoodsCompany extends BaseEntity{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	
     
 
 }
