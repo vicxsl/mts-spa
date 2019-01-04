@@ -18,7 +18,7 @@ public class SpaGoods extends BaseEntity {
 	private Integer sid;
 	private String name;
 	private String no;//商品编号
-	private String bar_code;//商品编码
+	private String barCode;//商品编码
 	private Integer type;//商品类型id
 	private Integer son_type;//商品子类型id
 	private String unit;//商品单位
@@ -62,11 +62,11 @@ public class SpaGoods extends BaseEntity {
 	public void setNo(String no) {
 		this.no = no;
 	}
-	public String getBar_code() {
-		return bar_code;
+	public String getbarCode() {
+		return barCode;
 	}
-	public void setBar_code(String bar_code) {
-		this.bar_code = bar_code;
+	public void setbarCode(String barCode) {
+		this.barCode = barCode;
 	}
 	public Integer getType() {
 		return type;
