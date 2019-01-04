@@ -17,23 +17,16 @@ public class SpaInoutDepotDetailServiceImpl implements SpaInoutDepotDetailServic
 	private SpaInoutDepotDetailDao spaInoutDepotDetailDao;
 	
 	@Override
-	public BaseResponse deleteByPrimaryKey(Integer id) {
-		BaseResponse resp = new BaseResponse();
-		spaInoutDepotDetailDao.deleteByPrimaryKey(id);
+	public CommObjResponse<List<SpaInoutDepotDetail>> delete(SpaInoutDepotDetail record) {
+		CommObjResponse<List<SpaInoutDepotDetail>> resp = new CommObjResponse<List<SpaInoutDepotDetail>>();
+		spaInoutDepotDetailDao.delete(record);
 		return resp;
 	}
 
 	@Override
-	public BaseResponse insert(SpaInoutDepotDetail record) {
-		BaseResponse resp = new BaseResponse();
-		spaInoutDepotDetailDao.insert(record);
-		return resp;
-	}
-
-	@Override
-	public BaseResponse updateByPrimaryKey(SpaInoutDepotDetail record) {
-		BaseResponse resp = new BaseResponse();
-		spaInoutDepotDetailDao.updateByPrimaryKey(record);
+	public CommObjResponse<List<SpaInoutDepotDetail>> save(SpaInoutDepotDetail record) {
+		CommObjResponse<List<SpaInoutDepotDetail>> resp = new CommObjResponse<List<SpaInoutDepotDetail>>();
+		spaInoutDepotDetailDao.save(record);
 		return resp;
 	}
 
@@ -46,9 +39,9 @@ public class SpaInoutDepotDetailServiceImpl implements SpaInoutDepotDetailServic
 	}
 
 	@Override
-	public CommObjResponse<List<SpaInoutDepotDetail>> selectInoutDepotDetails(SpaInoutDepotDetail body) {
+	public CommObjResponse<List<SpaInoutDepotDetail>> list(SpaInoutDepotDetail body) {
 		CommObjResponse<List<SpaInoutDepotDetail>> response = new CommObjResponse<List<SpaInoutDepotDetail>>();
-		response.setBody(spaInoutDepotDetailDao.selectInoutDepotDetails(body));
+		response.setBody(spaInoutDepotDetailDao.list(body));
 		return response;
 	}
 

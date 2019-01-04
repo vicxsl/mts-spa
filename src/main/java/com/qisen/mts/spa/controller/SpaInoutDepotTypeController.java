@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotType;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -21,28 +20,22 @@ public class SpaInoutDepotTypeController {
 	@Autowired
 	private SpaInoutDepotTypeService spaInoutDepotTypeService;
 	
-	@RequestMapping("/saveInoutDepotType")
+	@RequestMapping("/save")
 	@ResponseBody
-	public BaseResponse save(@RequestBody SpaRequest<SpaInoutDepotType> req) throws Exception {
-		return spaInoutDepotTypeService.insert(req.getBody());
+	public CommObjResponse<List<SpaInoutDepotType>> save(@RequestBody SpaRequest<SpaInoutDepotType> req) throws Exception {
+		return spaInoutDepotTypeService.save(req.getBody());
 	}
 	
-	@RequestMapping("/editInoutDepotType")
+	@RequestMapping("/delete")
 	@ResponseBody
-	public BaseResponse edit(@RequestBody SpaRequest<SpaInoutDepotType> req) throws Exception {
-		return spaInoutDepotTypeService.updateByPrimaryKey(req.getBody());
+	public CommObjResponse<List<SpaInoutDepotType>> delete(@RequestBody SpaRequest<SpaInoutDepotType> req) throws Exception {
+		return spaInoutDepotTypeService.delete(req.getBody());
 	}
 	
-	@RequestMapping("/delInoutDepotType")
+	@RequestMapping("/list")
 	@ResponseBody
-	public BaseResponse del(@RequestBody SpaRequest<SpaInoutDepotType> req) throws Exception {
-		return spaInoutDepotTypeService.deleteByPrimaryKey(req.getBody().getId());
-	}
-	
-	@RequestMapping("/getInoutDepotTypes")
-	@ResponseBody
-	public CommObjResponse<List<SpaInoutDepotType>> selectDepotTypes(@RequestBody SpaRequest<SpaInoutDepotType> req) throws Exception {
-		return spaInoutDepotTypeService.selectDepotTypes(req.getBody());
+	public CommObjResponse<List<SpaInoutDepotType>> list(@RequestBody SpaRequest<SpaInoutDepotType> req) throws Exception {
+		return spaInoutDepotTypeService.list(req.getBody());
 	}
 
 }

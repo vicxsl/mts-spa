@@ -1,6 +1,7 @@
 package com.qisen.mts.spa.model.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import com.qisen.mts.common.model.entity.BaseEntity;
 
@@ -39,6 +40,8 @@ public class SpaInoutDepot extends BaseEntity {
 	private Integer sid;
 
 	private Integer eid;
+	
+	private List<SpaInoutDepotDetail> goodsList;
 
 	private static final long serialVersionUID = 1L;
 
@@ -154,6 +157,12 @@ public class SpaInoutDepot extends BaseEntity {
 		this.eid = eid;
 	}
 
-	
+	public List<SpaInoutDepotDetail> getGoodsList() {
+		return goodsList;
+	}
+
+	public void setGoodsList(List<SpaInoutDepotDetail> goodsList) {
+		this.goodsList = goodsList;
+	}
 
 }

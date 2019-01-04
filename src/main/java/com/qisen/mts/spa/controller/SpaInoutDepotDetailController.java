@@ -21,29 +21,23 @@ public class SpaInoutDepotDetailController {
 	@Autowired
 	private SpaInoutDepotDetailService spaInoutDepotDetailService;
 
-	@RequestMapping("/saveInoutDepotDetail")
+	@RequestMapping("/save")
 	@ResponseBody
-	public BaseResponse save(@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
-		return spaInoutDepotDetailService.insert(req.getBody());
+	public CommObjResponse<List<SpaInoutDepotDetail>> save(@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
+		return spaInoutDepotDetailService.save(req.getBody());
 	}
 
-	@RequestMapping("/editInoutDepotDetail")
+	@RequestMapping("/delete")
 	@ResponseBody
-	public BaseResponse edit(@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
-		return spaInoutDepotDetailService.updateByPrimaryKey(req.getBody());
+	public CommObjResponse<List<SpaInoutDepotDetail>> delete(@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
+		return spaInoutDepotDetailService.delete(req.getBody());
 	}
 
-	@RequestMapping("/delInoutDepotDetail")
+	@RequestMapping("/list")
 	@ResponseBody
-	public BaseResponse del(@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
-		return spaInoutDepotDetailService.deleteByPrimaryKey(req.getBody().getId());
-	}
-
-	@RequestMapping("/getInoutDepotDetails")
-	@ResponseBody
-	public CommObjResponse<List<SpaInoutDepotDetail>> selectInoutDepotDetails(
+	public CommObjResponse<List<SpaInoutDepotDetail>> list(
 			@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
-		return spaInoutDepotDetailService.selectInoutDepotDetails(req.getBody());
+		return spaInoutDepotDetailService.list(req.getBody());
 	}
 
 }

@@ -8,14 +8,14 @@ import com.qisen.mts.spa.model.entity.SpaInoutDepot;
 
 public interface SpaInoutDepotService {
 	
-	BaseResponse deleteByPrimaryKey(Integer id);
+	CommObjResponse<List<SpaInoutDepot>> delete(SpaInoutDepot record);
 	  
-	BaseResponse insert(SpaInoutDepot record);
-    
-	BaseResponse updateByPrimaryKey(SpaInoutDepot record);
+	CommObjResponse<List<SpaInoutDepot>> save(SpaInoutDepot record);
     
     CommObjResponse<SpaInoutDepot> selectByPrimaryKey(Integer id);
 
-	CommObjResponse<List<SpaInoutDepot>> selectInoutDepots(SpaInoutDepot body);
+	CommObjResponse<List<SpaInoutDepot>> list(SpaInoutDepot body);
+
+	CommObjResponse<SpaInoutDepot> getWithDetail(SpaInoutDepot body);
 
 }

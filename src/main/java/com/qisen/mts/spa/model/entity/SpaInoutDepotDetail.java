@@ -11,6 +11,8 @@ public class SpaInoutDepotDetail extends BaseEntity{
 	 private Integer id;
 
     private String name;
+    
+    private String inoutno;//出入库表编号
 
     private String no;
 
@@ -42,6 +44,14 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getInoutno() {
+		return inoutno;
+	}
+
+	public void setInoutno(String inoutno) {
+		this.inoutno = inoutno;
 	}
 
 	public String getName() {

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.SpaInoutDepotTypeDao;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotType;
@@ -17,23 +16,42 @@ public class SpaInoutDepotTypeServiceImpl implements SpaInoutDepotTypeService{
 	private SpaInoutDepotTypeDao spaInoutDepotTypeDao;
 	
 	@Override
-	public BaseResponse deleteByPrimaryKey(Integer id) {
-		BaseResponse resp = new BaseResponse();
-		spaInoutDepotTypeDao.deleteByPrimaryKey(id);
+	public CommObjResponse<List<SpaInoutDepotType>> delete(SpaInoutDepotType record) {
+		CommObjResponse<List<SpaInoutDepotType>> resp = new CommObjResponse<List<SpaInoutDepotType>>();
+		SpaInoutDepotType querySpaInoutDepotType = new SpaInoutDepotType();
+		querySpaInoutDepotType.setEid(record.getEid());
+		querySpaInoutDepotType.setSid(record.getSid());
+		int count = spaInoutDepotTypeDao.delete(record);
+		if(count == 1 ){
+			resp.setBody(spaInoutDepotTypeDao.list(querySpaInoutDepotType));
+		}else{
+			
+		}
 		return resp;
 	}
 
 	@Override
-	public BaseResponse insert(SpaInoutDepotType record) {
-		BaseResponse resp = new BaseResponse();
-		spaInoutDepotTypeDao.insert(record);
-		return resp;
-	}
-
-	@Override
-	public BaseResponse updateByPrimaryKey(SpaInoutDepotType record) {
-		BaseResponse resp = new BaseResponse();
-		spaInoutDepotTypeDao.updateByPrimaryKey(record);
+	public CommObjResponse<List<SpaInoutDepotType>> save(SpaInoutDepotType record) {
+		CommObjResponse<List<SpaInoutDepotType>> resp = new CommObjResponse<List<SpaInoutDepotType>>();
+		SpaInoutDepotType querySpaInoutDepotType = new SpaInoutDepotType();
+		querySpaInoutDepotType.setEid(record.getEid());
+		querySpaInoutDepotType.setSid(record.getSid());
+		int count = spaInoutDepotTypeDao.check(record);//查询出入库类型？
+		if(null!=record.getId()&&record.getId()>0){
+			if(count == 1){
+				spaInoutDepotTypeDao.edit(record);
+				resp.setBody(spaInoutDepotTypeDao.list(querySpaInoutDepotType));
+			}else{
+				
+			}
+		}else{
+			if(count ==0){
+				spaInoutDepotTypeDao.save(record);
+				resp.setBody(spaInoutDepotTypeDao.list(querySpaInoutDepotType));
+			}else{
+				
+			}
+		}
 		return resp;
 	}
 
@@ -46,9 +64,9 @@ public class SpaInoutDepotTypeServiceImpl implements SpaInoutDepotTypeService{
 	}
 
 	@Override
-	public CommObjResponse<List<SpaInoutDepotType>> selectDepotTypes(SpaInoutDepotType body) {
+	public CommObjResponse<List<SpaInoutDepotType>> list(SpaInoutDepotType body) {
 		CommObjResponse<List<SpaInoutDepotType>> response = new CommObjResponse<List<SpaInoutDepotType>>();
-		response.setBody(spaInoutDepotTypeDao.selectDepotTypes(body));
+		response.setBody(spaInoutDepotTypeDao.list(body));
 		return response;
 	}
 

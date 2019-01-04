@@ -21,7 +21,7 @@ public class SpaInoutDepotType extends BaseEntity{
     private Integer sid;
 
     private Integer eid;
-
+    
 	public Integer getId() {
 		return id;
 	}

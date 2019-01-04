@@ -6,14 +6,16 @@ import com.qisen.mts.spa.model.entity.SpaInoutDepotDetail;
 
 public interface SpaInoutDepotDetailDao {
 	
-	int deleteByPrimaryKey(Integer id);
+	int delete(SpaInoutDepotDetail record);
 
-    int insert(SpaInoutDepotDetail record);
+    int save(SpaInoutDepotDetail record);
     
     int updateByPrimaryKey(SpaInoutDepotDetail record);
     
     SpaInoutDepotDetail selectByPrimaryKey(Integer id);
 
-	List<SpaInoutDepotDetail> selectInoutDepotDetails(SpaInoutDepotDetail body);
+	List<SpaInoutDepotDetail> list(SpaInoutDepotDetail body);
+	
+	void saveList(List<SpaInoutDepotDetail> detailList);
 
 }

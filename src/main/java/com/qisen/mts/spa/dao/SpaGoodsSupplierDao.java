@@ -6,13 +6,13 @@ import com.qisen.mts.spa.model.entity.SpaGoodsSupplier;
 
 public interface SpaGoodsSupplierDao {
 	
-	int deleteByPrimaryKey(Integer id);
+	int delete(Integer id);
 
-    int insert(SpaGoodsSupplier record);
+    int save(SpaGoodsSupplier record);
     
-    int updateByPrimaryKeySelective(SpaGoodsSupplier record);
+    int edit(SpaGoodsSupplier record);
     
-    List<SpaGoodsSupplier> selectSuppliers(SpaGoodsSupplier record);
+    List<SpaGoodsSupplier> list(SpaGoodsSupplier record);
 
 
 }

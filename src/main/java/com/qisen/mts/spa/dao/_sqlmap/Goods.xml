@@ -4,7 +4,8 @@
 <mapper namespace="com.qisen.mts.spa.dao.GoodsDao">
 
 	<!-- 通过手机号码检测账号是否存在 -->
-	<select id="check" resultType="int" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
+	<select id="check" resultType="int"
+		parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
 			select count(id)  from  goods 
 		]]>
@@ -31,15 +32,20 @@
 			</if>
 		</where>
 	</select>
-	
-	<!--新增商品  -->
+	<select id="getGoodsByPara" parameterType="com.qisen.mts.spa.model.entity.SpaGoods"
+		resultType="com.qisen.mts.spa.model.entity.SpaGoods">
+		select t.no,t.num,t.sid,t.eid
+		from goods t where t.no=#{no} and t.eid=#{eid} and t.sid = #{sid}
+	</select>
+
+	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
 			insert into goods(eid,sid,name,no,barCode,type,son_type,unit,spec,num,buyingPrice,costPrice,salePrice,goodsCompanyId,supplierId,status) 
 			values(#{eid},#{sid},#{name},#{no},#{barCode},#{type},#{son_type},#{unit},#{spec},#{num},#{buyingPrice},#{costPrice},#{salePrice},#{goodsCompanyId},#{supplierId},0)
 		]]>
 	</insert>
-	
+
 	<!-- 删除账号 -->
 	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
@@ -51,7 +57,7 @@
 			]]>
 		</where>
 	</delete>
-	
+
 	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
 			update goods
@@ -61,57 +67,57 @@
 				<![CDATA[
 					 name = #{name},
 				 ]]>
-			 </if>
-			 <if test="no != null and no !=''">
+			</if>
+			<if test="no != null and no !=''">
 				<![CDATA[
 					 no = #{no},
 				 ]]>
-			 </if>
-			 <if test="status != null and status !=''">
+			</if>
+			<if test="status != null and status !=''">
 				<![CDATA[
 					 status = #{status},
 				 ]]>
-			 </if>
-			 <if test="barCode != null and barCode !=''">
+			</if>
+			<if test="barCode != null and barCode !=''">
 				<![CDATA[
 					 barCode = #{barCode},
 				 ]]>
-			 </if>
-			 <if test="type != null and type !=''">
+			</if>
+			<if test="type != null and type !=''">
 				<![CDATA[
 					 type = #{type},
 				 ]]>
-			 </if>
-			 <if test="son_type != null and son_type !=''">
+			</if>
+			<if test="son_type != null and son_type !=''">
 				<![CDATA[
 					 son_type = #{son_type},
 				 ]]>
-			 </if>
-			 <if test="unit != null and unit !=''">
+			</if>
+			<if test="unit != null and unit !=''">
 				<![CDATA[
 					 unit = #{unit},
 				 ]]>
-			 </if>
-			 <if test="spec != null and spec !=''">
+			</if>
+			<if test="spec != null and spec !=''">
 				<![CDATA[
 					 spec = #{spec},
 				 ]]>
-			 </if>
-			 <if test="salePrice != null and salePrice !=''">
+			</if>
+			<if test="salePrice != null and salePrice !=''">
 				<![CDATA[
 					 salePrice = #{salePrice},
 				 ]]>
-			 </if>
-			 <if test="goodsCompanyId != null and goodsCompanyId !=''">
+			</if>
+			<if test="goodsCompanyId != null and goodsCompanyId !=''">
 				<![CDATA[
 					 goodsCompanyId = #{goodsCompanyId},
 				 ]]>
-			 </if>
-			 <if test="supplierId != null and supplierId !=''">
+			</if>
+			<if test="supplierId != null and supplierId !=''">
 				<![CDATA[
 					 supplierId = #{supplierId},
 				 ]]>
-			 </if>
+			</if>
 		</set>
 		<where>
 			<![CDATA[
@@ -119,11 +125,12 @@
 			]]>
 		</where>
 	</update>
-	
 
-	
+
+
 	<!-- 查询SPA商品列表 -->
-	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoods"  parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoods"
+		parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
 			select * from goods
 		]]>

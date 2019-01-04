@@ -21,28 +21,28 @@ public class SpaGoodsSupplierController {
 	@Autowired
 	private SpaGoodsSupplierService spaGoodsSupplierService;
 	
-	@RequestMapping("/saveGoodsSubType")
+	@RequestMapping("/save")
 	@ResponseBody
 	public BaseResponse save(@RequestBody SpaRequest<SpaGoodsSupplier> req) throws Exception {
-		return spaGoodsSupplierService.insert(req.getBody());
+		return spaGoodsSupplierService.save(req.getBody());
 	}
 	
-	@RequestMapping("/editGoodsSubType")
+	@RequestMapping("/edit")
 	@ResponseBody
 	public BaseResponse edit(@RequestBody SpaRequest<SpaGoodsSupplier> req) throws Exception {
-		return spaGoodsSupplierService.updateByPrimaryKey(req.getBody());
+		return spaGoodsSupplierService.edit(req.getBody());
 	}
 	
-	@RequestMapping("/delGoodsSubType")
+	@RequestMapping("/delete")
 	@ResponseBody
-	public BaseResponse del(@RequestBody SpaRequest<SpaGoodsSupplier> req) throws Exception {
-		return spaGoodsSupplierService.deleteByPrimaryKey(req.getBody().getId());
+	public BaseResponse delete(@RequestBody SpaRequest<SpaGoodsSupplier> req) throws Exception {
+		return spaGoodsSupplierService.delete(req.getBody().getId());
 	}
 	
-	@RequestMapping("/getGoodsSubTypeById")
+	@RequestMapping("/list")
 	@ResponseBody
-	public CommObjResponse<List<SpaGoodsSupplier>> selectSuppliers(@RequestBody SpaRequest<SpaGoodsSupplier> req) throws Exception {
-		return spaGoodsSupplierService.selectSuppliers(req.getBody());
+	public CommObjResponse<List<SpaGoodsSupplier>> list(@RequestBody SpaRequest<SpaGoodsSupplier> req) throws Exception {
+		return spaGoodsSupplierService.list(req.getBody());
 	}
 
 }

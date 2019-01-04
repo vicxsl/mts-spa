@@ -1,6 +1,9 @@
 package com.qisen.mts.spa.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,6 +80,27 @@ public class GoodsServiceImpl implements GoodsService{
 		List<SpaGoods>  spaList = goodsDao.list(spaGoods);
 		resp.setBody(spaList);
 		return resp;
+	}
+	@Override
+	public void updateGoodsNum(List<SpaGoods> goodsList, String inoutdepottype) {
+		List<SpaGoods> oldGoodsList = new ArrayList<SpaGoods>();
+		Map<String,Double> goodsNumMap = new HashMap<String,Double>();
+		for(SpaGoods spaGoods : goodsList){
+			SpaGoods goods = goodsDao.getGoodsByPara(spaGoods);
+			oldGoodsList.add(goods);
+			goodsNumMap.put(spaGoods.getNo()+spaGoods.getEid()+spaGoods.getSid(), spaGoods.getNum());
+		}
+		double num = 0.0;
+		for(SpaGoods spaGoods :oldGoodsList){
+			if(inoutdepottype.equals("2")){
+				num = spaGoods.getNum()+goodsNumMap.get(spaGoods.getNo()+spaGoods.getEid()+spaGoods.getSid());
+			}else{
+				num = spaGoods.getNum()-goodsNumMap.get(spaGoods.getNo()+spaGoods.getEid()+spaGoods.getSid());
+			}
+			spaGoods.setNum(num);
+			goodsDao.update(spaGoods);
+		}
+		
 	}
 	
 }

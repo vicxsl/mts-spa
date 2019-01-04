@@ -98,6 +98,16 @@
 		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
 		)
 	</insert>
+	
+	<insert  id="saveList" parameterType="java.util.List">
+	insert into inOutDepotDetail (
+		No,InOutNo, Num, Price,TotalMoney, remark, Status, sid, eid) values 
+		<foreach collection ="list" item ="goods" index="index" separator=",">
+		(#{goods.no},#{goods.inoutno},#{goods.num},#{goods.price},#{goods.totalmoney},#{goods.remark},
+		#{goods.status},#{goods.sid},#{goods.eid})
+		</foreach>
+	</insert>
+	
 	<update id="updateByPrimaryKey" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
 		update inOutDepotDetail
 		<set>

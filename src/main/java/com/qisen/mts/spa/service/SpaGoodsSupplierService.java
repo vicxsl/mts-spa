@@ -8,12 +8,12 @@ import com.qisen.mts.spa.model.entity.SpaGoodsSupplier;
 
 public interface SpaGoodsSupplierService {
 	
-	BaseResponse deleteByPrimaryKey(Integer id);
+	BaseResponse delete(Integer id);
 
-	BaseResponse insert(SpaGoodsSupplier record);
+	BaseResponse save(SpaGoodsSupplier record);
     
-	BaseResponse updateByPrimaryKey(SpaGoodsSupplier record);
+	BaseResponse edit(SpaGoodsSupplier record);
     
-	CommObjResponse<List<SpaGoodsSupplier>> selectSuppliers(SpaGoodsSupplier spaGoodsSupplier);
+	CommObjResponse<List<SpaGoodsSupplier>> list(SpaGoodsSupplier spaGoodsSupplier);
 
 }

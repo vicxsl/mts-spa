@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaInoutDepot;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -21,28 +20,28 @@ public class SpaInoutDepotController {
 	@Autowired
 	private SpaInoutDepotService spaInoutDepotService;
 	
-	@RequestMapping("/saveInoutDepot")
+	@RequestMapping("/save")
 	@ResponseBody
-	public BaseResponse save(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
-		return spaInoutDepotService.insert(req.getBody());
+	public CommObjResponse<List<SpaInoutDepot>> save(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
+		return spaInoutDepotService.save(req.getBody());
 	}
 	
-	@RequestMapping("/editInoutDepot")
+	@RequestMapping("/delete")
 	@ResponseBody
-	public BaseResponse edit(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
-		return spaInoutDepotService.updateByPrimaryKey(req.getBody());
+	public CommObjResponse<List<SpaInoutDepot>> delete(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
+		return spaInoutDepotService.delete(req.getBody());
 	}
 	
-	@RequestMapping("/delInoutDepot")
+	@RequestMapping("/list")
 	@ResponseBody
-	public BaseResponse del(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
-		return spaInoutDepotService.deleteByPrimaryKey(req.getBody().getId());
+	public CommObjResponse<List<SpaInoutDepot>> list(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
+		return spaInoutDepotService.list(req.getBody());
 	}
 	
-	@RequestMapping("/getInoutDepots")
+	@RequestMapping("/getWithDetail")
 	@ResponseBody
-	public CommObjResponse<List<SpaInoutDepot>> selectInoutDepots(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
-		return spaInoutDepotService.selectInoutDepots(req.getBody());
+	public CommObjResponse<SpaInoutDepot> getWithDetail(@RequestBody SpaRequest<SpaInoutDepot> req) throws Exception {
+		return spaInoutDepotService.getWithDetail(req.getBody());
 	}
 
 }

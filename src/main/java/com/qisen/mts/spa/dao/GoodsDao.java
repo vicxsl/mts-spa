@@ -39,4 +39,8 @@ public interface GoodsDao {
 	 * @return
 	 */
 	public List<SpaGoods> list(SpaGoods spaGoods);
+	
+	public void updateGoodsNum(List<SpaGoods> goodList);
+
+	public SpaGoods getGoodsByPara(SpaGoods spaGoods);
 }

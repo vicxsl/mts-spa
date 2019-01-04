@@ -17,30 +17,30 @@ public class SpaGoodsSupplierServiceImpl implements SpaGoodsSupplierService{
 	private SpaGoodsSupplierDao spaGoodsSupplierDao;
 	
 	@Override
-	public BaseResponse deleteByPrimaryKey(Integer id) {
+	public BaseResponse delete(Integer id) {
 		BaseResponse resp = new BaseResponse();
-		spaGoodsSupplierDao.deleteByPrimaryKey(id);
+		spaGoodsSupplierDao.delete(id);
 		return resp;
 	}
 
 	@Override
-	public BaseResponse insert(SpaGoodsSupplier record) {
+	public BaseResponse save(SpaGoodsSupplier record) {
 		BaseResponse resp = new BaseResponse();
-		spaGoodsSupplierDao.insert(record);
+		spaGoodsSupplierDao.save(record);
 		return resp;
 	}
 
 	@Override
-	public BaseResponse updateByPrimaryKey(SpaGoodsSupplier record) {
+	public BaseResponse edit(SpaGoodsSupplier record) {
 		BaseResponse resp = new BaseResponse();
-		spaGoodsSupplierDao.updateByPrimaryKeySelective(record);
+		spaGoodsSupplierDao.edit(record);
 		return resp;
 	}
 
 	@Override
-	public CommObjResponse<List<SpaGoodsSupplier>> selectSuppliers(SpaGoodsSupplier record) {
+	public CommObjResponse<List<SpaGoodsSupplier>> list(SpaGoodsSupplier record) {
 		CommObjResponse<List<SpaGoodsSupplier>> resp = new CommObjResponse<>();
-		List<SpaGoodsSupplier> list = spaGoodsSupplierDao.selectSuppliers(record);
+		List<SpaGoodsSupplier> list = spaGoodsSupplierDao.list(record);
 		resp.setBody(list);
 		return resp;
 	}

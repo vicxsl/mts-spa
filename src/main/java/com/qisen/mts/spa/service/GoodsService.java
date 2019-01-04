@@ -28,6 +28,8 @@ public interface GoodsService {
 	 * @return
 	 */
 	public CommObjResponse<List<SpaGoods>> list(SpaRequest<SpaGoods> req);
+
+	void updateGoodsNum(List<SpaGoods> goodsList, String inoutdepottype);
 	
 
 	

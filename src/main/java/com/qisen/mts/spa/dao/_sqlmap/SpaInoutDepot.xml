@@ -34,8 +34,24 @@
 		from inOutDepot
 		where Id = #{id,jdbcType=INTEGER}
 	</select>
+	
+	<select id="check" resultType="int">
+		select
+		count(1)
+		from inOutDepot
+		where 1=1 
+		<if test="inoutdepottypename != null">
+			and inOutDepotTypeName = #{inoutdepottypename}
+		</if>
+		<if test="no != null">
+			and No = #{no}
+		</if>
+		<if test="inoutdepottypeno != null">
+			and inOutDepotTypeNo = #{inoutdepottypeno}
+		</if>
+	</select>
 
-	<select id="selectInoutDepots" resultMap="BaseResultMap">
+	<select id="list" resultMap="BaseResultMap">
 		select * from inOutDepot
 
 		where 1=1
@@ -85,12 +101,12 @@
 		</if>
 
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+	<delete id="delete" parameterType="java.lang.Integer">
 		delete from
 		inOutDepot
-		where Id = #{id,jdbcType=INTEGER}
+		where Id = #{id} and sid = #{sid} and eid = #{eid}
 	</delete>
-	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
+	<insert id="save" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		insert into inOutDepot (
 		inOutDepotTypeName, No,
 		inOutDepotTypeNo, inOutDepotType, Remark,
@@ -110,7 +126,7 @@
 		#{sid,jdbcType=INTEGER},
 		#{eid,jdbcType=INTEGER})
 	</insert>
-	<update id="updateByPrimaryKey" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
+	<update id="edit" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		update inOutDepot
 		<set>
 			<if test="inoutdepottypename != null">
@@ -147,13 +163,7 @@
 			<if test="status != null">
 				Status = #{status,jdbcType=CHAR},
 			</if>
-			<if test="sid != null">
-				sid = #{sid,jdbcType=INTEGER},
-			</if>
-			<if test="eid != null">
-				eid = #{eid,jdbcType=INTEGER},
-			</if>
 		</set>
-		where Id = #{id,jdbcType=INTEGER}
+		where Id = #{id,jdbcType=INTEGER} and sid = #{sid} and eid = #{eid}
 	</update>
 </mapper>
