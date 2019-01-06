@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
-import com.qisen.mts.spa.dao.GoodsDao;
 import com.qisen.mts.spa.dao.SpaInoutDepotDao;
 import com.qisen.mts.spa.dao.SpaInoutDepotDetailDao;
 import com.qisen.mts.spa.model.entity.SpaGoods;
-import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
 import com.qisen.mts.spa.model.entity.SpaInoutDepot;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotDetail;
 
@@ -68,7 +65,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 			//执行明细表的插入或修改操作
 			inoutDepotDetailDao.saveList(detailList);
 			//判断出库还是入库对物品数量进行操作
-			goodsService.updateGoodsNum(goodsList,record.getInoutDepotTypeId());
+			goodsService.updateGoodsNum(goodsList,record.getType());
 		}
 		resp.setBody(spaInoutDepotDao.list(query)); 
 		return resp;

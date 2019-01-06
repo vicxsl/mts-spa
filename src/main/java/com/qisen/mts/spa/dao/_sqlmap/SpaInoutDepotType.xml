@@ -40,7 +40,7 @@
 			</if>
 			<if test="id != null and id >0">
 				<![CDATA[
-					and id = #{id} 
+					and id != #{id} 
 				]]>
 			</if>
 		</where>

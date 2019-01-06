@@ -38,7 +38,7 @@ public class SpaInoutDepotTypeServiceImpl implements SpaInoutDepotTypeService{
 		querySpaInoutDepotType.setSid(record.getSid());
 		int count = spaInoutDepotTypeDao.check(record);//查询出入库类型？
 		if(null!=record.getId()&&record.getId()>0){
-			if(count == 1){
+			if(count == 0){
 				spaInoutDepotTypeDao.edit(record);
 				resp.setBody(spaInoutDepotTypeDao.list(querySpaInoutDepotType));
 			}else{

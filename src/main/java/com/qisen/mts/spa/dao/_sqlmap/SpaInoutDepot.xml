@@ -1,45 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qisen.mts.spa.dao.SpaInoutDepotDao">
-	<resultMap id="BaseResultMap" type="com.qisen.mts.spa.model.entity.SpaInoutDepot">
-		<id column="Id" property="id" jdbcType="INTEGER" />
-		<result column="inOutDepotTypeName" property="inoutdepottypename"
-			jdbcType="VARCHAR" />
-		<result column="No" property="no" jdbcType="VARCHAR" />
-		<result column="inOutDepotTypeNo" property="inoutdepottypeno"
-			jdbcType="VARCHAR" />
-		<result column="inOutDepotType" property="inoutdepottype"
-			jdbcType="CHAR" />
-		<result column="Remark" property="remark" jdbcType="VARCHAR" />
-		<result column="CreateDate" property="createdate" jdbcType="TIMESTAMP" />
-		<result column="AuditingDate" property="auditingdate" jdbcType="TIMESTAMP" />
-		<result column="AccountName" property="accountname" jdbcType="VARCHAR" />
-		<result column="AccountId" property="accountid" jdbcType="VARCHAR" />
-		<result column="Money" property="money" jdbcType="DOUBLE" />
-		<result column="Status" property="status" jdbcType="CHAR" />
-		<result column="sid" property="sid" jdbcType="INTEGER" />
-		<result column="eid" property="eid" jdbcType="INTEGER" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		Id, inOutDepotTypeName, No, inOutDepotTypeNo,
-		inOutDepotType, Remark,
-		CreateDate,
-		AuditingDate, AccountName,
-		AccountId, Money, Status, sid, eid
-	</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
-		parameterType="java.lang.Integer">
-		select
-		<include refid="Base_Column_List" />
-		from inOutDepot
-		where Id = #{id,jdbcType=INTEGER}
-	</select>
-	
-	<select id="check" resultType="int">
+	<select id="check" resultType="int" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		select
 		count(1)
 		from inOutDepot
-		where 1=1 
+		<where>
 		<if test="inoutdepottypename != null">
 			and inOutDepotTypeName = #{inoutdepottypename}
 		</if>
@@ -49,57 +15,44 @@
 		<if test="inoutdepottypeno != null">
 			and inOutDepotTypeNo = #{inoutdepottypeno}
 		</if>
+		</where>
 	</select>
 
-	<select id="list" resultMap="BaseResultMap">
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaInoutDepot" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		select * from inOutDepot
 
-		where 1=1
-		<if test="inoutdepottypename != null">
-			<bind name="query_name" value="'%'+inoutdepottypename+'%'" />
-			and inOutDepotTypeName like #{query_name}
-		</if>
-		<if test="no != null">
-			<bind name="query_no" value="'%'+no+'%'" />
-			and No like #{query_no}
-		</if>
-		<if test="inoutdepottypeno != null">
-			<bind name="query_typeno" value="'%'+inoutdepottypeno+'%'" />
-			and inOutDepotTypeNo like #{query_typeno}
-		</if>
-		<if test="inoutdepottype != null">
-			and inOutDepotType = #{inoutdepottype,jdbcType=CHAR}
-		</if>
-		<if test="remark != null">
-			<bind name="query_remark" value="'%'+remark+'%'" />
-			and Remark like #{query_remark}
-		</if>
-		<if test="createdate != null">
-			and CreateDate = #{createdate,jdbcType=TIMESTAMP}
-		</if>
-		<if test="auditingdate != null">
-			and AuditingDate = #{auditingdate,jdbcType=TIMESTAMP}
-		</if>
-		<if test="accountname != null">
-			<bind name="query_accountname" value="'%'+accountname+'%'" />
-			and AccountName like #{query_accountname}
-		</if>
-		<if test="accountid != null">
-			and AccountId = #{accountid,jdbcType=VARCHAR}
-		</if>
-		<if test="money != null">
-			and Money = #{money,jdbcType=DOUBLE}
-		</if>
-		<if test="status != null">
-			and Status = #{status,jdbcType=CHAR}
-		</if>
-		<if test="sid != null">
-			and sid = #{sid,jdbcType=INTEGER}
-		</if>
-		<if test="eid != null">
-			and eid = #{eid,jdbcType=INTEGER}
-		</if>
-
+		<where>
+			<if test="no != null">
+				and No like #{'%'+no+'%'}
+			</if>
+			<if test="inoutDepotTypeId != null">
+				and inoutDepotTypeId = #{inoutDepotTypeId}
+			</if>
+			<if test="createDate != null">
+				and createDate = #{createDate}
+			</if>
+			<if test="auditingDate != null">
+				and auditingDate = #{auditingDate}
+			</if>
+			<if test="accountId != null">
+				and accountId = #{accountId}
+			</if>
+			<if test="money != null">
+				and Money = #{money}
+			</if>
+			<if test="type != null and type !=''">
+				and type = #{type}
+			</if>
+			<if test="status != null">
+				and Status = #{status}
+			</if>
+			<if test="sid != null">
+				and sid = #{sid}
+			</if>
+			<if test="eid != null">
+				and eid = #{eid}
+			</if>
+		</where>
 	</select>
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from
