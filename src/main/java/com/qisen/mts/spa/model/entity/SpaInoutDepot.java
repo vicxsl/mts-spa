@@ -15,23 +15,17 @@ public class SpaInoutDepot extends BaseEntity {
 
 	private Integer id;
 
-	private String inoutdepottypename;
-
 	private String no;
 
-	private String inoutdepottypeno;
-
-	private String inoutdepottype;
+	private String inoutDepotTypeId;
 
 	private String remark;
 
-	private Date createdate;
+	private Date createDate;
 
-	private Date auditingdate;
+	private Date auditingDate;
 
-	private String accountname;
-
-	private String accountid;
+	private String accountId;
 
 	private Double money;
 
@@ -53,13 +47,6 @@ public class SpaInoutDepot extends BaseEntity {
 		this.id = id;
 	}
 
-	public String getInoutdepottypename() {
-		return inoutdepottypename;
-	}
-
-	public void setInoutdepottypename(String inoutdepottypename) {
-		this.inoutdepottypename = inoutdepottypename;
-	}
 
 	public String getNo() {
 		return no;
@@ -69,20 +56,12 @@ public class SpaInoutDepot extends BaseEntity {
 		this.no = no;
 	}
 
-	public String getInoutdepottypeno() {
-		return inoutdepottypeno;
+	public String getInoutDepotTypeId() {
+		return inoutDepotTypeId;
 	}
 
-	public void setInoutdepottypeno(String inoutdepottypeno) {
-		this.inoutdepottypeno = inoutdepottypeno;
-	}
-
-	public String getInoutdepottype() {
-		return inoutdepottype;
-	}
-
-	public void setInoutdepottype(String inoutdepottype) {
-		this.inoutdepottype = inoutdepottype;
+	public void setInoutDepotTypeId(String inoutDepotTypeId) {
+		this.inoutDepotTypeId = inoutDepotTypeId;
 	}
 
 	public String getRemark() {
@@ -93,36 +72,28 @@ public class SpaInoutDepot extends BaseEntity {
 		this.remark = remark;
 	}
 
-	public Date getCreatedate() {
-		return createdate;
+	public Date getCreateDate() {
+		return createDate;
 	}
 
-	public void setCreatedate(Date createdate) {
-		this.createdate = createdate;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
-	public Date getAuditingdate() {
-		return auditingdate;
+	public Date getAuditingDate() {
+		return auditingDate;
 	}
 
-	public void setAuditingdate(Date auditingdate) {
-		this.auditingdate = auditingdate;
+	public void setAuditingDate(Date auditingDate) {
+		this.auditingDate = auditingDate;
 	}
 
-	public String getAccountname() {
-		return accountname;
+	public String getAccountId() {
+		return accountId;
 	}
 
-	public void setAccountname(String accountname) {
-		this.accountname = accountname;
-	}
-
-	public String getAccountid() {
-		return accountid;
-	}
-
-	public void setAccountid(String accountid) {
-		this.accountid = accountid;
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
 
 	public Double getMoney() {
@@ -165,4 +136,5 @@ public class SpaInoutDepot extends BaseEntity {
 		this.goodsList = goodsList;
 	}
 
+	
 }

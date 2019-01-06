@@ -68,7 +68,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 			//执行明细表的插入或修改操作
 			inoutDepotDetailDao.saveList(detailList);
 			//判断出库还是入库对物品数量进行操作
-			goodsService.updateGoodsNum(goodsList,record.getInoutdepottype());
+			goodsService.updateGoodsNum(goodsList,record.getInoutDepotTypeId());
 		}
 		resp.setBody(spaInoutDepotDao.list(query)); 
 		return resp;
