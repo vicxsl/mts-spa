@@ -22,6 +22,29 @@
 		where Id = #{id,jdbcType=INTEGER}
 	</select>
 
+	<select id="check" resultType="int"
+		parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType">
+		<![CDATA[
+			select count(id)  from  inOutDepotType 
+		]]>
+		<where>
+			<if test="no != null and no !=''">
+				<![CDATA[
+					 no = #{no} 
+				]]>
+			</if>
+			<if test="name != null and name !=''">
+				<![CDATA[
+					and name = #{name} 
+				]]>
+			</if>
+			<if test="id != null and id >0">
+				<![CDATA[
+					and id = #{id} 
+				]]>
+			</if>
+		</where>
+	</select>
 	<select id="list" resultMap="BaseResultMap">
 		select * from inOutDepotType
 		where 1=1

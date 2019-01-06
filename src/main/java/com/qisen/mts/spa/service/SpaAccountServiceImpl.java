@@ -2,7 +2,6 @@ package com.qisen.mts.spa.service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeoutException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,16 +15,17 @@ import com.qisen.mts.spa.dao.GoodsTypeDao;
 import com.qisen.mts.spa.dao.SpaAccountDao;
 import com.qisen.mts.spa.dao.SpaGoodsCompanyDao;
 import com.qisen.mts.spa.dao.SpaGoodsSupplierDao;
+import com.qisen.mts.spa.dao.SpaInoutDepotTypeDao;
 import com.qisen.mts.spa.model.SessionSpa;
 import com.qisen.mts.spa.model.entity.SpaAccount;
 import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
 import com.qisen.mts.spa.model.entity.SpaGoodsSubType;
 import com.qisen.mts.spa.model.entity.SpaGoodsSupplier;
 import com.qisen.mts.spa.model.entity.SpaGoodsType;
+import com.qisen.mts.spa.model.entity.SpaInoutDepotType;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 import net.rubyeye.xmemcached.MemcachedClient;
-import net.rubyeye.xmemcached.exception.MemcachedException;
 @Service
 public class SpaAccountServiceImpl implements SpaAccountService{
 	
@@ -41,6 +41,8 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 	private SpaGoodsCompanyDao spaGoodsCompanyDao;
 	@Autowired
 	private GoodsSubTypeDao goodsSubTypeDao;
+	@Autowired
+	private SpaInoutDepotTypeDao spaInoutDepotTypeDao;
 	
 	
 	/**
@@ -94,14 +96,19 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 					Integer sid = spaAccount.getSid();
 					SpaGoodsSupplier goodsSupplier = new SpaGoodsSupplier();//获取供应商
 					SpaGoodsCompany goodsCompany = new SpaGoodsCompany();//获取公司品牌
+					//出入库类型
+					SpaInoutDepotType inoutDepotType = new SpaInoutDepotType();
 					SpaGoodsType goodsType = new SpaGoodsType();//商品类型
 					SpaGoodsSubType goodsSubType = new SpaGoodsSubType();//商品子类型
 					goodsType.setEid(eid);
 					goodsType.setSid(sid);
 					goodsSubType.setEid(eid);
 					goodsSubType.setSid(sid);
+					inoutDepotType.setEid(eid);
+					inoutDepotType.setSid(sid);
 					List<SpaGoodsType> goodsTypeList= goodsTypeDao.list(goodsType);
 					List<SpaGoodsSubType> goodsSubTypeList= goodsSubTypeDao.list(goodsSubType);
+					List<SpaInoutDepotType> inoutDepotTypeList =  spaInoutDepotTypeDao.list(inoutDepotType);
 //					List<SpaGoodsSupplier> goodsSupplierList= spaGoodsSupplierDao.list(goodsSupplier);
 //					List<SpaGoodsCompany> goodsCompanyList= spaGoodsCompanyDao.list(goodsCompany);
 					sessionSpa.setMeta("goodsTypeList", goodsTypeList);
