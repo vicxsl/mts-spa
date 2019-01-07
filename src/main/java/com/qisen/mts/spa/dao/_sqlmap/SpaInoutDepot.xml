@@ -25,8 +25,8 @@
 			<if test="no != null">
 				and No like #{'%'+no+'%'}
 			</if>
-			<if test="inoutDepotTypeId != null">
-				and inoutDepotTypeId = #{inoutDepotTypeId}
+			<if test="inOutDepotTypeId != null">
+				and inOutDepotTypeId = #{inOutDepotTypeId}
 			</if>
 			<if test="createDate != null">
 				and createDate = #{createDate}

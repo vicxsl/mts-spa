@@ -108,12 +108,12 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 					inoutDepotType.setSid(sid);
 					List<SpaGoodsType> goodsTypeList= goodsTypeDao.list(goodsType);
 					List<SpaGoodsSubType> goodsSubTypeList= goodsSubTypeDao.list(goodsSubType);
-					List<SpaInoutDepotType> inoutDepotTypeList =  spaInoutDepotTypeDao.list(inoutDepotType);
+					List<SpaInoutDepotType> inOutDepotTypeList =  spaInoutDepotTypeDao.list(inoutDepotType);
 //					List<SpaGoodsSupplier> goodsSupplierList= spaGoodsSupplierDao.list(goodsSupplier);
 //					List<SpaGoodsCompany> goodsCompanyList= spaGoodsCompanyDao.list(goodsCompany);
 					sessionSpa.setMeta("goodsTypeList", goodsTypeList);
 					sessionSpa.setMeta("goodsSubTypeList", goodsSubTypeList);
-					sessionSpa.setMeta("inoutDepotTypeList", inoutDepotTypeList);
+					sessionSpa.setMeta("inOutDepotTypeList", inOutDepotTypeList);
 					String token = UUID.randomUUID().toString();
 					sessionSpa.setToken(token);
 					String sessionSpaKey = ConfigConsts.SESSION_SPA + token;

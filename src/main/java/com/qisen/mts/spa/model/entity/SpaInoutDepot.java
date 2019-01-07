@@ -17,7 +17,7 @@ public class SpaInoutDepot extends BaseEntity {
 
 	private String no;
 
-	private Integer inoutDepotTypeId;
+	private Integer inOutDepotTypeId;
 	
 	private String type;
 
@@ -57,12 +57,12 @@ public class SpaInoutDepot extends BaseEntity {
 		this.no = no;
 	}
 
-	public Integer getInoutDepotTypeId() {
-		return inoutDepotTypeId;
+	public Integer getInOutDepotTypeId() {
+		return inOutDepotTypeId;
 	}
 
-	public void setInoutDepotTypeId(Integer inoutDepotTypeId) {
-		this.inoutDepotTypeId = inoutDepotTypeId;
+	public void setInOutDepotTypeId(Integer inOutDepotTypeId) {
+		this.inOutDepotTypeId = inOutDepotTypeId;
 	}
 
 	public String getType() {
