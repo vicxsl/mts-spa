@@ -6,14 +6,11 @@
 		count(1)
 		from inOutDepot
 		<where>
-		<if test="inoutdepottypename != null">
-			and inOutDepotTypeName = #{inoutdepottypename}
-		</if>
 		<if test="no != null">
 			and No = #{no}
 		</if>
-		<if test="inoutdepottypeno != null">
-			and inOutDepotTypeNo = #{inoutdepottypeno}
+		<if test="inOutDepotTypeId != null">
+			and inOutDepotTypeId = #{inOutDepotTypeId}
 		</if>
 		</where>
 	</select>
@@ -23,7 +20,8 @@
 
 		<where>
 			<if test="no != null">
-				and No like #{'%'+no+'%'}
+			<bind name ="query_NO" value ="'%'+no+'%'"></bind>
+				and No like #{query_NO}
 			</if>
 			<if test="inOutDepotTypeId != null">
 				and inOutDepotTypeId = #{inOutDepotTypeId}
@@ -61,19 +59,18 @@
 	</delete>
 	<insert id="save" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		insert into inOutDepot (
-		inOutDepotTypeName, No,
-		inOutDepotTypeNo, inOutDepotType, Remark,
-		CreateDate, AuditingDate, AccountName,
+		 No,type,
+		inOutDepotTypeId, Remark,
+		CreateDate, AuditingDate, 
 		AccountId, Money, Status,
 		sid,
 		eid)
-		values ( #{inoutdepottypename,jdbcType=VARCHAR},
+		values (
 		#{no,jdbcType=VARCHAR},
-		#{inoutdepottypeno,jdbcType=VARCHAR},
-		#{inoutdepottype,jdbcType=CHAR},
+		#{inOutDepotTypeId},
 		#{remark,jdbcType=VARCHAR},
 		now(),
-		#{auditingdate,jdbcType=TIMESTAMP}, #{accountname,jdbcType=VARCHAR},
+		#{auditingdate,jdbcType=TIMESTAMP},
 		#{accountid,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE},
 		#{status,jdbcType=CHAR},
 		#{sid,jdbcType=INTEGER},
@@ -82,33 +79,23 @@
 	<update id="edit" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		update inOutDepot
 		<set>
-			<if test="inoutdepottypename != null">
-				inOutDepotTypeName =
-				#{inoutdepottypename,jdbcType=VARCHAR},
-			</if>
 			<if test="no != null">
 				No = #{no,jdbcType=VARCHAR},
 			</if>
-			<if test="inoutdepottypeno != null">
-				inOutDepotTypeNo = #{inoutdepottypeno,jdbcType=VARCHAR},
+			<if test="inOutDepotTypeId != null">
+				inOutDepotTypeId = #{inOutDepotTypeId},
 			</if>
-			<if test="inoutdepottype != null">
-				inOutDepotType = #{inoutdepottype,jdbcType=CHAR},
+			<if test="type != null">
+				type = #{type},
 			</if>
 			<if test="remark != null">
 				Remark = #{remark,jdbcType=VARCHAR},
 			</if>
-			<if test="createdate != null">
-				CreateDate = #{createdate,jdbcType=TIMESTAMP},
+			<if test="auditingDate != null">
+				AuditingDate = #{auditingDate},
 			</if>
-			<if test="auditingdate != null">
-				AuditingDate = #{auditingdate,jdbcType=TIMESTAMP},
-			</if>
-			<if test="accountname != null">
-				AccountName = #{accountname,jdbcType=VARCHAR},
-			</if>
-			<if test="accountid != null">
-				AccountId = #{accountid,jdbcType=VARCHAR},
+			<if test="accountId != null">
+				AccountId = #{accountId},
 			</if>
 			<if test="money != null">
 				Money = #{money,jdbcType=DOUBLE},

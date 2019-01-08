@@ -29,51 +29,39 @@
 		from inOutDepotDetail
 		where Id = #{id,jdbcType=INTEGER}
 	</select>
-	<select id="selectInoutDepotDetails" resultMap="BaseResultMap">
-		select * from inOutDepotDetail
-		where 1=1
-		<if test="name != null">
-			<bind name="query_name" value="'%'+name+'%'" />
-			and Name like #{query_name}
-		</if>
-		<if test="no != null">
-			<bind name="query_no" value="'%'+no+'%'" />
-			and No like #{query_no}
-		</if>
-		<if test="barcode != null">
-			<bind name="query_barcode" value="'%'+barcode+'%'" />
-			and Barcode like #{query_barcode}
-		</if>
-		<if test="unit != null">
-			and unit = #{unit,jdbcType=VARCHAR}
-		</if>
-		<if test="spec != null">
-			<bind name="query_spec" value="'%'+spec+'%'" />
-			and spec like #{query_spec}
-		</if>
-		<if test="num != null">
-			and Num = #{num,jdbcType=DOUBLE}
-		</if>
-		<if test="price != null">
-			and Price = #{price,jdbcType=DOUBLE}
-		</if>
-		<if test="totalmoney != null">
-			and TotalMoney = #{totalmoney,jdbcType=DOUBLE}
-		</if>
-		<if test="remark != null">
-			<bind name="query_remark" value="'%'+remark+'%'" />
-			and remark like #{query_remark}
-		</if>
-		<if test="status != null">
-			and Status = #{status,jdbcType=CHAR}
-		</if>
-		<if test="sid != null">
-			and sid = #{sid,jdbcType=INTEGER}
-		</if>
-		<if test="eid != null">
-			and eid = #{eid,jdbcType=INTEGER}
-		</if>
 
+	<select id="list" resultMap="BaseResultMap">
+		select g.name,g.id,g.unit,g.spec,i.Num,i.Price,i.status,i.remark,i.TotalMoney
+		FROM goods g ,inOutDepotDetail i
+		<where>
+			i.No = g.no
+			<if test="no != null">
+				<bind name="query_no" value="'%'+no+'%'" />
+				and No like #{query_no}
+			</if>
+			<if test="num != null">
+				and Num = #{num,jdbcType=DOUBLE}
+			</if>
+			<if test="price != null">
+				and Price = #{price,jdbcType=DOUBLE}
+			</if>
+			<if test="totalmoney != null">
+				and TotalMoney = #{totalmoney,jdbcType=DOUBLE}
+			</if>
+			<if test="remark != null">
+				<bind name="query_remark" value="'%'+remark+'%'" />
+				and remark like #{query_remark}
+			</if>
+			<if test="status != null">
+				and i.Status = #{status,jdbcType=CHAR}
+			</if>
+			<if test="sid != null">
+				and i.sid = #{sid,jdbcType=INTEGER}
+			</if>
+			<if test="eid != null">
+				and i.eid = #{eid,jdbcType=INTEGER}
+			</if>
+		</where>
 	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -98,16 +86,18 @@
 		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
 		)
 	</insert>
-	
-	<insert  id="saveList" parameterType="java.util.List">
-	insert into inOutDepotDetail (
-		No,InOutNo, Num, Price,TotalMoney, remark, Status, sid, eid) values 
-		<foreach collection ="list" item ="goods" index="index" separator=",">
-		(#{goods.no},#{goods.inoutno},#{goods.num},#{goods.price},#{goods.totalmoney},#{goods.remark},
-		#{goods.status},#{goods.sid},#{goods.eid})
+
+	<insert id="saveList" parameterType="java.util.List">
+		insert into inOutDepotDetail (
+		No,InOutNo, Num, Price,TotalMoney,
+		remark, Status, sid, eid) values
+		<foreach collection="list" item="goods" index="index"
+			separator=",">
+			(#{goods.no},#{goods.inoutno},#{goods.num},#{goods.price},#{goods.totalmoney},#{goods.remark},
+			#{goods.status},#{goods.sid},#{goods.eid})
 		</foreach>
 	</insert>
-	
+
 	<update id="updateByPrimaryKey" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
 		update inOutDepotDetail
 		<set>

@@ -54,6 +54,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 			for(SpaInoutDepotDetail spaInoutDepotDetail:detailList){
 				spaInoutDepotDetail.setInoutno(record.getNo());
 				spaInoutDepotDetail.setStatus("1");
+				spaInoutDepotDetail.setTotalmoney(spaInoutDepotDetail.getNum()*spaInoutDepotDetail.getPrice());
 				goods = new SpaGoods();
 				goods.setNo(spaInoutDepotDetail.getNo());
 				goods.setEid(spaInoutDepotDetail.getEid());
@@ -88,8 +89,18 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 
 	@Override
 	public CommObjResponse<SpaInoutDepot> getWithDetail(SpaInoutDepot body) {
-		// TODO Auto-generated method stub
-		return null;
+		CommObjResponse<SpaInoutDepot> response = new CommObjResponse<SpaInoutDepot>();
+		List<SpaInoutDepot> InoutDepot = spaInoutDepotDao.list(body);
+		SpaInoutDepotDetail detail = new SpaInoutDepotDetail();
+		detail.setInoutno(body.getNo());
+		detail.setEid(body.getEid());
+		detail.setSid(body.getSid());
+		List<SpaInoutDepotDetail> detailList = inoutDepotDetailDao.list(detail);
+		if(!CollectionUtils.isEmpty(detailList)){
+			InoutDepot.get(0).setGoodsList(detailList);
+		}
+		response.setBody(InoutDepot.get(0));
+		return response;
 	}
 
 }

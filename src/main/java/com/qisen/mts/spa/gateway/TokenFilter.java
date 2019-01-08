@@ -70,33 +70,33 @@ public class TokenFilter extends OncePerRequestFilter {
 			logger.debug(baseReq.toJSONString());
 		}
 		
-		if (!request.getRequestURI().contains("/spa/account/login")) {
-			BaseResponse resp = new BaseResponse();
-			if (StringUtils.isNotBlank(token)) {
-				try {
-					String sessionAdminKey = ConfigConsts.SESSION_SPA + token;
-					String adminInfoJstr = memcachedClient.get(sessionAdminKey);
-					if (StringUtils.isNotBlank(adminInfoJstr)) {
-						memcachedClient.replace(sessionAdminKey, ConfigConsts.MAX_SESSION_USER_INTERVAL, adminInfoJstr);
-					} else
-						resp.setResult(ResultCode.INVALID_TOKEN);
-				} catch (TimeoutException | InterruptedException | MemcachedException e) {
-					logger.error("filter error:", e);
-					resp.setResult(ResultCode.FAILED);
-				}
-			} else
-				resp.setResult(ResultCode.INVALID_PARAMETERS);
-
-			if (resp.getResult() != ResultCode.SUCCESS.getCode()) {
-				request.setCharacterEncoding("UTF-8");
-				response.setContentType("application/json;charset=UTF-8");
-				// 未登录
-				PrintWriter out = response.getWriter();
-				out.print(resp.toString());
-				out.close();
-				return;
-			}
-		}
+//		if (!request.getRequestURI().contains("/spa/account/login")) {
+//			BaseResponse resp = new BaseResponse();
+//			if (StringUtils.isNotBlank(token)) {
+//				try {
+//					String sessionAdminKey = ConfigConsts.SESSION_SPA + token;
+//					String adminInfoJstr = memcachedClient.get(sessionAdminKey);
+//					//if (StringUtils.isNotBlank(adminInfoJstr)) {
+//						memcachedClient.replace(sessionAdminKey, ConfigConsts.MAX_SESSION_USER_INTERVAL, adminInfoJstr);
+//					//} else
+//					//	resp.setResult(ResultCode.INVALID_TOKEN);
+//				} catch (TimeoutException | InterruptedException | MemcachedException e) {
+//					logger.error("filter error:", e);
+//					resp.setResult(ResultCode.FAILED);
+//				}
+//			} else
+//				resp.setResult(ResultCode.INVALID_PARAMETERS);
+//
+//			if (resp.getResult() != ResultCode.SUCCESS.getCode()) {
+//				request.setCharacterEncoding("UTF-8");
+//				response.setContentType("application/json;charset=UTF-8");
+//				// 未登录
+//				PrintWriter out = response.getWriter();
+//				out.print(resp.toString());
+//				out.close();
+//				return;
+//			}
+//		}
 		chain.doFilter(requestWrapper, response);
 	}
 
