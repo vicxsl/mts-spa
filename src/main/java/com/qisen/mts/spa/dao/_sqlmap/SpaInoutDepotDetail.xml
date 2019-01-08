@@ -34,7 +34,7 @@
 		select g.name,g.id,g.unit,g.spec,i.Num,i.Price,i.status,i.remark,i.TotalMoney
 		FROM goods g ,inOutDepotDetail i
 		<where>
-			i.No = g.no
+			i.goodsId = g.id
 			<if test="no != null">
 				<bind name="query_no" value="'%'+no+'%'" />
 				and No like #{query_no}
@@ -89,11 +89,11 @@
 
 	<insert id="saveList" parameterType="java.util.List">
 		insert into inOutDepotDetail (
-		No,InOutNo, Num, Price,TotalMoney,
+		goodsId,InOutNo, Num, Price,TotalMoney,
 		remark, Status, sid, eid) values
 		<foreach collection="list" item="goods" index="index"
 			separator=",">
-			(#{goods.no},#{goods.inoutno},#{goods.num},#{goods.price},#{goods.totalmoney},#{goods.remark},
+			(#{goods.goodsId},#{goods.inoutno},#{goods.num},#{goods.price},#{goods.totalmoney},#{goods.remark},
 			#{goods.status},#{goods.sid},#{goods.eid})
 		</foreach>
 	</insert>

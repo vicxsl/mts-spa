@@ -15,6 +15,8 @@ public class SpaInoutDepotDetail extends BaseEntity{
     private String inoutno;//出入库表编号
 
     private String no;
+    
+    private Integer goodsId;//产品id
 
     private String barcode;//产品条码
 
@@ -68,6 +70,14 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
 	public void setNo(String no) {
 		this.no = no;
+	}
+	
+	public Integer getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(Integer goodsId) {
+		this.goodsId = goodsId;
 	}
 
 	public String getBarcode() {

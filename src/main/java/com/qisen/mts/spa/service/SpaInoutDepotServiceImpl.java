@@ -56,7 +56,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 				spaInoutDepotDetail.setStatus("1");
 				spaInoutDepotDetail.setTotalmoney(spaInoutDepotDetail.getNum()*spaInoutDepotDetail.getPrice());
 				goods = new SpaGoods();
-				goods.setNo(spaInoutDepotDetail.getNo());
+				goods.setId(spaInoutDepotDetail.getGoodsId());
 				goods.setEid(spaInoutDepotDetail.getEid());
 				goods.setSid(spaInoutDepotDetail.getSid());
 				goods.setNum(spaInoutDepotDetail.getNum());//入库or出库数量

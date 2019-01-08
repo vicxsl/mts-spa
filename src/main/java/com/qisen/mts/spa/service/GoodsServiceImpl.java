@@ -88,14 +88,14 @@ public class GoodsServiceImpl implements GoodsService{
 		for(SpaGoods spaGoods : goodsList){
 			SpaGoods goods = goodsDao.getGoodsByPara(spaGoods);
 			oldGoodsList.add(goods);
-			goodsNumMap.put(spaGoods.getNo()+spaGoods.getEid()+spaGoods.getSid(), spaGoods.getNum());
+			goodsNumMap.put(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getSid(), spaGoods.getNum());
 		}
 		double num = 0.0;
 		for(SpaGoods spaGoods :oldGoodsList){
 			if(inoutdepottype.equals("2")){
-				num = spaGoods.getNum()+goodsNumMap.get(spaGoods.getNo()+spaGoods.getEid()+spaGoods.getSid());
+				num = spaGoods.getNum()+goodsNumMap.get(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getSid());
 			}else{
-				num = spaGoods.getNum()-goodsNumMap.get(spaGoods.getNo()+spaGoods.getEid()+spaGoods.getSid());
+				num = spaGoods.getNum()-goodsNumMap.get(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getSid());
 			}
 			spaGoods.setNum(num);
 			goodsDao.update(spaGoods);

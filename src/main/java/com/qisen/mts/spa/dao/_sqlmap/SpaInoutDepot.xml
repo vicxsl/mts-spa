@@ -67,11 +67,12 @@
 		eid)
 		values (
 		#{no,jdbcType=VARCHAR},
+		#{type},
 		#{inOutDepotTypeId},
 		#{remark,jdbcType=VARCHAR},
 		now(),
-		#{auditingdate,jdbcType=TIMESTAMP},
-		#{accountid,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE},
+		#{auditingDate,jdbcType=TIMESTAMP},
+		#{accountId,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE},
 		#{status,jdbcType=CHAR},
 		#{sid,jdbcType=INTEGER},
 		#{eid,jdbcType=INTEGER})

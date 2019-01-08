@@ -34,8 +34,8 @@
 	</select>
 	<select id="getGoodsByPara" parameterType="com.qisen.mts.spa.model.entity.SpaGoods"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoods">
-		select t.no,t.num,t.sid,t.eid
-		from goods t where t.no=#{no} and t.eid=#{eid} and t.sid = #{sid}
+		select t.id,t.num,t.sid,t.eid
+		from goods t where t.id=#{id} and t.eid=#{eid} and t.sid = #{sid}
 	</select>
 
 	<!--新增商品 -->
@@ -101,6 +101,11 @@
 			<if test="spec != null and spec !=''">
 				<![CDATA[
 					 spec = #{spec},
+				 ]]>
+			</if>
+			<if test=" num != null and num !=''">
+				<![CDATA[
+					 num = #{num},
 				 ]]>
 			</if>
 			<if test="salePrice != null and salePrice !=''">
