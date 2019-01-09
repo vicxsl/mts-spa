@@ -10,7 +10,7 @@
 		<result column="unit" property="unit" jdbcType="VARCHAR" />
 		<result column="spec" property="spec" jdbcType="VARCHAR" />
 		<result column="Num" property="num" jdbcType="DOUBLE" />
-		<result column="Price" property="price" jdbcType="DOUBLE" />
+		<result column="salePrice" property="salePrice" jdbcType="DOUBLE" />
 		<result column="TotalMoney" property="totalmoney" jdbcType="DOUBLE" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="Status" property="status" jdbcType="CHAR" />
@@ -18,7 +18,7 @@
 		<result column="eid" property="eid" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		Id, Name, No, Barcode, unit, spec, Num, Price, TotalMoney,
+		Id, Name, No, Barcode, unit, spec, Num, salePrice, TotalMoney,
 		remark,
 		Status, sid, eid
 	</sql>
@@ -31,7 +31,7 @@
 	</select>
 
 	<select id="list" resultMap="BaseResultMap">
-		select g.name,g.id,g.unit,g.spec,i.Num,i.Price,i.status,i.remark,i.TotalMoney
+		select g.name,g.id,g.unit,g.spec,i.Num,i.salePrice,i.status,i.remark,i.TotalMoney
 		FROM goods g ,inOutDepotDetail i
 		<where>
 			i.goodsId = g.id
@@ -42,8 +42,8 @@
 			<if test="num != null">
 				and Num = #{num,jdbcType=DOUBLE}
 			</if>
-			<if test="price != null">
-				and Price = #{price,jdbcType=DOUBLE}
+			<if test="salePrice != null">
+				and salePrice = #{salePrice,jdbcType=DOUBLE}
 			</if>
 			<if test="totalmoney != null">
 				and TotalMoney = #{totalmoney,jdbcType=DOUBLE}
@@ -73,7 +73,7 @@
 		insert into inOutDepotDetail (
 		Name, No,
 		Barcode, unit, spec,
-		Num, Price, TotalMoney,
+		Num, salePrice, TotalMoney,
 		remark, Status,
 		sid, eid
 		)
@@ -81,7 +81,7 @@
 		#{barcode,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR},
 		#{spec,jdbcType=VARCHAR},
 		#{num,jdbcType=DOUBLE},
-		#{price,jdbcType=DOUBLE}, #{totalmoney,jdbcType=DOUBLE},
+		#{salePrice,jdbcType=DOUBLE}, #{totalmoney,jdbcType=DOUBLE},
 		#{remark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
 		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
 		)
@@ -89,11 +89,11 @@
 
 	<insert id="saveList" parameterType="java.util.List">
 		insert into inOutDepotDetail (
-		goodsId,InOutNo, Num, Price,TotalMoney,
+		goodsId,InOutNo, Num, salePrice,TotalMoney,
 		remark, Status, sid, eid) values
 		<foreach collection="list" item="goods" index="index"
 			separator=",">
-			(#{goods.goodsId},#{goods.inoutno},#{goods.num},#{goods.price},#{goods.totalmoney},#{goods.remark},
+			(#{goods.goodsId},#{goods.inoutno},#{goods.num},#{goods.salePrice},#{goods.totalmoney},#{goods.remark},
 			#{goods.status},#{goods.sid},#{goods.eid})
 		</foreach>
 	</insert>
@@ -119,8 +119,8 @@
 			<if test="num != null">
 				Num = #{num,jdbcType=DOUBLE},
 			</if>
-			<if test="price != null">
-				Price = #{price,jdbcType=DOUBLE},
+			<if test="salePrice != null">
+				salePrice = #{salePrice,jdbcType=DOUBLE},
 			</if>
 			<if test="totalmoney != null">
 				TotalMoney = #{totalmoney,jdbcType=DOUBLE},

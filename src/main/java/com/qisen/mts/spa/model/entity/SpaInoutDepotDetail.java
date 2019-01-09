@@ -26,7 +26,7 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
     private Double num;
 
-    private Double price;
+    private Double salePrice;
 
     private Double totalmoney;
 
@@ -112,12 +112,14 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.num = num;
 	}
 
-	public Double getPrice() {
-		return price;
+	
+
+	public Double getSalePrice() {
+		return salePrice;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setSalePrice(Double salePrice) {
+		this.salePrice = salePrice;
 	}
 
 	public Double getTotalmoney() {

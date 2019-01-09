@@ -36,37 +36,42 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 	@Override
 	public CommObjResponse<List<SpaInoutDepot>> save(SpaInoutDepot record) {
 		CommObjResponse<List<SpaInoutDepot>> resp = new CommObjResponse<List<SpaInoutDepot>>();
+		double inOutMoney = 0.0;//单据金额
+		
 		int count = spaInoutDepotDao.check(record);
-		int saveCount = 0;
 		SpaInoutDepot query = new SpaInoutDepot();
 		query.setEid(record.getEid());
 		query.setSid(record.getSid());
-		if(count ==0 && null==record.getId()){
-			saveCount = spaInoutDepotDao.save(record);
-		}else if(count ==1){
-			saveCount =spaInoutDepotDao.edit(record);
-		}
 		
-		if(saveCount==1&&!CollectionUtils.isEmpty(record.getGoodsList())){
+		if(!CollectionUtils.isEmpty(record.getGoodsList())){
 			List<SpaInoutDepotDetail> detailList = record.getGoodsList();
 			List<SpaGoods> goodsList = new ArrayList<SpaGoods>(); 
 			SpaGoods goods = null;
 			for(SpaInoutDepotDetail spaInoutDepotDetail:detailList){
 				spaInoutDepotDetail.setInoutno(record.getNo());
 				spaInoutDepotDetail.setStatus("1");
-				spaInoutDepotDetail.setTotalmoney(spaInoutDepotDetail.getNum()*spaInoutDepotDetail.getPrice());
+				double sum = spaInoutDepotDetail.getNum()*spaInoutDepotDetail.getSalePrice();
+				spaInoutDepotDetail.setTotalmoney(sum);
+				inOutMoney += sum;//累加金额
 				goods = new SpaGoods();
-				goods.setId(spaInoutDepotDetail.getGoodsId());
+				goods.setId(spaInoutDepotDetail.getId());
 				goods.setEid(spaInoutDepotDetail.getEid());
 				goods.setSid(spaInoutDepotDetail.getSid());
 				goods.setNum(spaInoutDepotDetail.getNum());//入库or出库数量
 				goods.setStatus("1");
 				goodsList.add(goods);
 			}
+			record.setMoney(inOutMoney);
 			//执行明细表的插入或修改操作
 			inoutDepotDetailDao.saveList(detailList);
 			//判断出库还是入库对物品数量进行操作
 			goodsService.updateGoodsNum(goodsList,record.getType());
+
+			if(count ==0 && null==record.getId()){
+				spaInoutDepotDao.save(record);
+			}else if(count ==1){
+				spaInoutDepotDao.edit(record);
+			}
 		}
 		resp.setBody(spaInoutDepotDao.list(query)); 
 		return resp;
