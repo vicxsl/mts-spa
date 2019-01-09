@@ -49,12 +49,15 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 			SpaGoods goods = null;
 			for(SpaInoutDepotDetail spaInoutDepotDetail:detailList){
 				spaInoutDepotDetail.setInoutno(record.getNo());
+				Integer goodsId = record.getId();
+				spaInoutDepotDetail.setId(null);
+				spaInoutDepotDetail.setGoodsId(goodsId);
 				spaInoutDepotDetail.setStatus("1");
 				double sum = spaInoutDepotDetail.getNum()*spaInoutDepotDetail.getSalePrice();
 				spaInoutDepotDetail.setTotalmoney(sum);
 				inOutMoney += sum;//累加金额
 				goods = new SpaGoods();
-				goods.setId(spaInoutDepotDetail.getId());
+				goods.setId(goodsId);
 				goods.setEid(spaInoutDepotDetail.getEid());
 				goods.setSid(spaInoutDepotDetail.getSid());
 				goods.setNum(spaInoutDepotDetail.getNum());//入库or出库数量
