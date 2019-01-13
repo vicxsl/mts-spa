@@ -49,7 +49,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 			SpaGoods goods = null;
 			for(SpaInoutDepotDetail spaInoutDepotDetail:detailList){
 				spaInoutDepotDetail.setInoutno(record.getNo());
-				Integer goodsId = record.getId();
+				Integer goodsId = spaInoutDepotDetail.getId();
 				spaInoutDepotDetail.setId(null);
 				spaInoutDepotDetail.setGoodsId(goodsId);
 				spaInoutDepotDetail.setStatus("1");
