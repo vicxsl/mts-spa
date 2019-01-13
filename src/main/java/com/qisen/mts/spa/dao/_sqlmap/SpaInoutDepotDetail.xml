@@ -55,8 +55,8 @@
 			<if test="salePrice != null">
 				and salePrice = #{salePrice,jdbcType=DOUBLE}
 			</if>
-			<if test="totalmoney != null">
-				and TotalMoney = #{totalmoney,jdbcType=DOUBLE}
+			<if test="totalMoney != null">
+				and TotalMoney = #{totalMoney,jdbcType=DOUBLE}
 			</if>
 			<if test="remark != null">
 				<bind name="query_remark" value="'%'+remark+'%'" />
