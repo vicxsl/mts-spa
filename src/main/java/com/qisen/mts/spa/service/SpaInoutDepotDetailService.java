@@ -15,4 +15,6 @@ public interface SpaInoutDepotDetailService {
 
 	CommObjResponse<List<SpaInoutDepotDetail>> list(SpaInoutDepotDetail body);
 	
+	CommObjResponse<List<SpaInoutDepotDetail>> queryByInOutNo(SpaInoutDepotDetail body);
+	
 }

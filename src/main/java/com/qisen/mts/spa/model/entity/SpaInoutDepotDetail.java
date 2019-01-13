@@ -12,13 +12,13 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
     private String name;
     
-    private String inoutno;//出入库表编号
+    private String inOutNo;//出入库表编号
 
     private String no;
     
     private Integer goodsId;//产品id
 
-    private String barcode;//产品条码
+    private String barCode;//产品条码
 
     private String unit;
 
@@ -28,7 +28,7 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
     private Double salePrice;
 
-    private Double totalmoney;
+    private Double totalMoney;
 
     private String remark;
 
@@ -48,20 +48,20 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.id = id;
 	}
 
-	public String getInoutno() {
-		return inoutno;
-	}
-
-	public void setInoutno(String inoutno) {
-		this.inoutno = inoutno;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getInOutNo() {
+		return inOutNo;
+	}
+
+	public void setInOutNo(String inOutNo) {
+		this.inOutNo = inOutNo;
 	}
 
 	public String getNo() {
@@ -71,7 +71,7 @@ public class SpaInoutDepotDetail extends BaseEntity{
 	public void setNo(String no) {
 		this.no = no;
 	}
-	
+
 	public Integer getGoodsId() {
 		return goodsId;
 	}
@@ -80,12 +80,12 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.goodsId = goodsId;
 	}
 
-	public String getBarcode() {
-		return barcode;
+	public String getBarCode() {
+		return barCode;
 	}
 
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
 	}
 
 	public String getUnit() {
@@ -112,8 +112,6 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.num = num;
 	}
 
-	
-
 	public Double getSalePrice() {
 		return salePrice;
 	}
@@ -122,12 +120,12 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.salePrice = salePrice;
 	}
 
-	public Double getTotalmoney() {
-		return totalmoney;
+	public Double getTotalMoney() {
+		return totalMoney;
 	}
 
-	public void setTotalmoney(Double totalmoney) {
-		this.totalmoney = totalmoney;
+	public void setTotalMoney(Double totalMoney) {
+		this.totalMoney = totalMoney;
 	}
 
 	public String getRemark() {
@@ -163,5 +161,4 @@ public class SpaInoutDepotDetail extends BaseEntity{
 	}
 
 	
-
 }

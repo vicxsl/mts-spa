@@ -16,6 +16,8 @@ public interface SpaInoutDepotDetailDao {
 
 	List<SpaInoutDepotDetail> list(SpaInoutDepotDetail body);
 	
+	List<SpaInoutDepotDetail> queryByInOutNo(SpaInoutDepotDetail body);
+	
 	void saveList(List<SpaInoutDepotDetail> detailList);
 
 }

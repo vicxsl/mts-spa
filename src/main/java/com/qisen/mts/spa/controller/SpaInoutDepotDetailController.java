@@ -39,5 +39,12 @@ public class SpaInoutDepotDetailController {
 			@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
 		return spaInoutDepotDetailService.list(req.getBody());
 	}
-
+	
+//	查询出入库明细，通过出入库单号
+	@RequestMapping("/queryByInOutNo")
+	@ResponseBody
+	public CommObjResponse<List<SpaInoutDepotDetail>> queryByInOutNo(
+			@RequestBody SpaRequest<SpaInoutDepotDetail> req) throws Exception {
+		return spaInoutDepotDetailService.queryByInOutNo(req.getBody());
+	}
 }

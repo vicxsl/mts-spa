@@ -48,13 +48,13 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 			List<SpaGoods> goodsList = new ArrayList<SpaGoods>(); 
 			SpaGoods goods = null;
 			for(SpaInoutDepotDetail spaInoutDepotDetail:detailList){
-				spaInoutDepotDetail.setInoutno(record.getNo());
+				spaInoutDepotDetail.setInOutNo(record.getNo());
 				Integer goodsId = spaInoutDepotDetail.getId();
 				spaInoutDepotDetail.setId(null);
 				spaInoutDepotDetail.setGoodsId(goodsId);
 				spaInoutDepotDetail.setStatus("1");
 				double sum = spaInoutDepotDetail.getNum()*spaInoutDepotDetail.getSalePrice();
-				spaInoutDepotDetail.setTotalmoney(sum);
+				spaInoutDepotDetail.setTotalMoney(sum);
 				inOutMoney += sum;//累加金额
 				goods = new SpaGoods();
 				goods.setId(goodsId);
@@ -100,7 +100,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 		CommObjResponse<SpaInoutDepot> response = new CommObjResponse<SpaInoutDepot>();
 		List<SpaInoutDepot> InoutDepot = spaInoutDepotDao.list(body);
 		SpaInoutDepotDetail detail = new SpaInoutDepotDetail();
-		detail.setInoutno(body.getNo());
+		detail.setInOutNo(body.getNo());
 		detail.setEid(body.getEid());
 		detail.setSid(body.getSid());
 		List<SpaInoutDepotDetail> detailList = inoutDepotDetailDao.list(detail);

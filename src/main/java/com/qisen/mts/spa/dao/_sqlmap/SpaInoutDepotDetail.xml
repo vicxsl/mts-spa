@@ -6,12 +6,12 @@
 		<id column="Id" property="id" jdbcType="INTEGER" />
 		<result column="Name" property="name" jdbcType="VARCHAR" />
 		<result column="No" property="no" jdbcType="VARCHAR" />
-		<result column="Barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="Barcode" property="barCode" jdbcType="VARCHAR" />
 		<result column="unit" property="unit" jdbcType="VARCHAR" />
 		<result column="spec" property="spec" jdbcType="VARCHAR" />
 		<result column="Num" property="num" jdbcType="DOUBLE" />
 		<result column="salePrice" property="salePrice" jdbcType="DOUBLE" />
-		<result column="TotalMoney" property="totalmoney" jdbcType="DOUBLE" />
+		<result column="TotalMoney" property="totalMoney" jdbcType="DOUBLE" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="Status" property="status" jdbcType="CHAR" />
 		<result column="sid" property="sid" jdbcType="INTEGER" />
@@ -30,6 +30,16 @@
 		where Id = #{id,jdbcType=INTEGER}
 	</select>
 
+	<!-- 通过出入库单号查询出入库明细 -->
+	<select id="queryByInOutNo"  resultMap="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">>
+		<![CDATA[
+			select * from inOutDepotDetail
+		]]>
+		<where>
+			eid = #{eid} and sid = #{sid} and inOutNo = #{inOutNo}
+		</where>
+	</select>
+	
 	<select id="list" resultMap="BaseResultMap">
 		select g.name,g.id,g.unit,g.spec,i.Num,i.salePrice,i.status,i.remark,i.TotalMoney
 		FROM goods g ,inOutDepotDetail i
@@ -81,7 +91,7 @@
 		#{barcode,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR},
 		#{spec,jdbcType=VARCHAR},
 		#{num,jdbcType=DOUBLE},
-		#{salePrice,jdbcType=DOUBLE}, #{totalmoney,jdbcType=DOUBLE},
+		#{salePrice,jdbcType=DOUBLE}, #{totalMoney,jdbcType=DOUBLE},
 		#{remark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
 		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
 		)
@@ -93,7 +103,7 @@
 		remark, Status, sid, eid) values
 		<foreach collection="list" item="goods" index="index"
 			separator=",">
-			(#{goods.goodsId},#{goods.inoutno},#{goods.num},#{goods.salePrice},#{goods.totalmoney},#{goods.remark},
+			(#{goods.goodsId},#{goods.inOutNo},#{goods.num},#{goods.salePrice},#{goods.totalMoney},#{goods.remark},
 			#{goods.status},#{goods.sid},#{goods.eid})
 		</foreach>
 	</insert>
@@ -122,8 +132,8 @@
 			<if test="salePrice != null">
 				salePrice = #{salePrice,jdbcType=DOUBLE},
 			</if>
-			<if test="totalmoney != null">
-				TotalMoney = #{totalmoney,jdbcType=DOUBLE},
+			<if test="totalMoney != null">
+				TotalMoney = #{totalMoney,jdbcType=DOUBLE},
 			</if>
 			<if test="remark != null">
 				remark = #{remark,jdbcType=VARCHAR},

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.SpaInoutDepotDetailDao;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotDetail;
@@ -45,4 +44,10 @@ public class SpaInoutDepotDetailServiceImpl implements SpaInoutDepotDetailServic
 		return response;
 	}
 
+	@Override
+	public CommObjResponse<List<SpaInoutDepotDetail>> queryByInOutNo(SpaInoutDepotDetail body) {
+		CommObjResponse<List<SpaInoutDepotDetail>> response = new CommObjResponse<List<SpaInoutDepotDetail>>();
+		response.setBody(spaInoutDepotDetailDao.queryByInOutNo(body));
+		return response;
+	}
 }
