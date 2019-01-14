@@ -31,12 +31,14 @@
 	</select>
 
 	<!-- 通过出入库单号查询出入库明细 -->
-	<select id="queryByInOutNo"  resultType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">>
+	<select id="queryByInOutNo"  resultType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
 		<![CDATA[
 			select * from inOutDepotDetail
 		]]>
 		<where>
-			eid = #{eid} and sid = #{sid} and inOutNo = #{inOutNo}
+			<![CDATA[
+				eid = #{eid} and sid = #{sid} and inOutNo = #{inOutNo}
+			]]>
 		</where>
 	</select>
 	
