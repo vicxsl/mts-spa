@@ -49,7 +49,7 @@ public class SpaRequestBodyAdviceChain implements RequestBodyAdvice {
 
 	@Override
 	public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-		if (!parameter.getMethod().getName().equals("login")) {
+		if (!parameter.getMethod().getName().equals("login") && !parameter.getMethod().getName().equals("spaMall")) {
 			BaseRequest<?> baseReq = (BaseRequest<?>) body;
 			try {
 //				从缓存中获取spa账号信息字符串

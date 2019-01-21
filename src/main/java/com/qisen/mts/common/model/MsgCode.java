@@ -87,6 +87,11 @@ public enum MsgCode {
 	ACCOUNT_EXIST("ACCOUNT_EXIST", "账号已存在"),
 	
 	/*
+	 * 商户
+	 */
+	SHOP_NOT_EXIST("SHOP_NOT_EXIST", "商城不存在"),
+	
+	/*
 	 * 运营系统
 	 */
 	CITY_AREAID_EXIST("CITY_AREAID_EXIST", "城市区号已存在"),
