@@ -25,11 +25,13 @@ public class SpaGoods extends BaseEntity {
 	private String spec;//商品规格
 	private double num;//数量
 	private double buyingPrice;//进货价
-	private double costPrice;//成本价
+	private double preferencePrice;//优惠价
 	private double salePrice;//销售价
+	private double costPrice;//成本价
 	private Integer goodsCompanyId;//商品品牌id
 	private String goodsCompany;//商品品牌
-	private Integer supplierId;//供货商id
+	private String remark;//备注
+	private String describe;//商品描述
 	private String supplier;//供货商
 	private String status;// 状态:0正常,1停售,2删除
 	public Integer getId() {
@@ -62,10 +64,10 @@ public class SpaGoods extends BaseEntity {
 	public void setNo(String no) {
 		this.no = no;
 	}
-	public String getbarCode() {
+	public String getBarCode() {
 		return barCode;
 	}
-	public void setbarCode(String barCode) {
+	public void setBarCode(String barCode) {
 		this.barCode = barCode;
 	}
 	public Integer getType() {
@@ -104,17 +106,23 @@ public class SpaGoods extends BaseEntity {
 	public void setBuyingPrice(double buyingPrice) {
 		this.buyingPrice = buyingPrice;
 	}
-	public double getCostPrice() {
-		return costPrice;
+	public double getPreferencePrice() {
+		return preferencePrice;
 	}
-	public void setCostPrice(double costPrice) {
-		this.costPrice = costPrice;
+	public void setPreferencePrice(double preferencePrice) {
+		this.preferencePrice = preferencePrice;
 	}
 	public double getSalePrice() {
 		return salePrice;
 	}
 	public void setSalePrice(double salePrice) {
 		this.salePrice = salePrice;
+	}
+	public double getCostPrice() {
+		return costPrice;
+	}
+	public void setCostPrice(double costPrice) {
+		this.costPrice = costPrice;
 	}
 	public Integer getGoodsCompanyId() {
 		return goodsCompanyId;
@@ -128,11 +136,17 @@ public class SpaGoods extends BaseEntity {
 	public void setGoodsCompany(String goodsCompany) {
 		this.goodsCompany = goodsCompany;
 	}
-	public Integer getSupplierId() {
-		return supplierId;
+	public String getRemark() {
+		return remark;
 	}
-	public void setSupplierId(Integer supplierId) {
-		this.supplierId = supplierId;
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getDescribe() {
+		return describe;
+	}
+	public void setDescribe(String describe) {
+		this.describe = describe;
 	}
 	public String getSupplier() {
 		return supplier;

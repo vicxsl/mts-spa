@@ -41,8 +41,8 @@
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			insert into goods(eid,sid,name,no,barCode,type,son_type,unit,spec,num,buyingPrice,costPrice,salePrice,goodsCompanyId,supplierId,status) 
-			values(#{eid},#{sid},#{name},#{no},#{barCode},#{type},#{son_type},#{unit},#{spec},#{num},#{buyingPrice},#{costPrice},#{salePrice},#{goodsCompanyId},#{supplierId},0)
+			insert into goods(eid,sid,name,no,barCode,type,son_type,unit,spec,num,buyingPrice,costPrice,salePrice,goodsCompanyId,supplierId,status,describe,remark) 
+			values(#{eid},#{sid},#{name},#{no},#{barCode},#{type},#{son_type},#{unit},#{spec},#{num},#{buyingPrice},#{costPrice},#{salePrice},#{goodsCompanyId},#{supplierId},0,#{describe},#{remark})
 		]]>
 	</insert>
 
@@ -76,6 +76,16 @@
 			<if test="status != null and status !=''">
 				<![CDATA[
 					 status = #{status},
+				 ]]>
+			</if>
+			<if test="remark != null and remark !=''">
+				<![CDATA[
+					 remark = #{remark},
+				 ]]>
+			</if>
+			<if test="describe != null and describe !=''">
+				<![CDATA[
+					 describe = #{describe},
 				 ]]>
 			</if>
 			<if test="barCode != null and barCode !=''">
