@@ -11,6 +11,23 @@
 		]]>
 	</insert>
 
+	<!--新增商品到购物车 -->
+	<select id="check" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar"  resultType="int">
+		<![CDATA[
+			select count(id) from goodsShopCar
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and sid = #{sid} and status = 0 and goodsId = #{goodsId}
+			]]>
+			<if test="memberId != null and memberId !=''">
+				<![CDATA[
+					and memberId = #{memberId} 
+				]]>
+			</if>
+		</where>
+	</select>
+	
 	<!-- 删除  还可添加会员id限制-->
 	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		<![CDATA[
@@ -30,14 +47,24 @@
 		<set>
 			<if test="num != null and num > 0">
 				<![CDATA[
-					 num = #{num}
+					 num = (#{num}+num)
 				 ]]>
 			</if>
 		</set>
 		<where>
 			<![CDATA[
-				 eid = #{eid} and sid = #{sid} and id = #{id}
+				 eid = #{eid} and sid = #{sid} and goodsId = #{goodsId}
 			]]>
+			<if test="id != null and id > 0">
+				<![CDATA[
+					 and id = #{id}
+				 ]]>
+			</if>
+			<if test="memberId != null and memberId !=''">
+				<![CDATA[
+					and memberId = #{memberId} 
+				]]>
+			</if>
 		</where>
 	</update>
 
@@ -47,11 +74,11 @@
 	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar"
 		parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		<![CDATA[
-			select * from goodsShopCar
+			select a.*,b.name,b.unit,b.salePrice,b.preferencePrice,b.spec from goodsShopCar a,goods b
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid}
+				a.eid = #{eid} and a.sid = #{sid} and a.eid = b.eid and a.sid = b.sid and a.goodsId = b.id
 			]]>
 			<if test="memberId != null and memberId !=''">
 				<![CDATA[

@@ -29,7 +29,8 @@ public class GoodsShopCarServiceImpl implements GoodsShopCarService {
 		if (body.getNum() == 0) {
 			goodsShopCarDao.delete(body);
 		} else {
-			if (body.getId() != null && body.getId() > 0) {
+			int count =  goodsShopCarDao.check(body);
+			if (count > 0 ) {
 				goodsShopCarDao.update(body);
 				
 			} else {

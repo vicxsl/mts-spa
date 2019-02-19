@@ -12,6 +12,7 @@ public interface GoodsShopCarDao {
 	 */
 	public int delete(SpaGoodsShopCar spa);
 
+	public int check(SpaGoodsShopCar spa);
 	/**
 	 * 新增spa账号 
 	 * @param spaAccount

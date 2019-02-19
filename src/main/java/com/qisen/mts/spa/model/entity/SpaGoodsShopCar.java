@@ -19,6 +19,11 @@ public class SpaGoodsShopCar extends BaseEntity {
 	private Integer goodsId;
 	private Integer memberId;
 	private String createDate;//加入时间
+	private String name;//商品名称
+	private String unit;//单位
+	private String spec;//规格
+	private String salePrice;//销售价
+	private String preferencePrice;//优惠价
 	private String updateTime;//更新时间
 	private Integer num;//商品数量
 	private String status;// 状态:0正常,1停售,-1删除
@@ -57,6 +62,36 @@ public class SpaGoodsShopCar extends BaseEntity {
 	}
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	public String getSpec() {
+		return spec;
+	}
+	public void setSpec(String spec) {
+		this.spec = spec;
+	}
+	public String getSalePrice() {
+		return salePrice;
+	}
+	public void setSalePrice(String salePrice) {
+		this.salePrice = salePrice;
+	}
+	public String getPreferencePrice() {
+		return preferencePrice;
+	}
+	public void setPreferencePrice(String preferencePrice) {
+		this.preferencePrice = preferencePrice;
 	}
 	public String getUpdateTime() {
 		return updateTime;
