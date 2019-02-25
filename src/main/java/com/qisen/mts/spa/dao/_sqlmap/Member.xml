@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.MemberDao">
+
+	<!-- 通过手机号码检测账号是否存在 -->
+	<select id="check" resultType="com.qisen.mts.spa.model.entity.SpaMember"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			select *  from  member 
+		]]>
+		<where>
+			<if test="eid != null and eid !=''">
+				<![CDATA[
+					 eid = #{eid} 
+				]]>
+			</if>
+			<if test="sid != null and sid !=''">
+				<![CDATA[
+					and sid = #{sid} 
+				]]>
+			</if>
+			<if test="openid != null and openid !=''">
+				<![CDATA[
+					and openid = #{openid} 
+				]]>
+			</if>
+		</where>
+	</select>
+
+	<!--新增商品 -->
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			insert into member(eid,sid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,recommendThreeId,recommendTwoId,recommendOneId,status) 
+			values(#{eid},#{sid},#{name},#{mobile},#{totalMoney},#{balance},#{createDate},#{openid},#{session_key},#{unionid},#{recommendThreeId},#{recommendTwoId},#{recommendOneId},0)
+		]]>
+	</insert>
+
+	<!-- 删除账号 -->
+	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			delete from member
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and sid = #{sid} and openid=#{openid}
+			]]>
+		</where>
+	</delete>
+
+	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			update member
+		]]>
+		<set>
+			<if test="name != null and name !=''">
+				<![CDATA[
+					 name = #{name},
+				 ]]>
+			</if>
+		</set>
+		<where>
+			<![CDATA[
+				 eid = #{eid} and sid = #{sid} and id = #{id}
+			]]>
+		</where>
+	</update>
+
+
+
+	<!-- 查询SPA商品列表 -->
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaMember"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			select * from member
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and sid = #{sid}
+			]]>
+		</where>
+	</select>
+
+</mapper>
