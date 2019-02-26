@@ -11,6 +11,10 @@ public interface GoodsShopCarDao {
 	 * @return
 	 */
 	public int delete(SpaGoodsShopCar spa);
+	
+	public int deleteByMemberId(SpaGoodsShopCar spa);
+	
+	public int saveList(List<SpaGoodsShopCar> list);
 
 	public int check(SpaGoodsShopCar spa);
 	/**
@@ -32,4 +36,5 @@ public interface GoodsShopCarDao {
 	 * @return
 	 */
 	public List<SpaGoodsShopCar> list(SpaGoodsShopCar spa);
+	
 }

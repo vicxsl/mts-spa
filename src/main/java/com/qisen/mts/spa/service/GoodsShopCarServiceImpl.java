@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import com.qisen.mts.common.model.ResultCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
 import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
@@ -52,6 +54,19 @@ public class GoodsShopCarServiceImpl implements GoodsShopCarService {
 		List<SpaGoodsShopCar> spaList = goodsShopCarDao.list(body);
 		resp.setBody(spaList);
 		return resp;
+	}
+
+	@Override
+	public CommObjResponse<Integer> saveList(SpaRequest<List<SpaGoodsShopCar>> req) {
+		CommObjResponse<Integer> response = new CommObjResponse<Integer>();
+		List<SpaGoodsShopCar> shopCarList=req.getBody();
+		if(CollectionUtils.isEmpty(shopCarList)){
+		}else{
+			goodsShopCarDao.deleteByMemberId(shopCarList.get(0));
+			goodsShopCarDao.saveList(shopCarList);
+			response.setResult(ResultCode.SUCCESS);
+		}
+		return response;
 	}
 
 }

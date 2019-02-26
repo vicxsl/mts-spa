@@ -27,6 +27,7 @@ public class SpaGoodsShopCar extends BaseEntity {
 	private String updateTime;//更新时间
 	private Integer num;//商品数量
 	private String status;// 状态:0正常,1停售,-1删除
+	private String openid;//加入时间
 	public Integer getId() {
 		return id;
 	}
@@ -111,5 +112,10 @@ public class SpaGoodsShopCar extends BaseEntity {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+	public String getOpenid() {
+		return openid;
+	}
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
 }

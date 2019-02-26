@@ -23,5 +23,8 @@ public interface GoodsShopCarService {
 	 */
 	public CommObjResponse<List<SpaGoodsShopCar>> list(SpaRequest<SpaGoodsShopCar> req);
 
+
+	public CommObjResponse<Integer> saveList(SpaRequest<List<SpaGoodsShopCar>> req);
+
 	
 }

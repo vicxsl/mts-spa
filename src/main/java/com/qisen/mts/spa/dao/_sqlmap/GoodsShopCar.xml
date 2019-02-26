@@ -10,6 +10,16 @@
 			values(#{eid},#{sid},#{goodsId},#{memberId},#{num},#{createDate},#{updateTime},0)
 		]]>
 	</insert>
+	
+	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
+		insert into goodsShopCar
+		(eid,sid,goodsId,memberId,num,createDate,updateTime,status) values
+		<foreach collection="list" item="goods" index="index"
+			separator=",">
+			(#{goods.eid},#{goods.sid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},
+			#{goods.updateTime},#{goods.status})
+		</foreach>
+	</insert>
 
 	<!--新增商品到购物车 -->
 	<select id="check" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar"  resultType="int">
@@ -36,6 +46,17 @@
 		<where>
 			<![CDATA[
 				eid = #{eid} and sid = #{sid} and id=#{id} 
+			]]>
+		</where>
+	</delete>
+	
+	<delete id="deleteByMemberId" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
+		<![CDATA[
+			delete from goodsShopCar
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and sid = #{sid} and memberId=#{openid} 
 			]]>
 		</where>
 	</delete>
@@ -82,7 +103,7 @@
 			]]>
 			<if test="memberId != null and memberId !=''">
 				<![CDATA[
-					and memberId = #{memberId} 
+					and a.memberId = #{memberId} 
 				]]>
 			</if>
 		</where>

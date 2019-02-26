@@ -37,6 +37,13 @@ public class GoodsShopCarController {
 	public CommObjResponse<List<SpaGoodsShopCar>> edit(@RequestBody SpaRequest<SpaGoodsShopCar> req) throws Exception {
 		return goodsShopCarService.edit(req);
 	}
+	
+	//保存购物车接口
+	@RequestMapping("/saveList")
+	@ResponseBody
+	public CommObjResponse<Integer> saveList(@RequestBody SpaRequest<List<SpaGoodsShopCar>> req) throws Exception {
+		return goodsShopCarService.saveList(req);
+	}
 
 }
 
