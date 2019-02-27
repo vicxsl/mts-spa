@@ -17,6 +17,13 @@ public class SpaMember extends BaseEntity {
 	private Integer eid;
 	private String appid;
 	private String name;
+	private String avatarUrl;//会员头像
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
 	private String mobile;
 	private double totalMoney;//总金额
 	private double balance;//余额

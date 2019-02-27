@@ -24,8 +24,8 @@
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
-			insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,recommendThreeId,recommendTwoId,recommendOneId,status) 
-			values(#{eid},#{appid},#{name},#{mobile},#{totalMoney},#{balance},#{createDate},#{openid},#{session_key},#{unionid},#{recommendThreeId},#{recommendTwoId},#{recommendOneId},0)
+			insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,recommendThreeId,recommendTwoId,recommendOneId,status,avatarUrl) 
+			values(#{eid},#{appid},#{name},#{mobile},#{totalMoney},#{balance},#{createDate},#{openid},#{session_key},#{unionid},#{recommendThreeId},#{recommendTwoId},#{recommendOneId},0,#{avatarUrl})
 		]]>
 	</insert>
 
