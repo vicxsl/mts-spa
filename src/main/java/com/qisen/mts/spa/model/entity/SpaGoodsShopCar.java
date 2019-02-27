@@ -17,7 +17,6 @@ public class SpaGoodsShopCar extends BaseEntity {
 	private Integer eid;
 	private Integer sid;
 	private Integer goodsId;
-	private Integer memberId;
 	private String createDate;//加入时间
 	private String name;//商品名称
 	private String unit;//单位
@@ -51,12 +50,6 @@ public class SpaGoodsShopCar extends BaseEntity {
 	}
 	public void setGoodsId(Integer goodsId) {
 		this.goodsId = goodsId;
-	}
-	public Integer getMemberId() {
-		return memberId;
-	}
-	public void setMemberId(Integer memberId) {
-		this.memberId = memberId;
 	}
 	public String getCreateDate() {
 		return createDate;

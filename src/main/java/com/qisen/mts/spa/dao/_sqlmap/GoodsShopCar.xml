@@ -6,18 +6,18 @@
 	<!--新增商品到购物车 -->
 	<insert id="add" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		<![CDATA[
-			insert into goodsShopCar(eid,sid,goodsId,memberId,num,createDate,updateTime,status) 
-			values(#{eid},#{sid},#{goodsId},#{memberId},#{num},#{createDate},#{updateTime},0)
+			insert into goodsShopCar(eid,sid,goodsId,openid,num,createDate,updateTime,status) 
+			values(#{eid},#{sid},#{goodsId},#{openid},#{num},#{createDate},#{updateTime},0)
 		]]>
 	</insert>
 	
 	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		insert into goodsShopCar
-		(eid,sid,goodsId,memberId,num,createDate,updateTime,status) values
+		(eid,sid,goodsId,openid,num,createDate,updateTime,status) values
 		<foreach collection="list" item="goods" index="index"
 			separator=",">
 			(#{goods.eid},#{goods.sid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},
-			#{goods.updateTime},#{goods.status})
+			#{goods.updateTime},0)
 		</foreach>
 	</insert>
 
@@ -30,9 +30,9 @@
 			<![CDATA[
 				eid = #{eid} and sid = #{sid} and status = 0 and goodsId = #{goodsId}
 			]]>
-			<if test="memberId != null and memberId !=''">
+			<if test="openid != null and openid !=''">
 				<![CDATA[
-					and memberId = #{memberId} 
+					and openid = #{openid} 
 				]]>
 			</if>
 		</where>
@@ -56,7 +56,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid} and memberId=#{openid} 
+				eid = #{eid} and sid = #{sid} and openid=#{openid} 
 			]]>
 		</where>
 	</delete>
@@ -101,9 +101,9 @@
 			<![CDATA[
 				a.eid = #{eid} and a.sid = #{sid} and a.eid = b.eid and a.sid = b.sid and a.goodsId = b.id
 			]]>
-			<if test="memberId != null and memberId !=''">
+			<if test="openid != null and openid !=''">
 				<![CDATA[
-					and a.memberId = #{memberId} 
+					and a.openid = #{openid} 
 				]]>
 			</if>
 		</where>
