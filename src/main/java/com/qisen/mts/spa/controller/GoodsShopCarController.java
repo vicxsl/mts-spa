@@ -24,18 +24,11 @@ public class GoodsShopCarController {
 	private GoodsShopCarService goodsShopCarService;
 
 
-//	查询商品列表接口
+//	查询购物车列表接口
 	@RequestMapping("/list")
 	@ResponseBody
 	public CommObjResponse<List<SpaGoodsShopCar>> list(@RequestBody SpaRequest<SpaGoodsShopCar> req) throws Exception {
 		return goodsShopCarService.list(req);
-	}
-	
-//	保存商品接口
-	@RequestMapping("/edit")
-	@ResponseBody
-	public CommObjResponse<List<SpaGoodsShopCar>> edit(@RequestBody SpaRequest<SpaGoodsShopCar> req) throws Exception {
-		return goodsShopCarService.edit(req);
 	}
 	
 	//保存购物车接口

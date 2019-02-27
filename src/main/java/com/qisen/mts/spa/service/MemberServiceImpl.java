@@ -65,6 +65,17 @@ public class MemberServiceImpl implements MemberService{
 			checkMember.setSession_key(session_key);
 			checkMember.setOpenid(openid);
 		}else {
+			String recommendOneId = body.getRecommendOneId();
+			if(recommendOneId!=null){
+				//写入推荐人
+				SpaMember queryMember = req.getBody();
+				queryMember.setOpenid(recommendOneId);//第一推荐人openid
+				queryMember =  memberDao.check(queryMember);//获取推荐人信息
+				if(queryMember != null){
+					body.setRecommendTwoId(queryMember.getRecommendOneId());//用户的第二推荐人 是 他的第一推荐人的第一推荐人
+					body.setRecommendThreeId(queryMember.getRecommendThreeId());//用户的第三推荐人 是 他的第一推荐人的第二推荐人
+				}
+			}
 			body.setEid(shop.getEid());
 			body.setOpenid(openid);
 			body.setSession_key(session_key);

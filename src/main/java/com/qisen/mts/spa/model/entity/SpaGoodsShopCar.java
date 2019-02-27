@@ -27,6 +27,13 @@ public class SpaGoodsShopCar extends BaseEntity {
 	private Integer num;//商品数量
 	private String status;// 状态:0正常,1停售,-1删除
 	private String openid;//加入时间
+	private String select;//是否选中:0未选中，1已选中
+	public String getSelect() {
+		return select;
+	}
+	public void setSelect(String select) {
+		this.select = select;
+	}
 	public Integer getId() {
 		return id;
 	}

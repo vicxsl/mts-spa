@@ -19,32 +19,6 @@ public class GoodsShopCarServiceImpl implements GoodsShopCarService {
 	private GoodsShopCarDao goodsShopCarDao;
 
 	/**
-	 * 新增spa账号
-	 */
-	@Override
-	public CommObjResponse<List<SpaGoodsShopCar>> edit(SpaRequest<SpaGoodsShopCar> req) {
-		CommObjResponse<List<SpaGoodsShopCar>> resp = new CommObjResponse<List<SpaGoodsShopCar>>();
-		SpaGoodsShopCar body = req.getBody();
-		SpaGoodsShopCar query = new SpaGoodsShopCar();
-		query.setEid(body.getEid());
-		query.setAppid(body.getAppid());
-		if (body.getNum() == 0) {
-			goodsShopCarDao.delete(body);
-		} else {
-			int count =  goodsShopCarDao.check(body);
-			if (count > 0 ) {
-				goodsShopCarDao.update(body);
-				
-			} else {
-				goodsShopCarDao.add(body);
-			}
-		}
-		List<SpaGoodsShopCar> spaList = goodsShopCarDao.list(query);
-		resp.setBody(spaList);
-		return resp;
-	}
-
-	/**
 	 * 查询spa账号
 	 */
 	@Override
@@ -60,9 +34,8 @@ public class GoodsShopCarServiceImpl implements GoodsShopCarService {
 	public CommObjResponse<Integer> saveList(SpaRequest<List<SpaGoodsShopCar>> req) {
 		CommObjResponse<Integer> response = new CommObjResponse<Integer>();
 		List<SpaGoodsShopCar> shopCarList=req.getBody();
-		if(CollectionUtils.isEmpty(shopCarList)){
-		}else{
-			goodsShopCarDao.deleteByMemberId(shopCarList.get(0));
+		if(!CollectionUtils.isEmpty(shopCarList)){
+			goodsShopCarDao.deleteByOpenid(shopCarList.get(0));
 			goodsShopCarDao.saveList(shopCarList);
 			response.setResult(ResultCode.SUCCESS);
 		}

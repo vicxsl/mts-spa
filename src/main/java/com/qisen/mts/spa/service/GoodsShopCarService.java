@@ -8,22 +8,19 @@ import com.qisen.mts.spa.model.request.SpaRequest;
 
 public interface GoodsShopCarService {
 
-	/**
-	 * 新增spa商品
-	 * @param req
-	 * @return
-	 */
-	public CommObjResponse<List<SpaGoodsShopCar>> edit(SpaRequest<SpaGoodsShopCar> req);
-	
 
 	/**
-	 * 查询spa商品
+	 * 查询购物车列表
 	 * @param req
 	 * @return
 	 */
 	public CommObjResponse<List<SpaGoodsShopCar>> list(SpaRequest<SpaGoodsShopCar> req);
 
-
+	/**
+	 * 更新购物车列表
+	 * @param req
+	 * @return
+	 */
 	public CommObjResponse<Integer> saveList(SpaRequest<List<SpaGoodsShopCar>> req);
 
 	

@@ -6,32 +6,21 @@ import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
 
 public interface GoodsShopCarDao {
 	/**
-	 * 删除spa账号
+	 * 删除会员购物车内容
 	 * @param spaAccount
 	 * @return
 	 */
-	public int delete(SpaGoodsShopCar spa);
+	public int deleteByOpenid(SpaGoodsShopCar spa);
 	
-	public int deleteByMemberId(SpaGoodsShopCar spa);
-	
+	/**
+	 * 保存购物车列表
+	 * @param list
+	 * @return
+	 */
 	public int saveList(List<SpaGoodsShopCar> list);
 
-	public int check(SpaGoodsShopCar spa);
 	/**
-	 * 新增spa账号 
-	 * @param spaAccount
-	 */
-	public void add(SpaGoodsShopCar spa);
-	
-	/**
-	 * 编辑spa账号 
-	 * @param spaAccount
-	 */
-	public void update(SpaGoodsShopCar spa);
-	
-
-	/**
-	 * 查询spa账号列表
+	 * 查询购物车列表
 	 * @param mobile
 	 * @return
 	 */

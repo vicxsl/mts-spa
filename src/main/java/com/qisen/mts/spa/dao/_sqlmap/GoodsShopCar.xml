@@ -4,92 +4,33 @@
 <mapper namespace="com.qisen.mts.spa.dao.GoodsShopCarDao">
 	
 	<!--新增商品到购物车 -->
-	<insert id="add" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
-		<![CDATA[
-			insert into goodsShopCar(eid,appid,goodsId,openid,num,createDate,updateTime,status) 
-			values(#{eid},#{appid},#{goodsId},#{openid},#{num},#{createDate},#{updateTime},0)
-		]]>
-	</insert>
-	
 	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		insert into goodsShopCar
-		(eid,appid,goodsId,openid,num,createDate,updateTime,status) values
+		(eid,appid,goodsId,openid,num,createDate,updateTime,status,select) values
 		<foreach collection="list" item="goods" index="index"
 			separator=",">
 			(#{goods.eid},#{goods.appid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},
-			#{goods.updateTime},0)
+			#{goods.updateTime},0,#{select})
 		</foreach>
 	</insert>
 
-	<!--新增商品到购物车 -->
-	<select id="check" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar"  resultType="int">
-		<![CDATA[
-			select count(id) from goodsShopCar
-		]]>
-		<where>
-			<![CDATA[
-				eid = #{eid} and appid = #{appid} and status = 0 and goodsId = #{goodsId}
-			]]>
-			<if test="openid != null and openid !=''">
-				<![CDATA[
-					and openid = #{openid} 
-				]]>
-			</if>
-		</where>
-	</select>
+
 	
-	<!-- 删除  还可添加会员id限制-->
-	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
+	<delete id="deleteByOpenid" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		<![CDATA[
 			delete from goodsShopCar
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and appid = #{appid} and id=#{id} 
+				appid = #{appid} and openid=#{openid} 
 			]]>
-		</where>
-	</delete>
-	
-	<delete id="deleteByMemberId" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
-		<![CDATA[
-			delete from goodsShopCar
-		]]>
-		<where>
-			<![CDATA[
-				eid = #{eid} and appid = #{appid} and openid=#{openid} 
-			]]>
-		</where>
-	</delete>
-
-	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
-		<![CDATA[
-			update goodsShopCar
-		]]>
-		<set>
-			<if test="num != null and num > 0">
+			<if test="eid != null and eid !=''">
 				<![CDATA[
-					 num = (#{num}+num)
-				 ]]>
-			</if>
-		</set>
-		<where>
-			<![CDATA[
-				 eid = #{eid} and appid = #{appid} and goodsId = #{goodsId}
-			]]>
-			<if test="id != null and id > 0">
-				<![CDATA[
-					 and id = #{id}
-				 ]]>
-			</if>
-			<if test="memberId != null and memberId !=''">
-				<![CDATA[
-					and memberId = #{memberId} 
+					and eid = #{eid} 
 				]]>
 			</if>
 		</where>
-	</update>
-
-
+	</delete>
 
 	<!-- 查询列表 -->
 	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar"
