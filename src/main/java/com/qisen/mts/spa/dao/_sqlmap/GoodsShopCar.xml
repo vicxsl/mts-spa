@@ -99,11 +99,16 @@
 		]]>
 		<where>
 			<![CDATA[
-				a.eid = #{eid} and a.appid = #{appid} and a.eid = b.eid and a.appid = b.appid and a.goodsId = b.id
+				a.appid = #{appid} and a.appid = b.appid and a.goodsId = b.id
 			]]>
 			<if test="openid != null and openid !=''">
 				<![CDATA[
 					and a.openid = #{openid} 
+				]]>
+			</if>
+			<if test="eid != null and eid !=''">
+				<![CDATA[
+					and a.eid = #{eid} 
 				]]>
 			</if>
 		</where>

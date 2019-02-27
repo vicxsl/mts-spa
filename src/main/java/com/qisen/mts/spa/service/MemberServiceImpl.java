@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,11 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.spa.dao.GoodsShopCarDao;
 import com.qisen.mts.spa.dao.MemberDao;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.MetaData;
+import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -29,6 +32,9 @@ public class MemberServiceImpl implements MemberService{
 	private MemberDao memberDao;
 	@Autowired
 	private ShopDao shopDao;
+
+	@Autowired
+	GoodsShopCarDao goodsShopCarDao;
 	
 	/**
 	 * 商城登录
@@ -42,18 +48,18 @@ public class MemberServiceImpl implements MemberService{
 		SpaMember query = new SpaMember();
 		MetaData metaData = new MetaData();
 		SpaShop shop = shopDao.queryByAppId(appid);
-
+		metaData.setShop(shop);//储存门店信息
+		
 		String secret = shop.getSecret();
 		JSONObject wxObject = MemberServiceImpl.getSessionKeyOropenid(js_code,appid,secret);
 		String openid = wxObject.getString("openid");
 		String session_key = wxObject.getString("session_key");
-		metaData.setShop(shop);//储存门店信息
 		query.setEid(shop.getEid());
 		query.setAppid(appid);
 		query.setOpenid(openid);
 		SpaMember checkMember = memberDao.check(query);
 		if (checkMember != null && checkMember.getId() > 0 ) {
-			if((body.getMobile() != null && checkMember.getMobile() != body.getMobile()) || (body.getName() != null && checkMember.getName() != body.getName())){
+			if((body.getMobile() != null && checkMember.getMobile() != body.getMobile()) || (body.getName() != null && checkMember.getName() != body.getName()) ||(body.getAvatarUrl() != null && checkMember.getAvatarUrl() != body.getAvatarUrl())){
 				memberDao.update(body);
 			}
 			checkMember.setSession_key(session_key);
@@ -65,7 +71,12 @@ public class MemberServiceImpl implements MemberService{
 			checkMember = body;
 			memberDao.create(body);
 		}
-		metaData.setMember(checkMember);
+		metaData.setMember(checkMember);//储存会员信息
+		SpaGoodsShopCar queryShopCar = new SpaGoodsShopCar();
+		queryShopCar.setAppid(appid);
+		queryShopCar.setOpenid(openid);
+		List<SpaGoodsShopCar> ShopCarList = goodsShopCarDao.list(queryShopCar);
+		metaData.setShopCarList(ShopCarList);//储存会员购物车信息
 		resp.setBody(metaData);
 		return resp;
 	}
