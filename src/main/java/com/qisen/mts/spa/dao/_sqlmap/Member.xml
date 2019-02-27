@@ -10,19 +10,12 @@
 			select *  from  member 
 		]]>
 		<where>
+			<![CDATA[
+				 appid = #{appid} and openid = #{openid} 
+			]]>
 			<if test="eid != null and eid !=''">
 				<![CDATA[
-					 eid = #{eid} 
-				]]>
-			</if>
-			<if test="appid != null and appid !=''">
-				<![CDATA[
-					and appid = #{appid} 
-				]]>
-			</if>
-			<if test="openid != null and openid !=''">
-				<![CDATA[
-					and openid = #{openid} 
+					and eid = #{eid} 
 				]]>
 			</if>
 		</where>

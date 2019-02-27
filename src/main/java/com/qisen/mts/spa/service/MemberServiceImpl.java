@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,29 +34,39 @@ public class MemberServiceImpl implements MemberService{
 	 * 商城登录
 	 */
 	@Override
-	public CommObjResponse<List<SpaMember>> login(SpaRequest<SpaMember> req) {
-		CommObjResponse<List<SpaMember>> resp = new CommObjResponse<List<SpaMember>>();
+	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req) {
+		CommObjResponse<MetaData> resp = new CommObjResponse<MetaData>();
 		SpaMember body = req.getBody();
 		String appid = body.getAppid();
-		String js_code = body.getJs_code();
+		String js_code = body.getJs_code();//wx.login临时js_code
 		SpaMember query = new SpaMember();
 		MetaData metaData = new MetaData();
 		SpaShop shop = shopDao.queryByAppId(appid);
 
 		String secret = shop.getSecret();
-		JSONObject wxObject = this.getSessionKeyOropenid(js_code,appid,secret);
+		JSONObject wxObject = MemberServiceImpl.getSessionKeyOropenid(js_code,appid,secret);
+		String openid = wxObject.getString("openid");
+		String session_key = wxObject.getString("session_key");
 		metaData.setShop(shop);//储存门店信息
-		query.setEid(body.getEid());
-//		query.setAppid(body.getAppid());
-		query.setOpenid(body.getOpenid());
+		query.setEid(shop.getEid());
+		query.setAppid(appid);
+		query.setOpenid(openid);
 		SpaMember checkMember = memberDao.check(query);
 		if (checkMember != null && checkMember.getId() > 0 ) {
 			if((body.getMobile() != null && checkMember.getMobile() != body.getMobile()) || (body.getName() != null && checkMember.getName() != body.getName())){
 				memberDao.update(body);
 			}
+			checkMember.setSession_key(session_key);
+			checkMember.setOpenid(openid);
 		}else {
+			body.setEid(shop.getEid());
+			body.setOpenid(openid);
+			body.setSession_key(session_key);
+			checkMember = body;
 			memberDao.create(body);
 		}
+		metaData.setMember(checkMember);
+		resp.setBody(metaData);
 		return resp;
 	}
 	
