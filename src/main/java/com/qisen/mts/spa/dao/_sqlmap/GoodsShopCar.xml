@@ -6,11 +6,10 @@
 	<!--新增商品到购物车 -->
 	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		insert into goodsShopCar
-		(eid,appid,goodsId,openid,num,createDate,updateTime,status,select) values
+		(eid,appid,goodsId,openid,num,createDate,updateTime,status,sel) values
 		<foreach collection="list" item="goods" index="index"
 			separator=",">
-			(#{goods.eid},#{goods.appid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},
-			#{goods.updateTime},0,#{select})
+			(#{goods.eid},#{goods.appid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},#{goods.updateTime},0,#{goods.sel})
 		</foreach>
 	</insert>
 
