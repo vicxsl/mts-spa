@@ -15,7 +15,7 @@ public class SpaGoodsType extends BaseEntity {
 
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private String typeName;
 	private String typeNo;//商品编号
 	private String status;// 状态:0正常,1停售,2删除
@@ -31,11 +31,11 @@ public class SpaGoodsType extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 	public String getTypeName() {
 		return typeName;

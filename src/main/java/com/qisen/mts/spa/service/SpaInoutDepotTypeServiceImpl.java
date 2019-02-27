@@ -20,7 +20,7 @@ public class SpaInoutDepotTypeServiceImpl implements SpaInoutDepotTypeService{
 		CommObjResponse<List<SpaInoutDepotType>> resp = new CommObjResponse<List<SpaInoutDepotType>>();
 		SpaInoutDepotType querySpaInoutDepotType = new SpaInoutDepotType();
 		querySpaInoutDepotType.setEid(record.getEid());
-		querySpaInoutDepotType.setSid(record.getSid());
+		querySpaInoutDepotType.setAppid(record.getAppid());
 		int count = spaInoutDepotTypeDao.delete(record);
 		if(count == 1 ){
 			resp.setBody(spaInoutDepotTypeDao.list(querySpaInoutDepotType));
@@ -35,7 +35,7 @@ public class SpaInoutDepotTypeServiceImpl implements SpaInoutDepotTypeService{
 		CommObjResponse<List<SpaInoutDepotType>> resp = new CommObjResponse<List<SpaInoutDepotType>>();
 		SpaInoutDepotType querySpaInoutDepotType = new SpaInoutDepotType();
 		querySpaInoutDepotType.setEid(record.getEid());
-		querySpaInoutDepotType.setSid(record.getSid());
+		querySpaInoutDepotType.setAppid(record.getAppid());
 		int count = spaInoutDepotTypeDao.check(record);//查询出入库类型？
 		if(null!=record.getId()&&record.getId()>0){
 			if(count == 0){

@@ -15,9 +15,9 @@
 					 eid = #{eid} 
 				]]>
 			</if>
-			<if test="sid != null and sid !=''">
+			<if test="appid != null and appid !=''">
 				<![CDATA[
-					and sid = #{sid} 
+					and appid = #{appid} 
 				]]>
 			</if>
 			<if test="openid != null and openid !=''">
@@ -31,8 +31,8 @@
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
-			insert into member(eid,sid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,recommendThreeId,recommendTwoId,recommendOneId,status) 
-			values(#{eid},#{sid},#{name},#{mobile},#{totalMoney},#{balance},#{createDate},#{openid},#{session_key},#{unionid},#{recommendThreeId},#{recommendTwoId},#{recommendOneId},0)
+			insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,recommendThreeId,recommendTwoId,recommendOneId,status) 
+			values(#{eid},#{appid},#{name},#{mobile},#{totalMoney},#{balance},#{createDate},#{openid},#{session_key},#{unionid},#{recommendThreeId},#{recommendTwoId},#{recommendOneId},0)
 		]]>
 	</insert>
 
@@ -43,7 +43,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid} and openid=#{openid}
+				eid = #{eid} and appid = #{appid} and openid=#{openid}
 			]]>
 		</where>
 	</delete>
@@ -61,7 +61,7 @@
 		</set>
 		<where>
 			<![CDATA[
-				 eid = #{eid} and sid = #{sid} and id = #{id}
+				 eid = #{eid} and appid = #{appid} and id = #{id}
 			]]>
 		</where>
 	</update>
@@ -76,7 +76,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid}
+				eid = #{eid} and appid = #{appid}
 			]]>
 		</where>
 	</select>

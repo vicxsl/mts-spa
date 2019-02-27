@@ -12,9 +12,9 @@ public class CardRecord extends BaseEntity {
 	private static final long serialVersionUID = -1747040749018448374L;
 
 	private Integer id;
-	private Integer sid;
+	private String appid;
 	private Integer memId;
-	private Integer memSid;
+	private Integer memAppid;
 	private Integer memCardId;
 	private Double cardFee;
 	private Double payCard;
@@ -36,12 +36,12 @@ public class CardRecord extends BaseEntity {
 		this.id = id;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public Integer getMemId() {
@@ -52,12 +52,12 @@ public class CardRecord extends BaseEntity {
 		this.memId = memId;
 	}
 
-	public Integer getMemSid() {
-		return memSid;
+	public Integer getMemAppid() {
+		return memAppid;
 	}
 
-	public void setMemSid(Integer memSid) {
-		this.memSid = memSid;
+	public void setMemAppid(Integer memAppid) {
+		this.memAppid = memAppid;
 	}
 
 	public Integer getMemCardId() {

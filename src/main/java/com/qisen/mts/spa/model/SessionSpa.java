@@ -27,13 +27,13 @@ public class SessionSpa extends SessionAccount {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
-	private Integer sid;
+	private String appid;
 	public Integer getId() {
 		return id;
 	}

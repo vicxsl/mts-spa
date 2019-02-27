@@ -15,8 +15,8 @@ public class BillDetail extends BaseEntity {
 	private Integer eid;
 	private Integer billId;
 	private Date day;
-	private Integer outSid;
-	private Integer inSid;
+	private Integer outAppid;
+	private Integer inAppid;
 	private String empNo;
 	private Integer itemId;
 	private String itemNo;
@@ -66,20 +66,20 @@ public class BillDetail extends BaseEntity {
 		this.day = day;
 	}
 
-	public Integer getOutSid() {
-		return outSid;
+	public Integer getOutAppid() {
+		return outAppid;
 	}
 
-	public void setOutSid(Integer outSid) {
-		this.outSid = outSid;
+	public void setOutAppid(Integer outAppid) {
+		this.outAppid = outAppid;
 	}
 
-	public Integer getInSid() {
-		return inSid;
+	public Integer getInAppid() {
+		return inAppid;
 	}
 
-	public void setInSid(Integer inSid) {
-		this.inSid = inSid;
+	public void setInAppid(Integer inAppid) {
+		this.inAppid = inAppid;
 	}
 
 	public String getEmpNo() {

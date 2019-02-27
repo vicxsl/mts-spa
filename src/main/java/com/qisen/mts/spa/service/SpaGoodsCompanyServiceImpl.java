@@ -23,7 +23,7 @@ public class SpaGoodsCompanyServiceImpl implements SpaGoodsCompanyService{
 		SpaGoodsCompany spa = req.getBody();
 		SpaGoodsCompany query = new SpaGoodsCompany();
 		query.setEid(spa.getEid());
-		query.setSid(spa.getSid());
+		query.setAppid(spa.getAppid());
 		int count = spaGoodsCompanyDao.delete(spa);
 		if (count == 0 ) {
 			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
@@ -40,7 +40,7 @@ public class SpaGoodsCompanyServiceImpl implements SpaGoodsCompanyService{
 		SpaGoodsCompany spa = req.getBody();
 		SpaGoodsCompany query = new SpaGoodsCompany();
 		query.setEid(spa.getEid());
-		query.setSid(spa.getSid());
+		query.setAppid(spa.getAppid());
 		int count = spaGoodsCompanyDao.check(spa);
 		if(spa.getId() != null && spa.getId() > 0){
 			if (count == 0 ) {

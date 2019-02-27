@@ -25,7 +25,7 @@ public class GoodsTypeServiceImpl implements GoodsTypeService{
 		SpaGoodsType spaGoodsType = req.getBody();
 		SpaGoodsType queryGoodsType = new SpaGoodsType();
 		queryGoodsType.setEid(spaGoodsType.getEid());
-		queryGoodsType.setSid(spaGoodsType.getSid());
+		queryGoodsType.setAppid(spaGoodsType.getAppid());
 		int count = goodsTypeDao.check(spaGoodsType);
 		if(spaGoodsType.getId() != null && spaGoodsType.getId() > 0){
 			if (count == 0 ) {
@@ -56,7 +56,7 @@ public class GoodsTypeServiceImpl implements GoodsTypeService{
 		SpaGoodsType spaGoodsType = req.getBody();
 		SpaGoodsType queryGoodsType = new SpaGoodsType();
 		queryGoodsType.setEid(spaGoodsType.getEid());
-		queryGoodsType.setSid(spaGoodsType.getSid());
+		queryGoodsType.setAppid(spaGoodsType.getAppid());
 		int count = goodsTypeDao.delete(spaGoodsType);
 		if (count == 0 ) {
 			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);

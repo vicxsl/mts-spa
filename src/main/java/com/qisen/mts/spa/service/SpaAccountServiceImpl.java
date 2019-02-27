@@ -93,7 +93,7 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 				if (spaAccount.getStatus().equals("0")) {
 					SessionSpa sessionSpa = spaAccount.toJSON().toJavaObject(SessionSpa.class);
 					Integer eid = spaAccount.getEid();
-					Integer sid = spaAccount.getSid();
+					String appid = spaAccount.getAppid();
 					SpaGoodsSupplier goodsSupplier = new SpaGoodsSupplier();//获取供应商
 					SpaGoodsCompany goodsCompany = new SpaGoodsCompany();//获取公司品牌
 					//出入库类型
@@ -101,11 +101,11 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 					SpaGoodsType goodsType = new SpaGoodsType();//商品类型
 					SpaGoodsSubType goodsSubType = new SpaGoodsSubType();//商品子类型
 					goodsType.setEid(eid);
-					goodsType.setSid(sid);
+					goodsType.setAppid(appid);
 					goodsSubType.setEid(eid);
-					goodsSubType.setSid(sid);
+					goodsSubType.setAppid(appid);
 					inoutDepotType.setEid(eid);
-					inoutDepotType.setSid(sid);
+					inoutDepotType.setAppid(appid);
 					List<SpaGoodsType> goodsTypeList= goodsTypeDao.list(goodsType);
 					List<SpaGoodsSubType> goodsSubTypeList= goodsSubTypeDao.list(goodsSubType);
 					List<SpaInoutDepotType> inOutDepotTypeList =  spaInoutDepotTypeDao.list(inoutDepotType);

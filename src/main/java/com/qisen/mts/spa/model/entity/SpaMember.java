@@ -15,7 +15,7 @@ public class SpaMember extends BaseEntity {
 
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private String name;
 	private String mobile;
 	private double totalMoney;//总金额
@@ -24,10 +24,11 @@ public class SpaMember extends BaseEntity {
 	private Integer recommendTwoId;//第二推荐人
 	private Integer recommendThreeId;//第三推荐人
 	private String createDate;//加入时间
-	private String unionid;//加入时间
-	private String session_key;//加入时间
-	private String openid;//加入时间
-	private String status;// 状态:0正常,1停售,2删除
+	private String unionid;//开发者平台id
+	private String js_code;//临时会话码
+	private String session_key;//登录后的会话码
+	private String openid;//会员微信小程序openid
+	private String status;// 状态:0正常,1停用,-1删除
 	public Integer getId() {
 		return id;
 	}
@@ -40,17 +41,23 @@ public class SpaMember extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 	public double getTotalMoney() {
 		return totalMoney;
@@ -94,6 +101,12 @@ public class SpaMember extends BaseEntity {
 	public void setUnionid(String unionid) {
 		this.unionid = unionid;
 	}
+	public String getJs_code() {
+		return js_code;
+	}
+	public void setJs_code(String js_code) {
+		this.js_code = js_code;
+	}
 	public String getSession_key() {
 		return session_key;
 	}
@@ -111,12 +124,6 @@ public class SpaMember extends BaseEntity {
 	}
 	public void setStatus(String status) {
 		this.status = status;
-	}
-	public String getMobile() {
-		return mobile;
-	}
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
 	}
 	
 }

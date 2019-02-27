@@ -1,7 +1,5 @@
 package com.qisen.mts.spa.model.entity;
 
-import java.sql.Date;
-
 import com.qisen.mts.common.model.entity.BaseEntity;
 
 /**
@@ -17,10 +15,10 @@ public class SpaShop extends BaseEntity {
 
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String no;//门店编号
 	private String name;//门店名称
-	private Date createDate;//接入日期
-	private Date endDate;//结束日期
+	private String createDate;//接入日期
+	private String endDate;//结束日期
 	private String version;//版本
 	private String status;//状态
 	private String address;//地址
@@ -31,6 +29,7 @@ public class SpaShop extends BaseEntity {
 	private String telePhone;//门店电话
 	private String shopImg;//门店logo
 	private String appId;//小程序id
+	private String secret;//小程序id
 	public Integer getId() {
 		return id;
 	}
@@ -43,11 +42,11 @@ public class SpaShop extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public Integer getSid() {
-		return sid;
+	public String getNo() {
+		return no;
 	}
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setNo(String no) {
+		this.no = no;
 	}
 	public String getName() {
 		return name;
@@ -55,16 +54,16 @@ public class SpaShop extends BaseEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 	public String getVersion() {
@@ -126,6 +125,12 @@ public class SpaShop extends BaseEntity {
 	}
 	public void setAppId(String appId) {
 		this.appId = appId;
+	}
+	public String getSecret() {
+		return secret;
+	}
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 	
 }

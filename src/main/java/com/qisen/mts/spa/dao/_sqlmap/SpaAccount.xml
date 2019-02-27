@@ -25,8 +25,8 @@
 	<!--新增账号  -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
 		<![CDATA[
-			insert into spa_account(eid,sid,name,mobile,createDate,menuStr,optStr,role,password,status) 
-			values(#{eid},#{sid},#{name},#{mobile},now(),#{menuStr},#{optStr},#{role},#{password},0)
+			insert into spa_account(eid,appid,name,mobile,createDate,menuStr,optStr,role,password,status) 
+			values(#{eid},#{appid},#{name},#{mobile},now(),#{menuStr},#{optStr},#{role},#{password},0)
 		]]>
 	</insert>
 	
@@ -37,7 +37,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid} and id=#{id}
+				eid = #{eid} and appid = #{appid} and id=#{id}
 			]]>
 		</where>
 	</delete>
@@ -75,7 +75,7 @@
 		</set>
 		<where>
 			<![CDATA[
-				 eid = #{eid} and sid = #{sid} and id = #{id}
+				 eid = #{eid} and appid = #{appid} and id = #{id}
 			]]>
 		</where>
 	</update>
@@ -101,7 +101,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid}
+				eid = #{eid} and appid = #{appid}
 			]]>
 			<if test="mobile != null and mobile !=''">
 				<![CDATA[

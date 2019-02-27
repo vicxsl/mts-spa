@@ -44,8 +44,8 @@
 			<if test="status != null">
 				and Status = #{status}
 			</if>
-			<if test="sid != null">
-				and sid = #{sid}
+			<if test="appid != null">
+				and appid = #{appid}
 			</if>
 			<if test="eid != null">
 				and eid = #{eid}
@@ -55,7 +55,7 @@
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from
 		inOutDepot
-		where Id = #{id} and sid = #{sid} and eid = #{eid}
+		where Id = #{id} and appid = #{appid} and eid = #{eid}
 	</delete>
 	<insert id="save" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
 		insert into inOutDepot (
@@ -63,7 +63,7 @@
 		inOutDepotTypeId, Remark,
 		CreateDate, AuditingDate, 
 		AccountId, Money, Status,
-		sid,
+		appid,
 		eid)
 		values (
 		#{no,jdbcType=VARCHAR},
@@ -74,7 +74,7 @@
 		#{auditingDate,jdbcType=TIMESTAMP},
 		#{accountId,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE},
 		#{status,jdbcType=CHAR},
-		#{sid,jdbcType=INTEGER},
+		#{appid,jdbcType=INTEGER},
 		#{eid,jdbcType=INTEGER})
 	</insert>
 	<update id="edit" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepot">
@@ -105,6 +105,6 @@
 				Status = #{status,jdbcType=CHAR},
 			</if>
 		</set>
-		where Id = #{id,jdbcType=INTEGER} and sid = #{sid} and eid = #{eid}
+		where Id = #{id,jdbcType=INTEGER} and appid = #{appid} and eid = #{eid}
 	</update>
 </mapper>

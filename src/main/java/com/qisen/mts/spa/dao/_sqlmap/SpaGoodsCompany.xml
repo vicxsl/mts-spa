@@ -8,10 +8,10 @@
 		<result column="No" property="no" jdbcType="VARCHAR" />
 		<result column="Status" property="status" jdbcType="CHAR" />
 		<result column="eid" property="eid" jdbcType="INTEGER" />
-		<result column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="appid" property="appid" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		Id, Name, No, Status,sid,eid
+		Id, Name, No, Status,appid,eid
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
@@ -32,8 +32,8 @@
 				<bind name="parttern_name" value="'%'+name+'%'" />
 				and name like #{parttern_name}
 			</if>
-			<if test="sid != null">
-				and sid=#{sid}
+			<if test="appid != null">
+				and appid=#{appid}
 			</if>
 			<if test="eid != null">
 				and eid = #{eid}
@@ -56,14 +56,14 @@
 				name = #{name},
 			</if>
 			<if test="no != null and no !=''">
-				sid = #{sid},
+				appid = #{appid},
 			</if>
 			<if test="status != null and status !=''">
 				status = #{status},
 			</if>
 		</set>
 		<where>
-			eid = #{eid} and sid = #{sid} and id = #{id}
+			eid = #{eid} and appid = #{appid} and id = #{id}
 		</where>
 	</update>
 
@@ -75,10 +75,10 @@
 	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsCompany">
 		insert into goodsCompany (Id,
 		Name, No,
-		Status,eid,sid)
+		Status,eid,appid)
 		values (#{id,jdbcType=INTEGER},
 		#{name,jdbcType=VARCHAR},
 		#{no,jdbcType=VARCHAR},
-		#{status,jdbcType=CHAR},#{eid,jdbcType=INTEGER},#{sid,jdbcType=INTEGER})
+		#{status,jdbcType=CHAR},#{eid,jdbcType=INTEGER},#{appid,jdbcType=INTEGER})
 	</insert>
 </mapper>

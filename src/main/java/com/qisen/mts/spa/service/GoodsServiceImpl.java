@@ -28,7 +28,7 @@ public class GoodsServiceImpl implements GoodsService{
 		SpaGoods spaGoods = req.getBody();
 		SpaGoods queryGoods = new SpaGoods();
 		queryGoods.setEid(spaGoods.getEid());
-		queryGoods.setSid(spaGoods.getSid());
+		queryGoods.setAppid(spaGoods.getAppid());
 		int count = goodsDao.check(spaGoods);
 		if(spaGoods.getId() != null && spaGoods.getId() > 0){
 			if (count == 0 ) {
@@ -59,7 +59,7 @@ public class GoodsServiceImpl implements GoodsService{
 		SpaGoods spaGoods = req.getBody();
 		SpaGoods queryGoods = new SpaGoods();
 		queryGoods.setEid(spaGoods.getEid());
-		queryGoods.setSid(spaGoods.getSid());
+		queryGoods.setAppid(spaGoods.getAppid());
 		int count = goodsDao.delete(spaGoods);
 		if (count == 0 ) {
 			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
@@ -88,14 +88,14 @@ public class GoodsServiceImpl implements GoodsService{
 		for(SpaGoods spaGoods : goodsList){
 			SpaGoods goods = goodsDao.getGoodsByPara(spaGoods);
 			oldGoodsList.add(goods);
-			goodsNumMap.put(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getSid(), spaGoods.getNum());
+			goodsNumMap.put(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getAppid(), spaGoods.getNum());
 		}
 		double num = 0.0;
 		for(SpaGoods spaGoods :oldGoodsList){
 			if(inoutdepottype.equals("2")){
-				num = spaGoods.getNum()+goodsNumMap.get(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getSid());
+				num = spaGoods.getNum()+goodsNumMap.get(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getAppid());
 			}else{
-				num = spaGoods.getNum()-goodsNumMap.get(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getSid());
+				num = spaGoods.getNum()-goodsNumMap.get(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getAppid());
 			}
 			spaGoods.setNum(num);
 			goodsDao.update(spaGoods);

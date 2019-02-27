@@ -27,7 +27,7 @@ public class GoodsShopCarServiceImpl implements GoodsShopCarService {
 		SpaGoodsShopCar body = req.getBody();
 		SpaGoodsShopCar query = new SpaGoodsShopCar();
 		query.setEid(body.getEid());
-		query.setSid(body.getSid());
+		query.setAppid(body.getAppid());
 		if (body.getNum() == 0) {
 			goodsShopCarDao.delete(body);
 		} else {

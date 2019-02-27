@@ -41,7 +41,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 		int count = spaInoutDepotDao.check(record);
 		SpaInoutDepot query = new SpaInoutDepot();
 		query.setEid(record.getEid());
-		query.setSid(record.getSid());
+		query.setAppid(record.getAppid());
 		
 		if(!CollectionUtils.isEmpty(record.getGoodsList())){
 			List<SpaInoutDepotDetail> detailList = record.getGoodsList();
@@ -59,7 +59,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 				goods = new SpaGoods();
 				goods.setId(goodsId);
 				goods.setEid(spaInoutDepotDetail.getEid());
-				goods.setSid(spaInoutDepotDetail.getSid());
+				goods.setAppid(spaInoutDepotDetail.getAppid());
 				goods.setNum(spaInoutDepotDetail.getNum());//入库or出库数量
 				goods.setStatus("1");
 				goodsList.add(goods);
@@ -102,7 +102,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 		SpaInoutDepotDetail detail = new SpaInoutDepotDetail();
 		detail.setInOutNo(body.getNo());
 		detail.setEid(body.getEid());
-		detail.setSid(body.getSid());
+		detail.setAppid(body.getAppid());
 		List<SpaInoutDepotDetail> detailList = inoutDepotDetailDao.list(detail);
 		if(!CollectionUtils.isEmpty(detailList)){
 			InoutDepot.get(0).setGoodsList(detailList);

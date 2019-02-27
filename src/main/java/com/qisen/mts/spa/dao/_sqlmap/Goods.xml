@@ -34,15 +34,15 @@
 	</select>
 	<select id="getGoodsByPara" parameterType="com.qisen.mts.spa.model.entity.SpaGoods"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoods">
-		select t.id,t.num,t.sid,t.eid
-		from goods t where t.id=#{id} and t.eid=#{eid} and t.sid = #{sid}
+		select t.id,t.num,t.appid,t.eid
+		from goods t where t.id=#{id} and t.eid=#{eid} and t.appid = #{appid}
 	</select>
 
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			insert into goods(eid,sid,name,no,barCode,type,son_type,unit,spec,num,buyingPrice,costPrice,salePrice,goodsCompanyId,supplierId,status,describe,remark) 
-			values(#{eid},#{sid},#{name},#{no},#{barCode},#{type},#{son_type},#{unit},#{spec},#{num},#{buyingPrice},#{costPrice},#{salePrice},#{goodsCompanyId},#{supplierId},0,#{describe},#{remark})
+			insert into goods(eid,appid,name,no,barCode,type,son_type,unit,spec,num,buyingPrice,costPrice,salePrice,goodsCompanyId,supplierId,status,describe,remark) 
+			values(#{eid},#{appid},#{name},#{no},#{barCode},#{type},#{son_type},#{unit},#{spec},#{num},#{buyingPrice},#{costPrice},#{salePrice},#{goodsCompanyId},#{supplierId},0,#{describe},#{remark})
 		]]>
 	</insert>
 
@@ -53,7 +53,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid} and id=#{id}
+				eid = #{eid} and appid = #{appid} and id=#{id}
 			]]>
 		</where>
 	</delete>
@@ -136,7 +136,7 @@
 		</set>
 		<where>
 			<![CDATA[
-				 eid = #{eid} and sid = #{sid} and id = #{id}
+				 eid = #{eid} and appid = #{appid} and id = #{id}
 			]]>
 		</where>
 	</update>
@@ -151,7 +151,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid}
+				eid = #{eid} and appid = #{appid}
 			]]>
 			<if test="no != null and no !=''">
 				<![CDATA[

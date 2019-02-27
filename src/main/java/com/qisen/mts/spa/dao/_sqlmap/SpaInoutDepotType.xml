@@ -8,11 +8,11 @@
 		<result column="No" property="no" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="CHAR" />
 		<result column="Status" property="status" jdbcType="CHAR" />
-		<result column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="appid" property="appid" jdbcType="INTEGER" />
 		<result column="eid" property="eid" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		Id, Name, No, type, Status, sid, eid
+		Id, Name, No, type, Status, appid, eid
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
@@ -62,8 +62,8 @@
 		<if test="status != null">
 			and Status = #{status,jdbcType=CHAR}
 		</if>
-		<if test="sid != null">
-			and sid = #{sid,jdbcType=INTEGER}
+		<if test="appid != null">
+			and appid = #{appid,jdbcType=INTEGER}
 		</if>
 		<if test="eid != null">
 			and eid = #{eid,jdbcType=INTEGER}
@@ -73,17 +73,17 @@
 		delete from
 		inOutDepotType
 		where Id = #{id,jdbcType=INTEGER} 
-			and sid = #{sid} and eid = #{eid}
+			and appid = #{appid} and eid = #{eid}
 	</delete>
 	<insert id="save" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType">
 		insert into inOutDepotType (
 		Name, No,
-		type, Status, sid, eid
+		type, Status, appid, eid
 		)
 		values ( #{name,jdbcType=VARCHAR},
 		#{no,jdbcType=VARCHAR},
 		#{type,jdbcType=CHAR}, #{status,jdbcType=CHAR},
-		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
+		#{appid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
 		)
 	</insert>
 	<update id="edit" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotType">
@@ -102,6 +102,6 @@
 				Status = #{status,jdbcType=CHAR},
 			</if>
 		</set>
-		where Id = #{id,jdbcType=INTEGER} and sid = #{sid} and eid = #{eid}
+		where Id = #{id,jdbcType=INTEGER} and appid = #{appid} and eid = #{eid}
 	</update>
 </mapper>

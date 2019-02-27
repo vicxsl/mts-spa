@@ -12,13 +12,13 @@ public class Bill extends BaseEntity {
 
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private String no;
 	private Date day;
 	private String handler;
 	private Integer empId;
-	private Integer outSid;
-	private Integer inSid;
+	private Integer outAppid;
+	private Integer inAppid;
 	private Integer num;
 	private Double money;
 	/**
@@ -53,12 +53,12 @@ public class Bill extends BaseEntity {
 		this.eid = eid;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public String getNo() {
@@ -93,20 +93,20 @@ public class Bill extends BaseEntity {
 		this.empId = empId;
 	}
 
-	public Integer getOutSid() {
-		return outSid;
+	public Integer getOutAppid() {
+		return outAppid;
 	}
 
-	public void setOutSid(Integer outSid) {
-		this.outSid = outSid;
+	public void setOutAppid(Integer outAppid) {
+		this.outAppid = outAppid;
 	}
 
-	public Integer getInSid() {
-		return inSid;
+	public Integer getInAppid() {
+		return inAppid;
 	}
 
-	public void setInSid(Integer inSid) {
-		this.inSid = inSid;
+	public void setInAppid(Integer inAppid) {
+		this.inAppid = inAppid;
 	}
 
 	public Integer getNum() {

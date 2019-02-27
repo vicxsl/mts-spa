@@ -30,7 +30,7 @@ public class SpaGoodsSupplier extends BaseEntity{
 
     private String status;
 
-    private Integer sid;
+    private String appid;
 
     private Integer eid;
 
@@ -98,12 +98,12 @@ public class SpaGoodsSupplier extends BaseEntity{
 		this.status = status;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public Integer getEid() {

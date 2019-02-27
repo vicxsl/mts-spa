@@ -11,7 +11,7 @@ public class Reservation extends BaseEntity {
 	private static final long serialVersionUID = 7035203632472989347L;
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private Integer memId; // 客户ID
 	private String memName; // 客户姓名
 	private String memMobile; 
@@ -40,11 +40,11 @@ public class Reservation extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 	public Integer getMemId() {
 		return memId;

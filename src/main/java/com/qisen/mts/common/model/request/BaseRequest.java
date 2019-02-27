@@ -14,7 +14,7 @@ public class BaseRequest<T> implements Serializable {
 	private static final long serialVersionUID = -7280804637908279226L;
 	
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private String token;
 	private String scope;
 	private String lang;
@@ -31,12 +31,12 @@ public class BaseRequest<T> implements Serializable {
 		this.eid = eid;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public String getToken() {

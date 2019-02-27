@@ -12,13 +12,13 @@
 		<result column="OtherLinkMobile" property="otherlinkmobile"
 			jdbcType="VARCHAR" />
 		<result column="Status" property="status" jdbcType="CHAR" />
-		<result column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="appid" property="appid" jdbcType="INTEGER" />
 		<result column="eid" property="eid" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		Id, Name, Address, Linkman, LinkMobile, OtherLinkman,
 		OtherLinkMobile,
-		Status, sid,
+		Status, appid,
 		eid
 	</sql>
 	<select id="selectSuppliers" resultMap="BaseResultMap">
@@ -54,8 +54,8 @@
 			<if test="status != null">
 				and Status = #{status,jdbcType=CHAR}
 			</if>
-			<if test="sid != null">
-				and sid = #{sid,jdbcType=INTEGER}
+			<if test="appid != null">
+				and appid = #{appid,jdbcType=INTEGER}
 			</if>
 			<if test="eid != null">
 				and eid = #{eid,jdbcType=INTEGER}
@@ -73,7 +73,7 @@
 		Name, Address,
 		Linkman, LinkMobile, OtherLinkman,
 		OtherLinkMobile,
-		Status, sid,
+		Status, appid,
 		eid)
 		values (#{id,jdbcType=INTEGER},
 		#{name,jdbcType=VARCHAR},
@@ -82,7 +82,7 @@
 		#{otherlinkman,jdbcType=VARCHAR},
 		#{otherlinkmobile,jdbcType=VARCHAR},
 		#{status,jdbcType=CHAR},
-		#{sid,jdbcType=INTEGER},
+		#{appid,jdbcType=INTEGER},
 		#{eid,jdbcType=INTEGER})
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsSupplier">
@@ -109,8 +109,8 @@
 			<if test="status != null">
 				Status = #{status,jdbcType=CHAR},
 			</if>
-			<if test="sid != null">
-				sid = #{sid,jdbcType=INTEGER},
+			<if test="appid != null">
+				appid = #{appid,jdbcType=INTEGER},
 			</if>
 			<if test="eid != null">
 				eid = #{eid,jdbcType=INTEGER},

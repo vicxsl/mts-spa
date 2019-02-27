@@ -30,8 +30,8 @@
 	<!--新增商品类型  -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsSubType">
 		<![CDATA[
-			insert into goodsSubType(eid,sid,typeId,subTypeName,subTypeNo,status) 
-			values(#{eid},#{sid},#{typeId},#{subTypeName},#{subTypeNo},0)
+			insert into goodsSubType(eid,appid,typeId,subTypeName,subTypeNo,status) 
+			values(#{eid},#{appid},#{typeId},#{subTypeName},#{subTypeNo},0)
 		]]>
 	</insert>
 	
@@ -42,7 +42,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid} and id=#{id}
+				eid = #{eid} and appid = #{appid} and id=#{id}
 			]]>
 		</where>
 	</delete>
@@ -76,7 +76,7 @@
 		</set>
 		<where>
 			<![CDATA[
-				 eid = #{eid} and sid = #{sid} and id = #{id}
+				 eid = #{eid} and appid = #{appid} and id = #{id}
 			]]>
 		</where>
 	</update>
@@ -88,7 +88,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid}
+				eid = #{eid} and appid = #{appid}
 			]]>
 			<if test="subTypeNo != null and subTypeNo !=''">
 				<![CDATA[

@@ -16,7 +16,7 @@ public class Vacation extends BaseEntity {
 	private static final long serialVersionUID = -8535738352817563162L;
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private Integer  empId;
 	private String  empName;
 	private Date  vacationDate;
@@ -46,11 +46,11 @@ public class Vacation extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 	public Date getVacationDate() {
 		return vacationDate;

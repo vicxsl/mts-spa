@@ -14,13 +14,13 @@
 		<result column="TotalMoney" property="totalMoney" jdbcType="DOUBLE" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="Status" property="status" jdbcType="CHAR" />
-		<result column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="appid" property="appid" jdbcType="INTEGER" />
 		<result column="eid" property="eid" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		Id, Name, No, Barcode, unit, spec, Num, salePrice, TotalMoney,
 		remark,
-		Status, sid, eid
+		Status, appid, eid
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
@@ -37,7 +37,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and sid = #{sid} and inOutNo = #{inOutNo}
+				eid = #{eid} and appid = #{appid} and inOutNo = #{inOutNo}
 			]]>
 		</where>
 	</select>
@@ -67,8 +67,8 @@
 			<if test="status != null">
 				and i.Status = #{status,jdbcType=CHAR}
 			</if>
-			<if test="sid != null">
-				and i.sid = #{sid,jdbcType=INTEGER}
+			<if test="appid != null">
+				and i.appid = #{appid,jdbcType=INTEGER}
 			</if>
 			<if test="eid != null">
 				and i.eid = #{eid,jdbcType=INTEGER}
@@ -87,7 +87,7 @@
 		Barcode, unit, spec,
 		Num, salePrice, TotalMoney,
 		remark, Status,
-		sid, eid
+		appid, eid
 		)
 		values ( #{name,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR},
 		#{barcode,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR},
@@ -95,18 +95,18 @@
 		#{num,jdbcType=DOUBLE},
 		#{salePrice,jdbcType=DOUBLE}, #{totalMoney,jdbcType=DOUBLE},
 		#{remark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
-		#{sid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
+		#{appid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
 		)
 	</insert>
 
 	<insert id="saveList" parameterType="java.util.List">
 		insert into inOutDepotDetail (
 		goodsId,InOutNo, Num, salePrice,TotalMoney,
-		remark, Status, sid, eid) values
+		remark, Status, appid, eid) values
 		<foreach collection="list" item="goods" index="index"
 			separator=",">
 			(#{goods.goodsId},#{goods.inOutNo},#{goods.num},#{goods.salePrice},#{goods.totalMoney},#{goods.remark},
-			#{goods.status},#{goods.sid},#{goods.eid})
+			#{goods.status},#{goods.appid},#{goods.eid})
 		</foreach>
 	</insert>
 
@@ -143,8 +143,8 @@
 			<if test="status != null">
 				Status = #{status,jdbcType=CHAR},
 			</if>
-			<if test="sid != null">
-				sid = #{sid,jdbcType=INTEGER},
+			<if test="appid != null">
+				appid = #{appid,jdbcType=INTEGER},
 			</if>
 			<if test="eid != null">
 				eid = #{eid,jdbcType=INTEGER},

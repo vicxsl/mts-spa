@@ -11,7 +11,7 @@ public class ShopSetting extends BaseEntity {
 	
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private Integer mid;
 	private String key;
 	private String value;
@@ -27,11 +27,11 @@ public class ShopSetting extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 	public Integer getMid() {
 		return mid;

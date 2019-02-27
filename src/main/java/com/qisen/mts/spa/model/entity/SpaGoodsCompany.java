@@ -8,7 +8,7 @@ public class SpaGoodsCompany extends BaseEntity{
 
     private String name;
     
-    private Integer sid;
+    private String appid;
     
     private Integer eid;
 
@@ -34,12 +34,12 @@ public class SpaGoodsCompany extends BaseEntity{
 		this.name = name;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public Integer getEid() {

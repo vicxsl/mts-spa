@@ -11,7 +11,7 @@ public class EmpGrade extends BaseEntity {
 
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private String no;
 	private String name;
 	private String gtype;
@@ -33,12 +33,12 @@ public class EmpGrade extends BaseEntity {
 		this.eid = eid;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public String getNo() {

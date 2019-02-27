@@ -10,7 +10,7 @@ public class ItemPrice extends BaseEntity {
 	private static final long serialVersionUID = -1630140863280972613L;
 
 	private Integer id;
-	private Integer sid;
+	private String appid;
 	private String itemNo;
 	private String img;
 	private String tagNos;
@@ -25,12 +25,12 @@ public class ItemPrice extends BaseEntity {
 		this.id = id;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public String getItemNo() {
@@ -75,7 +75,7 @@ public class ItemPrice extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "ItemPrice [id=" + id + ", sid=" + sid + ", itemNo=" + itemNo + ", img=" + img + ", tagNos=" + tagNos
+		return "ItemPrice [id=" + id + ", appid=" + appid + ", itemNo=" + itemNo + ", img=" + img + ", tagNos=" + tagNos
 				+ ", price=" + price + ", type=" + type + "]";
 	}
 

@@ -66,9 +66,9 @@ public class BaseResponse {
 		this.lastUpdateTs4s = lastUpdateTs4s;
 	}
 
-	public void notify4Metadata(Integer eid, Integer sid) {
+	public void notify4Metadata(Integer eid, String appid) {
 		this.lastUpdateTs4e = eid != null ? eid.longValue() : null;
-		this.lastUpdateTs4s = sid != null ? sid.longValue() : null;
+		this.lastUpdateTs4s = appid != null ? eid.longValue() : null;
 		this.setResult(ResultCode.UPDATE_METADATA);
 	}
 	

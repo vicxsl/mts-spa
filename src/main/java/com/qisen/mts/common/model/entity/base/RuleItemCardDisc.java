@@ -10,7 +10,7 @@ public class RuleItemCardDisc extends BaseEntity {
 
 	private Integer id;
 	private Integer eid;
-	private Integer sid;
+	private String appid;
 	private String itemNo;
 	private String cardTypeNo;
 	private Integer way;
@@ -32,12 +32,12 @@ public class RuleItemCardDisc extends BaseEntity {
 		this.eid = eid;
 	}
 
-	public Integer getSid() {
-		return sid;
+	public String getAppid() {
+		return appid;
 	}
 
-	public void setSid(Integer sid) {
-		this.sid = sid;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 
 	public String getItemNo() {
