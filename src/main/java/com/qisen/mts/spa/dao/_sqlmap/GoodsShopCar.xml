@@ -35,7 +35,7 @@
 	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar"
 		parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		<![CDATA[
-			select a.*,b.name,b.unit,b.salePrice,b.preferencePrice,b.spec from goodsShopCar a,goods b
+			select a.*,b.name,b.unit,b.salePrice,b.preferencePrice,b.spec,b.imgUrl from goodsShopCar a,goods b
 		]]>
 		<where>
 			<![CDATA[

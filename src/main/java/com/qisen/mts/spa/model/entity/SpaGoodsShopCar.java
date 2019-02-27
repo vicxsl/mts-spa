@@ -17,6 +17,13 @@ public class SpaGoodsShopCar extends BaseEntity {
 	private Integer eid;
 	private String appid;
 	private Integer goodsId;
+	private String imgUrl;
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 	private String createDate;//加入时间
 	private String name;//商品名称
 	private String unit;//单位
