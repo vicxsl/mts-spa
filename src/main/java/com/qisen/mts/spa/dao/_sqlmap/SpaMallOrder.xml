@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.SpaMallOrderDao">
+
+	<!--新增订单  -->
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+		<![CDATA[
+			insert into mallOrder(eid,appid,openid,totalMoney,preFee,expressCost,realFee,
+			inOutDepotId,flowNo,createTime,status) values (#{eid},#{appid},#{openid},
+			#{totalMoney},#{preFee},#{expressCost},#{realFee},#{inOutDepotId},#{flowNo},
+			now(),#{status})
+		]]>
+	</insert>
+	
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaMallOrder" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+		select * from mallOrder
+
+		<where>
+			<if test="appid != null">
+				and appid = #{appid}
+			</if>
+			<if test="eid != null">
+				and eid = #{eid}
+			</if>
+			<if test="openid != null">
+				and openid = #{openid}
+			</if>
+		</where>
+	</select>
+	
+</mapper>
