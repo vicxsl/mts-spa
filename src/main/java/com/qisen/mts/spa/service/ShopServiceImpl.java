@@ -2,19 +2,26 @@ package com.qisen.mts.spa.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.spa.controller.ShopController;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
 public class ShopServiceImpl implements ShopService{
+	
+	private static final Logger logger = LoggerFactory.getLogger(ShopServiceImpl.class);
+	
 	
 	@Autowired
 	private ShopDao shopDao;
@@ -43,7 +50,7 @@ public class ShopServiceImpl implements ShopService{
 	 */
 	@Override
 	public CommObjResponse<JSONArray> queryRotateImg(SpaRequest<JSONObject> req) {
-		// TODO Auto-generated method stub
+		logger.info("查询轮播图urls开始req:{}",JSON.toJSON(req));
 		return null;
 	}
 
@@ -52,7 +59,7 @@ public class ShopServiceImpl implements ShopService{
 	 */
 	@Override
 	public CommObjResponse<JSONArray> queryGoodList(SpaRequest<JSONObject> req) {
-		// TODO Auto-generated method stub
+		logger.info("查询商品列表开始req:{}",JSON.toJSON(req));
 		return null;
 	}
 
