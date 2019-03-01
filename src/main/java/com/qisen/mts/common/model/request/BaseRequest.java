@@ -15,7 +15,7 @@ public class BaseRequest<T> implements Serializable {
 	
 	private Integer eid;
 	private String appid;
-	private String token;
+	private String token;//小程序 token是openid,商户管理token 是生成的token
 	private String scope;
 	private String lang;
 	

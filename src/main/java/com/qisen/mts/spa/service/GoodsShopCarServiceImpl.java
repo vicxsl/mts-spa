@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.qisen.mts.common.model.ResultCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
 import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
@@ -34,10 +33,13 @@ public class GoodsShopCarServiceImpl implements GoodsShopCarService {
 	public CommObjResponse<Integer> saveList(SpaRequest<List<SpaGoodsShopCar>> req) {
 		CommObjResponse<Integer> response = new CommObjResponse<Integer>();
 		List<SpaGoodsShopCar> shopCarList=req.getBody();
+		SpaGoodsShopCar shopCar = new SpaGoodsShopCar();
+		shopCar.setEid(req.getEid());
+		shopCar.setAppid(req.getAppid());
+		shopCar.setOpenid(req.getToken());
+		goodsShopCarDao.deleteByOpenid(shopCar);
 		if(!CollectionUtils.isEmpty(shopCarList)){
-			goodsShopCarDao.deleteByOpenid(shopCarList.get(0));
 			goodsShopCarDao.saveList(shopCarList);
-			response.setResult(ResultCode.SUCCESS);
 		}
 		return response;
 	}
