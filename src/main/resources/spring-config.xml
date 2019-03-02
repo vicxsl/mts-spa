@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
@@ -10,7 +12,18 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
 
-	<context:component-scan base-package="com.qisen.mts"/>
+	<context:component-scan
+		base-package="com.qisen.mts" />
+
+	<!-- 加载属性文件 -->
+	<bean id="configProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:sp.properties</value>
+			</list>
+		</property>
+	</bean>
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -19,8 +32,9 @@
 		</property>
 	</bean>
 
-	<bean id="dataSourceRW" class="com.alibaba.druid.pool.DruidDataSource"
-		init-method="init" destroy-method="close">
+	<bean id="dataSourceRW"
+		class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+		destroy-method="close">
 		<!-- 基本属性 url、user、password -->
 		<property name="url" value="${url}" />
 		<property name="username" value="${username}" />
@@ -54,15 +68,19 @@
 		<property name="filters" value="stat" />
 	</bean>
 
-	<bean id="mybatisConfiguration" class="org.apache.ibatis.session.Configuration">
+	<bean id="mybatisConfiguration"
+		class="org.apache.ibatis.session.Configuration">
 		<property name="jdbcTypeForNull" value="NULL" />
 	</bean>
 
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="mapperLocations" value="classpath:com/qisen/mts/*/dao/_sqlmap/*.xml"/>
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="mapperLocations"
+			value="classpath:com/qisen/mts/*/dao/_sqlmap/*.xml" />
 		<property name="dataSource" ref="dataSourceRW" />
 		<property name="configuration" ref="mybatisConfiguration" />
-		<property name="typeHandlersPackage" value="com.qisen.mts.common.util.handler"/>
+		<property name="typeHandlersPackage"
+			value="com.qisen.mts.common.util.handler" />
 	</bean>
 
 	<bean id="transactionManager"
@@ -71,15 +89,20 @@
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.qisen.mts.spa.dao,com.qisen.mts.common.dao" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage"
+			value="com.qisen.mts.spa.dao,com.qisen.mts.common.dao" />
+		<property name="sqlSessionFactoryBeanName"
+			value="sqlSessionFactory" />
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
 
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+	<tx:advice id="txAdvice"
+		transaction-manager="transactionManager">
 		<tx:attributes>
-			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception,com.qisen.mts.gateway.ExceptionWithCode"/>
+			<tx:method name="*" propagation="REQUIRED"
+				rollback-for="Exception,com.qisen.mts.gateway.ExceptionWithCode" />
 			<tx:method name="get*" read-only="true" />
 			<tx:method name="list*" read-only="true" />
 			<tx:method name="query*" read-only="true" />
@@ -91,7 +114,8 @@
 
 	<aop:config>
 		<!-- 定义一个切入点 -->
-		<aop:pointcut expression="execution (* com.qisen.mts..service..*Impl.*(..))"
+		<aop:pointcut
+			expression="execution (* com.qisen.mts..service..*Impl.*(..))"
 			id="services" />
 		<!-- 对切入点和事务的通知，进行适配 -->
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="services" />
@@ -99,7 +123,8 @@
 
 	<!-- XMemcachedClientBuilder have two arguments.First is server list,and 
 		second is weights array. -->
-	<bean name="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder">
+	<bean name="memcachedClientBuilder"
+		class="net.rubyeye.xmemcached.XMemcachedClientBuilder">
 		<constructor-arg>
 			<list>
 				<bean class="java.net.InetSocketAddress">
@@ -120,10 +145,12 @@
 			<bean class="net.rubyeye.xmemcached.command.TextCommandFactory"></bean>
 		</property>
 		<property name="sessionLocator">
-			<bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"></bean>
+			<bean
+				class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"></bean>
 		</property>
 		<property name="transcoder">
-			<bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" />
+			<bean
+				class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" />
 		</property>
 	</bean>
 
@@ -131,7 +158,8 @@
 	<bean name="memcachedClient" factory-bean="memcachedClientBuilder"
 		factory-method="build" destroy-method="shutdown" />
 
-	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+	<bean id="captchaProducer"
+		class="com.google.code.kaptcha.impl.DefaultKaptcha">
 		<property name="config">
 			<bean class="com.google.code.kaptcha.util.Config">
 				<constructor-arg>

@@ -17,6 +17,13 @@ public class MetaData extends BaseEntity {
 	private SpaShop shop;
 	private SpaMember member;
 	private List<SpaGoodsShopCar> shopCarList;//购物车
+	private String photoPath;//图片地址
+	public String getPhotoPath() {
+		return photoPath;
+	}
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
+	}
 	public SpaShop getShop() {
 		return shop;
 	}
