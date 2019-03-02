@@ -3,6 +3,7 @@ package com.qisen.mts.spa.dao;
 import java.util.List;
 
 import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
+import com.qisen.mts.spa.model.entity.SpaMallOrder;
 
 public interface GoodsShopCarDao {
 	/**
@@ -25,5 +26,7 @@ public interface GoodsShopCarDao {
 	 * @return
 	 */
 	public List<SpaGoodsShopCar> list(SpaGoodsShopCar spa);
+	
+	public void deleteByOrder(SpaMallOrder order);
 	
 }

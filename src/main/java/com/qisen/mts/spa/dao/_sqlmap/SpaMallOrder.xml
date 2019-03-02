@@ -4,29 +4,71 @@
 <mapper namespace="com.qisen.mts.spa.dao.SpaMallOrderDao">
 
 	<!--新增订单  -->
-	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			insert into mallOrder(eid,appid,openid,totalMoney,preFee,expressCost,realFee,
-			inOutDepotId,flowNo,createTime,status) values (#{eid},#{appid},#{openid},
-			#{totalMoney},#{preFee},#{expressCost},#{realFee},#{inOutDepotId},#{flowNo},
-			now(),#{status})
+			insert into mallOrder(id,eid,appid,openid,totalMoney,preFee,expressCost,realFee,goodsCost,bonusCost,orderProfit,inOutDepotId,flowNo,createTime,status) 
+			values (#{id},#{eid},#{appid},#{openid},#{totalMoney},#{preFee},#{expressCost},#{realFee},#{goodsCost},#{bonusCost},#{orderProfit},#{inOutDepotId},#{flowNo},now(),0)
 		]]>
 	</insert>
 	
-	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaMallOrder" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
-		select * from mallOrder
-
+	<select id="list" resultMap="orderMap" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+		<![CDATA[
+			select a.*,b.* ,c.* from mallOrder a,memberAddress b, inOutDepotDetail c
+		]]>
 		<where>
-			<if test="appid != null">
-				and appid = #{appid}
-			</if>
-			<if test="eid != null">
-				and eid = #{eid}
-			</if>
-			<if test="openid != null">
-				and openid = #{openid}
-			</if>
+			<![CDATA[
+				a.appid = #{appid} and a.eid = #{eid}  and a.openid = #{openid} and a.id = b.orderId and a.id = c.orderId
+			]]>
 		</where>
 	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaMallOrder" id="orderMap">
+         <id property="id" column="id"/>
+         <result property="id" column="id"/>
+         <result property="eid" column="eid"/>
+         <result property="appid" column="appid"/>
+         <result property="openid" column="openid"/>
+         <result property="totalMoney" column="totalMoney"/>
+         <result property="preFee" column="preFee"/>
+         <result property="expressCost" column="expressCost"/>
+         <result property="realFee" column="realFee"/>
+         <result property="flowNo" column="flowNo"/>
+         <result property="createTime" column="createTime"/>
+         <result property="status" column="status"/>
+         <result property="goodsCost" column="goodsCost"/>
+         <result property="bonusCost" column="bonusCost"/>
+         <result property="orderProfit" column="orderProfit"/>
+         <association property="memberAddress" javaType="com.qisen.mts.spa.model.entity.MemberAddress">
+             <id property="id" column="id"/>
+             <result property="id" column="id"/>
+	         <result property="eid" column="eid"/>
+	         <result property="appid" column="appid"/>
+	         <result property="openid" column="openid"/>
+             <result property="userName" column="userName"/>
+             <result property="postalCode" column="postalCode"/>
+             <result property="provinceName" column="provinceName"/>
+             <result property="cityName" column="cityName"/>
+             <result property="countyName" column="countyName"/>
+             <result property="detailInfo" column="detailInfo"/>
+             <result property="nationalCode" column="nationalCode"/>
+             <result property="telNumber" column="telNumber"/>
+             <result property="orderId" column="orderId"/>
+             <result property="status" column="status"/>
+         </association>
+        <!-- ofType指定students集合中的对象类型 -->
+         <collection property="goodsList" ofType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
+             <id property="id" column="id"/>
+             <result property="id" column="id"/>
+	         <result property="eid" column="eid"/>
+	         <result property="appid" column="appid"/>
+	         <result property="openid" column="openid"/>
+             <result property="goodsId" column="goodsId"/>
+             <result property="orderId" column="orderId"/>
+             <result property="num" column="num"/>
+             <result property="preferencePrice" column="preferencePrice"/>
+             <result property="costPrice" column="costPrice"/>
+             <result property="totalMoney" column="totalMoney"/>
+             <result property="status" column="status"/>
+         </collection>
+     </resultMap>
 	
 </mapper>

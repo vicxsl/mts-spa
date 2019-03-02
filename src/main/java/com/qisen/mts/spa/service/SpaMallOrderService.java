@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaMallOrder;
+import com.qisen.mts.spa.model.request.SpaRequest;
 
 public interface SpaMallOrderService {
 
-	CommObjResponse<List<SpaMallOrder>> save(SpaMallOrder body);
+	CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req);
 
-	CommObjResponse<List<SpaMallOrder>> list(SpaMallOrder body);
+	CommObjResponse<List<SpaMallOrder>> list(SpaRequest<SpaMallOrder> req);
 
 }

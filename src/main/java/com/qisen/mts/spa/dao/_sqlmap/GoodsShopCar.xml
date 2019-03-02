@@ -14,6 +14,19 @@
 	</insert>
 
 
+<delete id="deleteByOrder" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+		delete from goodsShopCar
+		<where>
+			<![CDATA[
+				appid = #{appid}  and eid = #{eid} and openid=#{openid} and goodsId in 
+			]]>
+			<foreach collection="goodsList" item="goods" index="index" separator=",">
+				<![CDATA[
+					(#{goods.goodsId})
+				]]>
+			</foreach>
+		</where>
+	</delete>
 	
 	<delete id="deleteByOpenid" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		<![CDATA[
