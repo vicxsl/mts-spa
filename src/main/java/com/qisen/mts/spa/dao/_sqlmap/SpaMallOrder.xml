@@ -13,11 +13,11 @@
 	
 	<select id="list" resultMap="orderMap" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
 		<![CDATA[
-			select a.*,b.* ,c.* from mallOrder a,memberAddress b, inOutDepotDetail c
+			select a.*,b.* ,c.*,d.name  from mallOrder a,memberAddress b, inOutDepotDetail c, goods d
 		]]>
 		<where>
 			<![CDATA[
-				a.appid = #{appid} and a.eid = #{eid}  and a.openid = #{openid} and a.id = b.orderId and a.id = c.orderId
+				a.appid = #{appid} and a.eid = #{eid}  and a.openid = #{openid} and a.id = b.orderId and a.id = c.orderId and c.goodsId = d.id
 			]]>
 		</where>
 	</select>
@@ -68,6 +68,8 @@
              <result property="costPrice" column="costPrice"/>
              <result property="totalMoney" column="totalMoney"/>
              <result property="status" column="status"/>
+             <result property="name"  column="name"/>
+         
          </collection>
      </resultMap>
 	

@@ -7,9 +7,8 @@
 	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		insert into goodsShopCar
 		(eid,appid,goodsId,openid,num,createDate,updateTime,status,sel) values
-		<foreach collection="list" item="goods" index="index"
-			separator=",">
-			(#{goods.eid},#{goods.appid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},#{goods.updateTime},0,#{goods.sel})
+		<foreach collection="list" item="goods" index="index" open="("  separator="," close=")">
+			#{goods.eid},#{goods.appid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},#{goods.updateTime},0,#{goods.sel}
 		</foreach>
 	</insert>
 
@@ -20,9 +19,9 @@
 			<![CDATA[
 				appid = #{appid}  and eid = #{eid} and openid=#{openid} and goodsId in 
 			]]>
-			<foreach collection="goodsList" item="goods" index="index" separator=",">
+			<foreach collection="goodsList" item="goods" index="index" open="("  separator="," close=")">
 				<![CDATA[
-					(#{goods.goodsId})
+					#{goods.goodsId}
 				]]>
 			</foreach>
 		</where>
