@@ -18,22 +18,17 @@ public class SpaGoodsShopCar extends BaseEntity {
 	private String appid;
 	private Integer goodsId;
 	private String imgUrl;
-	public String getImgUrl() {
-		return imgUrl;
-	}
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
-	}
 	private String createDate;//加入时间
 	private String name;//商品名称
 	private String unit;//单位
 	private String spec;//规格
 	private String salePrice;//销售价
+	private String costPrice;//成本价
 	private String preferencePrice;//优惠价
 	private String updateTime;//更新时间
 	private Integer num;//商品数量
 	private String status;// 状态:0正常,1停售,-1删除
-	private String openid;//加入时间
+	private String openid;//会员id
 	private String sel;//是否选中:0未选中，1已选中
 	public String getSel() {
 		return sel;
@@ -124,5 +119,17 @@ public class SpaGoodsShopCar extends BaseEntity {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+	public String getCostPrice() {
+		return costPrice;
+	}
+	public void setCostPrice(String costPrice) {
+		this.costPrice = costPrice;
 	}
 }

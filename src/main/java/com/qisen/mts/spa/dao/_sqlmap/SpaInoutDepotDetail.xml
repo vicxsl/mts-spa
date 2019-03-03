@@ -1,155 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qisen.mts.spa.dao.SpaInoutDepotDetailDao">
-	<resultMap id="BaseResultMap"
-		type="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
-		<id column="Id" property="id" jdbcType="INTEGER" />
-		<result column="Name" property="name" jdbcType="VARCHAR" />
-		<result column="No" property="no" jdbcType="VARCHAR" />
-		<result column="Barcode" property="barCode" jdbcType="VARCHAR" />
-		<result column="unit" property="unit" jdbcType="VARCHAR" />
-		<result column="spec" property="spec" jdbcType="VARCHAR" />
-		<result column="Num" property="num" jdbcType="DOUBLE" />
-		<result column="salePrice" property="salePrice" jdbcType="DOUBLE" />
-		<result column="TotalMoney" property="totalMoney" jdbcType="DOUBLE" />
-		<result column="remark" property="remark" jdbcType="VARCHAR" />
-		<result column="Status" property="status" jdbcType="CHAR" />
-		<result column="appid" property="appid" jdbcType="INTEGER" />
-		<result column="eid" property="eid" jdbcType="INTEGER" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		Id, Name, No, Barcode, unit, spec, Num, salePrice, TotalMoney,
-		remark,
-		Status, appid, eid
-	</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
-		parameterType="java.lang.Integer">
-		select
-		<include refid="Base_Column_List" />
-		from inOutDepotDetail
-		where Id = #{id,jdbcType=INTEGER}
-	</select>
+
 
 	<!-- 通过出入库单号查询出入库明细 -->
-	<select id="queryByInOutNo"  resultType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
+	<select id="queryByOrder" resultType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail"
+		parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
 		<![CDATA[
 			select * from inOutDepotDetail
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and appid = #{appid} and inOutNo = #{inOutNo}
+				eid = #{eid} and appid = #{appid} and orderId = #{orderId}
 			]]>
 		</where>
 	</select>
-	
-	<select id="list" resultMap="BaseResultMap">
-		select g.name,g.id,g.unit,g.spec,i.Num,i.salePrice,i.status,i.remark,i.TotalMoney
-		FROM goods g ,inOutDepotDetail i
-		<where>
-			i.goodsId = g.id
-			<if test="no != null">
-				<bind name="query_no" value="'%'+no+'%'" />
-				and No like #{query_no}
-			</if>
-			<if test="num != null">
-				and Num = #{num,jdbcType=DOUBLE}
-			</if>
-			<if test="salePrice != null">
-				and salePrice = #{salePrice,jdbcType=DOUBLE}
-			</if>
-			<if test="totalMoney != null">
-				and TotalMoney = #{totalMoney,jdbcType=DOUBLE}
-			</if>
-			<if test="remark != null">
-				<bind name="query_remark" value="'%'+remark+'%'" />
-				and remark like #{query_remark}
-			</if>
-			<if test="status != null">
-				and i.Status = #{status,jdbcType=CHAR}
-			</if>
-			<if test="appid != null">
-				and i.appid = #{appid,jdbcType=INTEGER}
-			</if>
-			<if test="eid != null">
-				and i.eid = #{eid,jdbcType=INTEGER}
-			</if>
-		</where>
-	</select>
 
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from
-		inOutDepotDetail
-		where Id = #{id,jdbcType=INTEGER}
-	</delete>
-	<insert id="insert" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
-		insert into inOutDepotDetail (
-		Name, No,
-		Barcode, unit, spec,
-		Num, salePrice, TotalMoney,
-		remark, Status,
-		appid, eid
-		)
-		values ( #{name,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR},
-		#{barcode,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR},
-		#{spec,jdbcType=VARCHAR},
-		#{num,jdbcType=DOUBLE},
-		#{salePrice,jdbcType=DOUBLE}, #{totalMoney,jdbcType=DOUBLE},
-		#{remark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
-		#{appid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}
-		)
-	</insert>
 
 	<insert id="saveList" parameterType="java.util.List">
-		insert into inOutDepotDetail (
-		goodsId,InOutNo, Num, salePrice,TotalMoney,
-		remark, Status, appid, eid) values
-		<foreach collection="list" item="goods" index="index"
-			separator=",">
-			(#{goods.goodsId},#{goods.inOutNo},#{goods.num},#{goods.salePrice},#{goods.totalMoney},#{goods.remark},
-			#{goods.status},#{goods.appid},#{goods.eid})
+		insert into inOutDepotDetail (goodsId,orderId, num,preferencePrice,costPrice,totalMoney,status, appid, eid)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.goodsId},#{item.orderId},#{item.num},#{item.preferencePrice},#{item.costPrice},#{item.totalMoney},#{item.status},#{item.appid},#{item.eid})
 		</foreach>
 	</insert>
 
-	<update id="updateByPrimaryKey" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
-		update inOutDepotDetail
+	<update id="updateByOrder" parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
+		<![CDATA[
+			update inOutDepotDetail
+		]]>
 		<set>
-			<if test="name != null">
-				Name = #{name,jdbcType=VARCHAR},
-			</if>
-			<if test="no != null">
-				No = #{no,jdbcType=VARCHAR},
-			</if>
-			<if test="barcode != null">
-				Barcode = #{barcode,jdbcType=VARCHAR},
-			</if>
-			<if test="unit != null">
-				unit = #{unit,jdbcType=VARCHAR},
-			</if>
-			<if test="spec != null">
-				spec = #{spec,jdbcType=VARCHAR},
-			</if>
-			<if test="num != null">
-				Num = #{num,jdbcType=DOUBLE},
-			</if>
-			<if test="salePrice != null">
-				salePrice = #{salePrice,jdbcType=DOUBLE},
-			</if>
-			<if test="totalMoney != null">
-				TotalMoney = #{totalMoney,jdbcType=DOUBLE},
-			</if>
-			<if test="remark != null">
-				remark = #{remark,jdbcType=VARCHAR},
-			</if>
 			<if test="status != null">
-				Status = #{status,jdbcType=CHAR},
-			</if>
-			<if test="appid != null">
-				appid = #{appid,jdbcType=INTEGER},
-			</if>
-			<if test="eid != null">
-				eid = #{eid,jdbcType=INTEGER},
+				<![CDATA[
+					Status = #{status,jdbcType=CHAR},
+				]]>
 			</if>
 		</set>
-		where Id = #{id,jdbcType=INTEGER}
+			<![CDATA[
+				where  appid = #{appid} and eid = #{eid} and orderId = #{orderId}
+			]]>
 	</update>
 </mapper>

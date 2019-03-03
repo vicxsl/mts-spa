@@ -48,7 +48,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 			List<SpaGoods> goodsList = new ArrayList<SpaGoods>(); 
 			SpaGoods goods = null;
 			for(SpaInoutDepotDetail spaInoutDepotDetail:detailList){
-				spaInoutDepotDetail.setInOutNo(record.getNo());
+//				spaInoutDepotDetail.setOrderId(record.geto);(record.getNo());
 				Integer goodsId = spaInoutDepotDetail.getId();
 				spaInoutDepotDetail.setId(null);
 				spaInoutDepotDetail.setGoodsId(goodsId);
@@ -100,7 +100,7 @@ public class SpaInoutDepotServiceImpl implements SpaInoutDepotService{
 		CommObjResponse<SpaInoutDepot> response = new CommObjResponse<SpaInoutDepot>();
 		List<SpaInoutDepot> InoutDepot = spaInoutDepotDao.list(body);
 		SpaInoutDepotDetail detail = new SpaInoutDepotDetail();
-		detail.setInOutNo(body.getNo());
+//		detail.setInOutNo(body.getNo());
 		detail.setEid(body.getEid());
 		detail.setAppid(body.getAppid());
 		List<SpaInoutDepotDetail> detailList = inoutDepotDetailDao.list(detail);

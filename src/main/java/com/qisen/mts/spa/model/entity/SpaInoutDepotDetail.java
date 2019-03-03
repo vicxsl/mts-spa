@@ -12,9 +12,10 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
     private String name;
     
-    private String inOutNo;//出入库表编号
+    private Integer orderId;//出入库表编号
 
     private String no;
+    private String openid;//会员id
     
     private Integer goodsId;//产品id
 
@@ -27,7 +28,8 @@ public class SpaInoutDepotDetail extends BaseEntity{
     private Double num;
 
     private Double salePrice;
-
+    private Double costPrice;
+    private Double preferencePrice;
     private Double totalMoney;
 
     private String remark;
@@ -56,12 +58,12 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.name = name;
 	}
 
-	public String getInOutNo() {
-		return inOutNo;
+	public Integer getOrderId() {
+		return orderId;
 	}
 
-	public void setInOutNo(String inOutNo) {
-		this.inOutNo = inOutNo;
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getNo() {
@@ -160,5 +162,28 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.eid = eid;
 	}
 
+	public Double getCostPrice() {
+		return costPrice;
+	}
+
+	public void setCostPrice(Double costPrice) {
+		this.costPrice = costPrice;
+	}
+
+	public Double getPreferencePrice() {
+		return preferencePrice;
+	}
+
+	public void setPreferencePrice(Double preferencePrice) {
+		this.preferencePrice = preferencePrice;
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
 	
 }

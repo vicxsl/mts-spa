@@ -22,14 +22,14 @@ public class SpaMallOrderController {
 	
 	@RequestMapping("/save")
 	@ResponseBody
-	public CommObjResponse<List<SpaMallOrder>> save(@RequestBody SpaRequest<SpaMallOrder> req) throws Exception {
-		return spaMallOrderService.save(req.getBody());
+	public CommObjResponse<SpaMallOrder> save(@RequestBody SpaRequest<SpaMallOrder> req) throws Exception {
+		return spaMallOrderService.save(req);
 	}
 	
 	@RequestMapping("/list")
 	@ResponseBody
 	public CommObjResponse<List<SpaMallOrder>> list(@RequestBody SpaRequest<SpaMallOrder> req) throws Exception {
-		return spaMallOrderService.list(req.getBody());
+		return spaMallOrderService.list(req);
 	}
 
 }

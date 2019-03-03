@@ -20,12 +20,15 @@ public class SpaMallOrder extends BaseEntity {
 	private double preFee;//优惠金额
 	private double expressCost;//运输费用
 	private double realFee;//结算金额
+	private double goodsCost;//商品总成本
+	private double bonusCost;//新零售成本
+	private double orderProfit;//订单实际利润
 	private String inOutDepotId;//出库id
 	private String flowNo;//物流单号
 	private String createTime;
 	private String status;
 	private List<SpaInoutDepotDetail> goodsList;
-	
+	private MemberAddress memberAddress;
 	public Integer getId() {
 		return id;
 	}
@@ -74,6 +77,24 @@ public class SpaMallOrder extends BaseEntity {
 	public void setRealFee(double realFee) {
 		this.realFee = realFee;
 	}
+	public double getGoodsCost() {
+		return goodsCost;
+	}
+	public void setGoodsCost(double goodsCost) {
+		this.goodsCost = goodsCost;
+	}
+	public double getBonusCost() {
+		return bonusCost;
+	}
+	public void setBonusCost(double bonusCost) {
+		this.bonusCost = bonusCost;
+	}
+	public double getOrderProfit() {
+		return orderProfit;
+	}
+	public void setOrderProfit(double orderProfit) {
+		this.orderProfit = orderProfit;
+	}
 	public String getInOutDepotId() {
 		return inOutDepotId;
 	}
@@ -103,6 +124,12 @@ public class SpaMallOrder extends BaseEntity {
 	}
 	public void setGoodsList(List<SpaInoutDepotDetail> goodsList) {
 		this.goodsList = goodsList;
+	}
+	public MemberAddress getMemberAddress() {
+		return memberAddress;
+	}
+	public void setMemberAddress(MemberAddress memberAddress) {
+		this.memberAddress = memberAddress;
 	}
 	
 }

@@ -30,6 +30,13 @@ public class SpaShop extends BaseEntity {
 	private String shopImg;//门店logo
 	private String appId;//小程序id
 	private String secret;//小程序id
+	private String shopBonus;//新零售提成机制
+	public String getShopBonus() {
+		return shopBonus;
+	}
+	public void setShopBonus(String shopBonus) {
+		this.shopBonus = shopBonus;
+	}
 	public Integer getId() {
 		return id;
 	}

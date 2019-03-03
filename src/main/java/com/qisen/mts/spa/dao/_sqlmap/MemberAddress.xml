@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.MemberAddressDao">
+
+	<!-- 通过手机号码检测账号是否存在 -->
+	<select id="queryByOrder" resultType="com.qisen.mts.spa.model.entity.MemberAddress"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+		<![CDATA[
+			select *  from  memberAddress
+		]]>
+		<where>
+			<![CDATA[
+				 appId = #{appId} and eid = #{eid}
+			]]>
+			<if test="orderId != null and orderId != ''">
+				<![CDATA[
+					 orderId = #{orderId}
+				]]>
+			</if>
+		</where>
+	</select>
+	
+		<select id="queryNewAddressByMember" resultType="com.qisen.mts.spa.model.entity.MemberAddress"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			select *  from  memberAddress
+		]]>
+		<where>
+			<![CDATA[
+				 appId = #{appId} and eid = #{eid} and openid = #{openid}
+			]]>
+		</where>
+		<![CDATA[
+		ORDER BY id DESC LIMIT 1
+		]]>
+	</select>
+	
+	<delete id="deleteByOrder" parameterType="com.qisen.mts.spa.model.entity.MemberAddress">
+		<![CDATA[
+			delete from memberAddress
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and appid = #{appid} and orderId = #{orderId}
+			]]>
+		</where>
+	</delete>
+	
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.MemberAddress">
+		<![CDATA[
+			insert into memberAddress(eid,appid,openid,userName,postalCode,provinceName,cityName,countyName,detailInfo,nationalCode,telNumber,orderId,status) 
+			values(#{eid},#{appid},#{openid},#{userName},#{postalCode},#{provinceName},#{cityName},#{countyName},#{detailInfo},#{nationalCode},#{telNumber},#{orderId},0)
+		]]>
+	</insert>
+</mapper>

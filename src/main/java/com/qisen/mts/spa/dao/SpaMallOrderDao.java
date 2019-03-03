@@ -10,7 +10,7 @@ public interface SpaMallOrderDao {
 
 	int delete(SpaMallOrder record);
 
-	void create(SpaMallOrder record);
+	int create(SpaMallOrder record);
 
 	void update(SpaMallOrder record);
 

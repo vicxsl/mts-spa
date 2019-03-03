@@ -6,18 +6,18 @@ import com.qisen.mts.spa.model.entity.SpaInoutDepotDetail;
 
 public interface SpaInoutDepotDetailDao {
 	
-	int delete(SpaInoutDepotDetail record);
+	public int delete(SpaInoutDepotDetail record);
 
-    int save(SpaInoutDepotDetail record);
+	public int save(SpaInoutDepotDetail record);
     
-    int updateByPrimaryKey(SpaInoutDepotDetail record);
+	public int updateByPrimaryKey(SpaInoutDepotDetail record);
     
-    SpaInoutDepotDetail selectByPrimaryKey(Integer id);
+	public SpaInoutDepotDetail selectByPrimaryKey(Integer id);
 
-	List<SpaInoutDepotDetail> list(SpaInoutDepotDetail body);
+	public List<SpaInoutDepotDetail> list(SpaInoutDepotDetail body);
 	
-	List<SpaInoutDepotDetail> queryByInOutNo(SpaInoutDepotDetail body);
+	public List<SpaInoutDepotDetail> queryByInOutNo(SpaInoutDepotDetail body);
 	
-	void saveList(List<SpaInoutDepotDetail> detailList);
+	public void saveList(List<SpaInoutDepotDetail> list);
 
 }
