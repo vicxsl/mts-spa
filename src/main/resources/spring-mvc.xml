@@ -21,6 +21,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/account/login" />
+			<mvc:exclude-mapping path="/file/upload" />
 			<mvc:exclude-mapping path="/photo/upload" />
 			<bean class="com.qisen.mts.gateway.RightsInterceptor"></bean>
 		</mvc:interceptor>
