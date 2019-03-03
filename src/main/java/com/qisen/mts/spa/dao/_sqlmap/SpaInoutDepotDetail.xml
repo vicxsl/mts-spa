@@ -7,11 +7,11 @@
 	<select id="queryByOrder" resultType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail"
 		parameterType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail">
 		<![CDATA[
-			select * from inOutDepotDetail
+			select a.*,b.name from inOutDepotDetail a, goods b
 		]]>
 		<where>
 			<![CDATA[
-				eid = #{eid} and appid = #{appid} and orderId = #{orderId}
+				orderId = #{orderId} and a.goodsId = b.id
 			]]>
 		</where>
 	</select>
