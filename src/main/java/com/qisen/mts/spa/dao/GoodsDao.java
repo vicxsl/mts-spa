@@ -3,6 +3,7 @@ package com.qisen.mts.spa.dao;
 import java.util.List;
 
 import com.qisen.mts.spa.model.entity.SpaGoods;
+import com.qisen.mts.spa.model.entity.SpaImg;
 
 public interface GoodsDao {
 
@@ -39,6 +40,8 @@ public interface GoodsDao {
 	 * @return
 	 */
 	public List<SpaGoods> list(SpaGoods spaGoods);
+	
+	public List<SpaImg> goodsImgList(SpaImg spa);
 	
 	public void updateGoodsNum(List<SpaGoods> goodList);
 

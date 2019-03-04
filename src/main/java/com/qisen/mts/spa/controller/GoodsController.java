@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaGoods;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
 import com.qisen.mts.spa.service.GoodsService;
 
@@ -43,6 +44,13 @@ public class GoodsController {
 	@ResponseBody
 	public CommObjResponse<List<SpaGoods>> delete(@RequestBody SpaRequest<SpaGoods> req) throws Exception {
 		return goodsService.delete(req);
+	}
+	
+//	查询商品主图、轮播图列表接口
+	@RequestMapping("/goodsImgList")
+	@ResponseBody
+	public CommObjResponse<List<SpaImg>> goodsImgList(@RequestBody SpaRequest<SpaImg> req) throws Exception {
+		return goodsService.goodsImgList(req);
 	}
 	
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaGoods;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 public interface GoodsService {
@@ -31,6 +32,7 @@ public interface GoodsService {
 
 	void updateGoodsNum(List<SpaGoods> goodsList, String inoutdepottype);
 	
-
+	public CommObjResponse<List<SpaImg>> goodsImgList(SpaRequest<SpaImg> req);
+		
 	
 }

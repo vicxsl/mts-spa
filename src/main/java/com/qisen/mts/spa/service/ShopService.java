@@ -5,7 +5,7 @@ import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaShop;
-import com.qisen.mts.spa.model.entity.SpaShopsImg;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 public interface ShopService {
@@ -23,7 +23,7 @@ public interface ShopService {
 	 * @param req
 	 * @return
 	 */
-	public CommObjResponse<List<SpaShopsImg>> shopsImgList(SpaRequest<SpaShopsImg> req);
+	public CommObjResponse<List<SpaImg>> shopsImgList(SpaRequest<SpaImg> req);
 
 	
 }

@@ -12,7 +12,7 @@ import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.SpaShop;
-import com.qisen.mts.spa.model.entity.SpaShopsImg;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
@@ -45,9 +45,9 @@ public class ShopServiceImpl implements ShopService{
 	 * 查询轮播图urls,按顺序返回
 	 */
 	@Override
-	public CommObjResponse<List<SpaShopsImg>> shopsImgList(SpaRequest<SpaShopsImg> req) {
-		CommObjResponse<List<SpaShopsImg>> resp = new CommObjResponse<List<SpaShopsImg>>();
-		List<SpaShopsImg> imgList = shopDao.shopsImgList(req.getBody());
+	public CommObjResponse<List<SpaImg>> shopsImgList(SpaRequest<SpaImg> req) {
+		CommObjResponse<List<SpaImg>> resp = new CommObjResponse<List<SpaImg>>();
+		List<SpaImg> imgList = shopDao.shopsImgList(req.getBody());
 		resp.setBody(imgList);
 		return resp;
 	}

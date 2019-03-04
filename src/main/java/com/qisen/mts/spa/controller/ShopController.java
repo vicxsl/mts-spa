@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaShop;
-import com.qisen.mts.spa.model.entity.SpaShopsImg;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
 import com.qisen.mts.spa.service.ShopService;
 
@@ -36,7 +36,7 @@ public class ShopController {
 	//查询店铺轮播图集合
 	@RequestMapping("/shopsImgList")
 	@ResponseBody
-	public CommObjResponse<List<SpaShopsImg>> shopsImgList(@RequestBody SpaRequest<SpaShopsImg> req) throws Exception {
+	public CommObjResponse<List<SpaImg>> shopsImgList(@RequestBody SpaRequest<SpaImg> req) throws Exception {
 		return shopService.shopsImgList(req);
 	}
 	

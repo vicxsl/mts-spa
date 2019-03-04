@@ -12,6 +12,7 @@ import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsDao;
 import com.qisen.mts.spa.model.entity.SpaGoods;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
 @Service
 public class GoodsServiceImpl implements GoodsService{
@@ -78,6 +79,18 @@ public class GoodsServiceImpl implements GoodsService{
 		CommObjResponse<List<SpaGoods>> resp = new CommObjResponse<List<SpaGoods>>();
 		SpaGoods spaGoods = req.getBody();
 		List<SpaGoods>  spaList = goodsDao.list(spaGoods);
+		resp.setBody(spaList);
+		return resp;
+	}
+	
+	/**
+	 * 查询商品图片集合
+	 */
+	@Override
+	public CommObjResponse<List<SpaImg>> goodsImgList(SpaRequest<SpaImg> req) {
+		CommObjResponse<List<SpaImg>> resp = new CommObjResponse<List<SpaImg>>();
+		SpaImg spa = req.getBody();
+		List<SpaImg>  spaList = goodsDao.goodsImgList(spa);
 		resp.setBody(spaList);
 		return resp;
 	}

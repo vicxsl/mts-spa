@@ -176,4 +176,22 @@
 		</where>
 	</select>
 
+	<!-- 查询SPA商品列表 -->
+	<select id="goodsImgList" resultType="com.qisen.mts.spa.model.entity.SpaImg" parameterType="com.qisen.mts.spa.model.entity.SpaImg">
+		<![CDATA[
+			select * from imgTable
+		]]>
+		<where>
+			<![CDATA[
+				appid = #{appid} and eid = #{eid} and type in ("1","2")
+			]]>
+			
+			<if test="status != null and status !=''">
+				<![CDATA[
+					and status = #{status} 
+				]]>
+			</if>
+		</where>
+	</select>
+
 </mapper>
