@@ -1,7 +1,5 @@
 package com.qisen.mts.spa.service;
 
-import java.io.IOException;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;

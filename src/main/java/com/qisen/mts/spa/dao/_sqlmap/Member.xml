@@ -73,5 +73,17 @@
 			]]>
 		</where>
 	</select>
+	
+	<!-- 查询会员推荐人员集合 及其所带来的获利集合 -->
+	<select id="memberIncomeDetailsList" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<!-- <![CDATA[
+			select a.name,a.createDate,select sum(b.money) as balance from ,a.totalMoney from member a ,incomeDetails b
+		]]>
+		<where>
+			<![CDATA[
+				eid = #{eid} and appid = #{appid}
+			]]>
+		</where> -->
+	</select>
 
 </mapper>

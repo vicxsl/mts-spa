@@ -13,14 +13,10 @@ import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsSubTypeDao;
 import com.qisen.mts.spa.dao.GoodsTypeDao;
 import com.qisen.mts.spa.dao.SpaAccountDao;
-import com.qisen.mts.spa.dao.SpaGoodsCompanyDao;
-import com.qisen.mts.spa.dao.SpaGoodsSupplierDao;
 import com.qisen.mts.spa.dao.SpaInoutDepotTypeDao;
 import com.qisen.mts.spa.model.SessionSpa;
 import com.qisen.mts.spa.model.entity.SpaAccount;
-import com.qisen.mts.spa.model.entity.SpaGoodsCompany;
 import com.qisen.mts.spa.model.entity.SpaGoodsSubType;
-import com.qisen.mts.spa.model.entity.SpaGoodsSupplier;
 import com.qisen.mts.spa.model.entity.SpaGoodsType;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotType;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -35,10 +31,6 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 	private SpaAccountDao spaAccountDao;
 	@Autowired
 	private GoodsTypeDao goodsTypeDao;
-	@Autowired
-	private SpaGoodsSupplierDao spaGoodsSupplierDao;
-	@Autowired
-	private SpaGoodsCompanyDao spaGoodsCompanyDao;
 	@Autowired
 	private GoodsSubTypeDao goodsSubTypeDao;
 	@Autowired
@@ -94,8 +86,6 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 					SessionSpa sessionSpa = spaAccount.toJSON().toJavaObject(SessionSpa.class);
 					Integer eid = spaAccount.getEid();
 					String appid = spaAccount.getAppid();
-					SpaGoodsSupplier goodsSupplier = new SpaGoodsSupplier();//获取供应商
-					SpaGoodsCompany goodsCompany = new SpaGoodsCompany();//获取公司品牌
 					//出入库类型
 					SpaInoutDepotType inoutDepotType = new SpaInoutDepotType();
 					SpaGoodsType goodsType = new SpaGoodsType();//商品类型

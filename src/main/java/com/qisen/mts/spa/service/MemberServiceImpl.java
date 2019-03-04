@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +19,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
+import com.qisen.mts.spa.dao.GoodsTypeDao;
 import com.qisen.mts.spa.dao.MemberDao;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.MetaData;
 import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
+import com.qisen.mts.spa.model.entity.SpaGoodsType;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -37,7 +38,9 @@ public class MemberServiceImpl implements MemberService {
 	private ShopDao shopDao;
 
 	@Autowired
-	GoodsShopCarDao goodsShopCarDao;
+	private GoodsShopCarDao goodsShopCarDao;
+	@Autowired
+	private GoodsTypeDao goodsTypeDao;
 	
 	@Value("#{configProperties['PHOTO_PATH']}")
 	private String PHOTO_PATH;
@@ -53,8 +56,13 @@ public class MemberServiceImpl implements MemberService {
 		SpaMember query = new SpaMember();
 		MetaData metaData = new MetaData();
 		SpaShop shop = shopDao.queryByAppId(appid);
+		SpaGoodsType goodstype = new SpaGoodsType();
+		goodstype.setAppid(appid);
+		goodstype.setEid(shop.getEid());
 		metaData.setShop(shop);// 储存门店信息
 		metaData.setPhotoPath(PHOTO_PATH);
+		List<SpaGoodsType> goodsTypes = goodsTypeDao.list(goodstype);
+		metaData.setGoodsTypes(goodsTypes);//储存商品类型集合
 		String secret = shop.getSecret();
 		JSONObject wxObject = MemberServiceImpl.getSessionKeyOropenid(js_code, appid, secret);
 		String openid = wxObject.getString("openid");

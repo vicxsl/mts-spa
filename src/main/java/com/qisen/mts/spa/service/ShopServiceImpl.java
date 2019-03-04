@@ -1,7 +1,5 @@
 package com.qisen.mts.spa.service;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
-import com.qisen.mts.spa.controller.ShopController;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -34,8 +31,6 @@ public class ShopServiceImpl implements ShopService{
 		CommObjResponse<SpaShop> resp = new CommObjResponse<SpaShop>();
 		JSONObject obj = req.getBody();
 		String appId = obj.getString("appId");
-		System.out.println(obj.isEmpty());
-		System.out.println("=============================");
 		if(!obj.isEmpty() && !appId.isEmpty()){
 			SpaShop shop = shopDao.queryByAppId(appId);
 			resp.setBody(shop);

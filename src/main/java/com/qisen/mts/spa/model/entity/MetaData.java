@@ -1,6 +1,7 @@
 package com.qisen.mts.spa.model.entity;
 
 import java.util.List;
+
 import com.qisen.mts.common.model.entity.BaseEntity;
 
 /**
@@ -17,6 +18,7 @@ public class MetaData extends BaseEntity {
 	private SpaShop shop;
 	private SpaMember member;
 	private List<SpaGoodsShopCar> shopCarList;//购物车
+	private List<SpaGoodsType> goodsTypes;//商品类型集合
 	private String photoPath;//图片地址
 	public String getPhotoPath() {
 		return photoPath;
@@ -41,6 +43,12 @@ public class MetaData extends BaseEntity {
 	}
 	public void setShopCarList(List<SpaGoodsShopCar> shopCarList) {
 		this.shopCarList = shopCarList;
+	}
+	public List<SpaGoodsType> getGoodsTypes() {
+		return goodsTypes;
+	}
+	public void setGoodsTypes(List<SpaGoodsType> goodsTypes) {
+		this.goodsTypes = goodsTypes;
 	}
 	
 	
