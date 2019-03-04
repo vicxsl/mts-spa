@@ -1,9 +1,11 @@
 package com.qisen.mts.spa.service;
 
-import com.alibaba.fastjson.JSONArray;
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaShop;
+import com.qisen.mts.spa.model.entity.SpaShopsImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 public interface ShopService {
@@ -21,16 +23,7 @@ public interface ShopService {
 	 * @param req
 	 * @return
 	 */
-	public CommObjResponse<JSONArray> queryRotateImg(SpaRequest<JSONObject> req);
+	public CommObjResponse<List<SpaShopsImg>> shopsImgList(SpaRequest<SpaShopsImg> req);
 
-
-	/**
-	 *  查询查询商品列表
-	 * @param req
-	 * @return
-	 */
-	public CommObjResponse<JSONArray> queryGoodList(SpaRequest<JSONObject> req);
-	
-	
 	
 }
