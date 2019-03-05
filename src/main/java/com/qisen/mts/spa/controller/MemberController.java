@@ -1,5 +1,7 @@
 package com.qisen.mts.spa.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,12 @@ public class MemberController {
 	@ResponseBody
 	public CommObjResponse<MetaData> list(@RequestBody SpaRequest<SpaMember> req) throws Exception {
 		return memberService.login(req);
+	}
+	
+	@RequestMapping("/memberIncomeDetailsList")
+	@ResponseBody
+	public CommObjResponse<List<SpaMember>> memberIncomeDetailsList(@RequestBody SpaRequest<SpaMember> req) throws Exception {
+		return memberService.memberIncomeDetailsList(req);
 	}
 
 }

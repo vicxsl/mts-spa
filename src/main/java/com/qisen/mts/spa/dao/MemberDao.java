@@ -1,5 +1,7 @@
 package com.qisen.mts.spa.dao;
 
+import java.util.List;
+
 import com.qisen.mts.spa.model.entity.SpaMember;
 
 public interface MemberDao {
@@ -30,5 +32,11 @@ public interface MemberDao {
 	 */
 	public void update(SpaMember spa);
 	
+	public List<SpaMember> profitLevelOne(SpaMember spa);
+
+	public List<SpaMember> levelTwo(List<SpaMember> spaMemberList);
+
+	public List<SpaMember> levelThree(List<SpaMember> spaMemberList);
+
 
 }

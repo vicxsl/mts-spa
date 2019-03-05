@@ -190,4 +190,35 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	@Override
+	public CommObjResponse<List<SpaMember>> memberIncomeDetailsList(SpaRequest<SpaMember> req) {
+		CommObjResponse<List<SpaMember>> resp = new CommObjResponse<List<SpaMember>>();
+		Map<String, Double> totalMap = new HashMap<String,Double>();
+		List<SpaMember> levelOne = memberDao.profitLevelOne(req.getBody());//一级获利
+		List<SpaMember> levelTwo = memberDao.levelTwo(levelOne);//二级
+		List<SpaMember> levelThree = memberDao.levelThree(levelOne);//三级
+		
+		for(SpaMember spaMember :levelTwo){
+			totalMap.put(spaMember.getOpenid(), spaMember.getBalance());
+		}
+		
+		for(SpaMember spaMember :levelThree){
+			if(null!=totalMap.get(spaMember.getOpenid())){
+				totalMap.put(spaMember.getOpenid(), 
+						totalMap.get(spaMember.getOpenid())+spaMember.getBalance());
+			}
+		}
+		
+		for(SpaMember spaMember :levelOne){
+			if(null!=totalMap.get(spaMember.getOpenid())){
+				spaMember.setTotalMoney(spaMember.getBalance()+
+						totalMap.get(spaMember.getOpenid()));
+			}
+		}
+		
+		resp.setBody(levelOne);
+		
+		return resp;
+	}
+
 }
