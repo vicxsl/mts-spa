@@ -14,6 +14,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -195,8 +196,11 @@ public class MemberServiceImpl implements MemberService {
 		CommObjResponse<List<SpaMember>> resp = new CommObjResponse<List<SpaMember>>();
 		Map<String, Double> totalMap = new HashMap<String,Double>();
 		List<SpaMember> levelOne = memberDao.profitLevelOne(req.getBody());//一级获利
-		List<SpaMember> levelTwo = memberDao.levelTwo(levelOne);//二级
-		List<SpaMember> levelThree = memberDao.levelThree(levelOne);//三级
+		if(CollectionUtils.isEmpty(levelOne)){
+			return resp;
+		}
+		List<SpaMember> levelTwo = memberDao.levelTwo(levelOne,levelOne.get(0).getEid().toString());//二级
+		List<SpaMember> levelThree = memberDao.levelThree(levelOne,levelOne.get(0).getEid().toString());//三级
 		
 		for(SpaMember spaMember :levelTwo){
 			totalMap.put(spaMember.getOpenid(), spaMember.getBalance());

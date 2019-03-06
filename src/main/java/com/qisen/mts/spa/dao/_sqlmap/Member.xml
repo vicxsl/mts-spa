@@ -76,30 +76,30 @@
 	
 	<!-- 查询会员推荐人员集合 及其所带来的获利集合 -->
 	<select id="profitLevelOne" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-	  select b.buyOpenid as openid, b.name,b.createDate,sum(b.money) as balance from (select t.name,a.createDate,t.buyOpenid,t.money FROM incomeDetails t ,
+	  select b.buyOpenid as openid,b.eid, b.name,b.createDate,sum(b.money) as balance from (select t.name,t.eid,a.createDate,t.buyOpenid,t.money FROM incomeDetails t ,
 	     member a where t.buyOpenid = a.openid and t.eid = #{eid} and t.openid=#{openid} ) b group by b.buyOpenid, b.name,b.createDate
 	</select>
 	
 	<select id="levelTwo" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-	  select b.openid, b.name,b.createDate,sum(b.money) as balance from (select t.name,a.createDate,t.buyOpenid,t.money FROM incomeDetails t ,
+	  select b.openid,b.eid, b.name,b.createDate,sum(b.money) as balance from (select t.name,t.eid,a.createDate,t.openid,t.money FROM incomeDetails t ,
 	     member a where t.openid = a.openid and t.eid = #{eid} and t.Level=1 and t.openid in
-	     <foreach collection="spaMemberList" item="member" index="index" open="("  separator="," close=")">
+	     <foreach collection="list" item="member" index="index" open="("  separator="," close=")">
 				<![CDATA[
 					#{member.openid}
 				]]>
 			</foreach>
-	      ) b group by b.buyOpenid, b.name,b.createDate
+	      ) b group by b.openid, b.name,b.createDate
 	</select>
 	
 	<select id="levelThree" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-	  select b.openid, b.name,b.createDate,sum(b.money) as balance from (select t.name,a.createDate,t.buyOpenid,t.money FROM incomeDetails t ,
+	  select b.openid, b.name,b.eid,b.createDate,sum(b.money) as balance from (select t.name,t.eid,a.createDate,t.openid,t.money FROM incomeDetails t ,
 	     member a where t.openid = a.openid and t.eid = #{eid} and t.Level=2 and t.openid in
-	     <foreach collection="spaMemberList" item="member" index="index" open="("  separator="," close=")">
+	     <foreach collection="list" item="member" index="index" open="("  separator="," close=")">
 				<![CDATA[
 					#{member.openid}
 				]]>
 			</foreach>
-	      ) b group by b.buyOpenid, b.name,b.createDate
+	      ) b group by b.openid, b.name,b.createDate
 	</select>
 
 </mapper>

@@ -2,6 +2,8 @@ package com.qisen.mts.spa.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.qisen.mts.spa.model.entity.SpaMember;
 
 public interface MemberDao {
@@ -34,9 +36,9 @@ public interface MemberDao {
 	
 	public List<SpaMember> profitLevelOne(SpaMember spa);
 
-	public List<SpaMember> levelTwo(List<SpaMember> spaMemberList);
+	public List<SpaMember> levelTwo(@Param("list")List<SpaMember> list,@Param("eid")String eid);
 
-	public List<SpaMember> levelThree(List<SpaMember> spaMemberList);
+	public List<SpaMember> levelThree(@Param("list")List<SpaMember> list,@Param("eid")String eid);
 
 
 }
