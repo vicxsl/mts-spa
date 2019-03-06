@@ -73,7 +73,7 @@
 			]]>
 		</where>
 	</select>
-	
+
 	<!-- 查询会员推荐人员集合 及其所带来的获利集合 -->
 	<select id="profitLevelOne" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 	  select b.buyOpenid as openid,b.eid, b.name,b.createDate,sum(b.money) as balance from (select t.name,t.eid,a.createDate,t.buyOpenid,t.money FROM incomeDetails t ,
@@ -102,4 +102,32 @@
 	      ) b group by b.openid, b.name,b.createDate
 	</select>
 
+
+	<select id="myInfoGains" resultMap="MyInfoGains" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains">
+		<![CDATA[
+        	select * from member where appid=#{appid} and openid = #{openid} and eid=#{eid}
+        ]]>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaMyInfoGains"
+		id="MyInfoGains">
+		<result property="myMoney" column="balance" />
+		<association property="todayPeople" column="appid" javaType="int" select="getTodayPeople" />
+	<association property="todayMoney" column="openid" select="getTodayMoney" />
+		<association property="myPeople" column="appid" select="getMyPeople" />
+	</resultMap>
+	<select id="getTodayPeople" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains" resultType="int">
+	    <![CDATA[
+        	select count(id) from member where appid=#{appid}  and openid = #{openid}
+        ]]>
+	</select>
+	<select id="getMyPeople" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains" resultType="int">
+    	<![CDATA[
+        	select count(id) from member where appid=#{appid} and recommendOneId = #{openid}
+        ]]>
+	</select>
+	<select id="getTodayMoney" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains" resultType="int">
+    	<![CDATA[
+        	select sum(money) from incomeDetails where appid=#{appid} and openid = #{openid}and createTime > #{createTime} 
+        ]]>
+	</select>
 </mapper>

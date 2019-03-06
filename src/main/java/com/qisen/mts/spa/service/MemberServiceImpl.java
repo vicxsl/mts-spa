@@ -27,6 +27,7 @@ import com.qisen.mts.spa.model.entity.MetaData;
 import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
 import com.qisen.mts.spa.model.entity.SpaGoodsType;
 import com.qisen.mts.spa.model.entity.SpaMember;
+import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
@@ -225,4 +226,13 @@ public class MemberServiceImpl implements MemberService {
 		return resp;
 	}
 
+	@Override
+	public CommObjResponse<SpaMyInfoGains> myInfoGains(SpaRequest<SpaMyInfoGains> req) {
+		CommObjResponse<SpaMyInfoGains> resp = new CommObjResponse<SpaMyInfoGains>();
+		SpaMyInfoGains spa = memberDao.myInfoGains(req.getBody());//一级获利
+		
+		resp.setBody(spa);
+		
+		return resp;
+	}
 }

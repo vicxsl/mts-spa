@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.MetaData;
 import com.qisen.mts.spa.model.entity.SpaMember;
+import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 import com.qisen.mts.spa.model.request.SpaRequest;
 import com.qisen.mts.spa.service.MemberService;
 
@@ -37,6 +38,17 @@ public class MemberController {
 	public CommObjResponse<List<SpaMember>> memberIncomeDetailsList(@RequestBody SpaRequest<SpaMember> req) throws Exception {
 		return memberService.memberIncomeDetailsList(req);
 	}
-
+	/**
+	 * 小程序我的页面 4个数据
+	 * @param req
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/myInfoGains")
+	@ResponseBody
+	public CommObjResponse<SpaMyInfoGains> myInfoGains(@RequestBody SpaRequest<SpaMyInfoGains> req) throws Exception {
+		return memberService.myInfoGains(req);
+	}
+	
 }
 

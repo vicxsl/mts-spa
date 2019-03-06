@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.qisen.mts.spa.model.entity.SpaMember;
+import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 
 public interface MemberDao {
 
@@ -40,5 +41,7 @@ public interface MemberDao {
 
 	public List<SpaMember> levelThree(@Param("list")List<SpaMember> list,@Param("eid")String eid);
 
+	public SpaMyInfoGains myInfoGains(SpaMyInfoGains spa);
+	
 
 }
