@@ -11,7 +11,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				 appId = #{appId} 
+				 appid = #{appid} 
 			]]>
 		</where>
 	</select>
@@ -25,7 +25,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				 appId = #{appId} and eid = #{eid} and status = "0"
+				 appid = #{appid} and eid = #{eid} and status = "0"
 			]]>
 		</where>
 	</select>

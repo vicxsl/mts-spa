@@ -31,7 +31,7 @@ public class ShopServiceImpl implements ShopService{
 	public CommObjResponse<SpaShop> queryByAppId(SpaRequest<JSONObject> req) {
 		CommObjResponse<SpaShop> resp = new CommObjResponse<SpaShop>();
 		JSONObject obj = req.getBody();
-		String appId = obj.getString("appId");
+		String appId = obj.getString("appid");
 		if(!obj.isEmpty() && !appId.isEmpty()){
 			SpaShop shop = shopDao.queryByAppId(appId);
 			resp.setBody(shop);
