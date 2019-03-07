@@ -105,7 +105,7 @@
 
 	<select id="myInfoGains" resultMap="MyInfoGains" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains">
 		<![CDATA[
-        	select * from member where appid=#{appid} and openid = #{openid} and eid=#{eid}
+        	select * from member where appid=#{appid} and openid = #{openid} and eid=#{eid} order By createDate
         ]]>
 	</select>
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaMyInfoGains"

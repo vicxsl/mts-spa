@@ -13,7 +13,7 @@ public interface ShopDao {
 	 * @param 
 	 * @return
 	 */
-	public SpaShop queryByAppId(@Param("appId")String appId);
+	public SpaShop queryByAppId(@Param("appid")String appid);
 	
 	/**
 	 * 查询轮播图urls,按顺序返回
