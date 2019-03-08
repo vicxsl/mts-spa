@@ -20,6 +20,14 @@ public class MetaData extends BaseEntity {
 	private List<SpaGoodsShopCar> shopCarList;//购物车
 	private List<SpaGoodsType> goodsTypes;//商品类型集合
 	private String photoPath;//图片地址
+	private MemberAddress address;//默认收货地址
+	
+	public MemberAddress getAddress() {
+		return address;
+	}
+	public void setAddress(MemberAddress address) {
+		this.address = address;
+	}
 	public String getPhotoPath() {
 		return photoPath;
 	}

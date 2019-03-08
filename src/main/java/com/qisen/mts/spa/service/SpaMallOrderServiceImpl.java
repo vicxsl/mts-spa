@@ -17,17 +17,17 @@ import com.qisen.mts.spa.model.entity.SpaMallOrder;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
-public class SpaMallOrderServiceImpl implements SpaMallOrderService{
-	
+public class SpaMallOrderServiceImpl implements SpaMallOrderService {
+
 	@Autowired
 	private SpaMallOrderDao spaMallOrderDao;
-	
+
 	@Autowired
 	private SpaInoutDepotDetailDao inoutDepotDetailDao;
-	
+
 	@Autowired
 	private MemberAddressDao memberAddressDao;
-	
+
 	@Autowired
 	private GoodsShopCarDao goodsShopCarDao;
 
@@ -35,19 +35,19 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService{
 	public CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) {
 		CommObjResponse<SpaMallOrder> resp = new CommObjResponse<SpaMallOrder>();
 		SpaMallOrder body = req.getBody();
-		if(!CollectionUtils.isEmpty(body.getGoodsList())){
+		if (!CollectionUtils.isEmpty(body.getGoodsList())) {
 			int eid = req.getEid();
 			String appid = req.getAppid();
 			String openid = req.getToken();
-					spaMallOrderDao.create(body);//插入订单表
-
-					int orderId = body.getId();
+			spaMallOrderDao.create(body);// 插入订单表
+			int orderId = body.getId();
+			body.setStatus("0");
 			List<SpaInoutDepotDetail> details = body.getGoodsList();
-			for(SpaInoutDepotDetail spaInoutDepotDetail:details){
+			for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
 				spaInoutDepotDetail.setOrderId(orderId);
 				spaInoutDepotDetail.setTotalMoney(spaInoutDepotDetail.getNum() * spaInoutDepotDetail.getPreferencePrice());
 			}
-			//执行明细表的插入或修改操作
+			// 执行明细表的插入或修改操作
 			inoutDepotDetailDao.saveList(details);
 			goodsShopCarDao.deleteByOrder(body);
 			MemberAddress address = body.getMemberAddress();
