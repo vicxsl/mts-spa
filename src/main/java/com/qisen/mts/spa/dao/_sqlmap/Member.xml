@@ -23,10 +23,18 @@
 
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-		<![CDATA[
-			insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,recommendThreeId,recommendTwoId,recommendOneId,status,avatarUrl) 
-			values(#{eid},#{appid},#{name},#{mobile},#{totalMoney},#{balance},#{createDate},#{openid},#{session_key},#{unionid},#{recommendThreeId},#{recommendTwoId},#{recommendOneId},0,#{avatarUrl})
-		]]>
+			insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId) 
+			SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as mobile,#{totalMoney} as totalMoney,#{balance} as balance,
+			#{createDate} as createDate,#{openid} as openid,#{session_key} as session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as avatarUrl,
+		<choose>
+        	<when test="recommendOneId !=null and recommendOneId != ''">
+            	a.recommendTwoId as recommendThreeId,a.recommendOneId as recommendTwoId,#{recommendOneId} as recommendOneId   from member a where a.openid=#{recommendOneId}
+        	</when>
+        	<otherwise>
+            	'' as recommendThreeId,'' as recommendTwoId,'' as recommendOneId  from dual
+        	</otherwise>
+    	</choose>
+			
 	</insert>
 
 	<!-- 删除账号 -->
