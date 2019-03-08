@@ -7,7 +7,7 @@
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
 			insert into mallOrder(id,eid,appid,openid,totalMoney,preFee,expressCost,realFee,goodsCost,bonusCost,orderProfit,inOutDepotId,flowNo,createTime,status) 
-			values (#{id},#{eid},#{appid},#{openid},#{totalMoney},#{preFee},#{expressCost},#{realFee},#{goodsCost},#{bonusCost},#{orderProfit},#{inOutDepotId},#{flowNo},now(),0)
+			values (#{id},#{eid},#{appid},#{openid},#{totalMoney},#{preFee},#{expressCost},#{realFee},#{goodsCost},#{bonusCost},#{orderProfit},#{inOutDepotId},#{flowNo},unix_timestamp(now())*1000,0)
 		]]>
 	</insert>
 	
@@ -20,6 +20,9 @@
 				a.appid = #{appid} and a.eid = #{eid}  and a.openid = #{openid} and a.id = b.orderId and a.id = c.orderId and c.goodsId = d.id
 			]]>
 		</where>
+		<![CDATA[
+			order by a.createTime desc
+		]]>
 	</select>
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaMallOrder" id="orderMap">
          <id property="id" column="id"/>
