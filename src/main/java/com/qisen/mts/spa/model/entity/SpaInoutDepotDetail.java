@@ -25,7 +25,7 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
     private String spec;
 
-    private Double num;
+    private Integer num;
 
     private Double salePrice;
     private Double costPrice;
@@ -106,11 +106,11 @@ public class SpaInoutDepotDetail extends BaseEntity{
 		this.spec = spec;
 	}
 
-	public Double getNum() {
+	public Integer getNum() {
 		return num;
 	}
 
-	public void setNum(Double num) {
+	public void setNum(Integer num) {
 		this.num = num;
 	}
 

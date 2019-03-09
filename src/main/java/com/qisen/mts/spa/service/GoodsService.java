@@ -21,7 +21,7 @@ public interface GoodsService {
 	 * @param req
 	 * @return
 	 */
-	public CommObjResponse<List<SpaGoods>> delete(SpaRequest<SpaGoods> req);
+	public CommObjResponse<List<SpaGoods>> delete(SpaRequest<List<SpaGoods>> req);
 	
 	/**
 	 * 查询spa商品

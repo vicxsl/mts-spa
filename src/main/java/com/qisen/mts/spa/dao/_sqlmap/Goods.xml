@@ -35,28 +35,36 @@
 	<select id="getGoodsByPara" parameterType="com.qisen.mts.spa.model.entity.SpaGoods"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoods">
 		select t.id,t.num,t.appid,t.eid
-		from goods t where t.id=#{id} and t.eid=#{eid} and t.appid = #{appid}
+		from goods t where
+		t.id=#{id} and t.eid=#{eid} and t.appid = #{appid}
 	</select>
 
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
-			insert into goods(eid,appid,name,no,barCode,type,son_type,unit,spec,num,buyingPrice,costPrice,salePrice,goodsCompanyId,supplierId,status,describe,remark) 
-			values(#{eid},#{appid},#{name},#{no},#{barCode},#{type},#{son_type},#{unit},#{spec},#{num},#{buyingPrice},#{costPrice},#{salePrice},#{goodsCompanyId},#{supplierId},0,#{describe},#{remark})
+			insert into goods(eid,appid,name,no,barCode,type,unit,spec,num,saleNum,buyingPrice,costPrice,salePrice,preferencePrice,status,describeText,remark) 
+			values(#{eid},#{appid},#{name},#{no},#{barCode},#{type},#{unit},#{spec},#{num},#{saleNum},#{buyingPrice},#{costPrice},#{salePrice},#{preferencePrice},0,#{describeText},#{remark})
 		]]>
 	</insert>
 
 	<!-- 删除账号 -->
-	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
+	<update id="delete" parameterType="list">
 		<![CDATA[
-			delete from goods
-		]]>
+            update goods
+        ]]>
+		<set>
+				<![CDATA[
+					 status = "-1"
+				 ]]>
+		</set>
 		<where>
-			<![CDATA[
-				eid = #{eid} and appid = #{appid} and id=#{id}
-			]]>
+			<foreach collection="list" separator="or" item="i" index="index">
+			 	<![CDATA[
+              		id=#{i.id} and eid = #{i.eid} and appid = #{i.appid}  
+              	]]>
+			</foreach>
 		</where>
-	</delete>
+	</update>
 
 	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
@@ -83,9 +91,9 @@
 					 remark = #{remark},
 				 ]]>
 			</if>
-			<if test="describe != null and describe !=''">
+			<if test="describeText != null and describeText !=''">
 				<![CDATA[
-					 describe = #{describe},
+					 describeText = #{describeText},
 				 ]]>
 			</if>
 			<if test="barCode != null and barCode !=''">
@@ -98,11 +106,6 @@
 					 type = #{type},
 				 ]]>
 			</if>
-			<if test="son_type != null and son_type !=''">
-				<![CDATA[
-					 son_type = #{son_type},
-				 ]]>
-			</if>
 			<if test="unit != null and unit !=''">
 				<![CDATA[
 					 unit = #{unit},
@@ -113,24 +116,14 @@
 					 spec = #{spec},
 				 ]]>
 			</if>
-			<if test=" num != null and num !=''">
-				<![CDATA[
-					 num = #{num},
-				 ]]>
-			</if>
 			<if test="salePrice != null and salePrice !=''">
 				<![CDATA[
 					 salePrice = #{salePrice},
 				 ]]>
 			</if>
-			<if test="goodsCompanyId != null and goodsCompanyId !=''">
+			<if test="preferencePrice != null and preferencePrice !=''">
 				<![CDATA[
-					 goodsCompanyId = #{goodsCompanyId},
-				 ]]>
-			</if>
-			<if test="supplierId != null and supplierId !=''">
-				<![CDATA[
-					 supplierId = #{supplierId},
+					 preferencePrice = #{preferencePrice},
 				 ]]>
 			</if>
 		</set>
@@ -173,11 +166,27 @@
 					and status = #{status} 
 				]]>
 			</if>
+			<choose>
+				<when test="status !=null and status != ''">
+					<![CDATA[
+						and status = #{status}
+					]]>
+				</when>
+				<otherwise>
+					<![CDATA[
+						and status != "-1"
+					]]>
+				</otherwise>
+			</choose>
 		</where>
+		<![CDATA[
+			order by no+0
+		]]>
 	</select>
 
 	<!-- 查询SPA商品图文详情 -->
-	<select id="goodsImgList" resultType="com.qisen.mts.spa.model.entity.SpaImg" parameterType="com.qisen.mts.spa.model.entity.SpaImg">
+	<select id="goodsImgList" resultType="com.qisen.mts.spa.model.entity.SpaImg"
+		parameterType="com.qisen.mts.spa.model.entity.SpaImg">
 		<![CDATA[
 			select * from imgTable
 		]]>
@@ -185,7 +194,7 @@
 			<![CDATA[
 				appid = #{appid} and eid = #{eid} and type in ("1","2") and goodsId=#{goodsId}
 			]]>
-			
+
 			<if test="status != null and status !=''">
 				<![CDATA[
 					and status = #{status} 

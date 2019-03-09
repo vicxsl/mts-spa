@@ -23,7 +23,8 @@ public class SpaGoods extends BaseEntity {
 	private Integer son_type;//商品子类型id
 	private String unit;//商品单位
 	private String spec;//商品规格
-	private double num;//数量
+	private Integer num;//数量
+	private Integer saleNum;//已售数量
 	private double buyingPrice;//进货价
 	private double preferencePrice;//优惠价
 	private double salePrice;//销售价
@@ -31,7 +32,7 @@ public class SpaGoods extends BaseEntity {
 	private Integer goodsCompanyId;//商品品牌id
 	private String goodsCompany;//商品品牌
 	private String remark;//备注
-	private String describe;//商品描述
+	private String describeText;//商品描述
 	private String supplier;//供货商
 	private String imgUrl;//商品图片
 	private String status;// 状态:0正常,1停售,2删除
@@ -95,11 +96,18 @@ public class SpaGoods extends BaseEntity {
 	public void setSpec(String spec) {
 		this.spec = spec;
 	}
-	public double getNum() {
+	
+	public Integer getNum() {
 		return num;
 	}
-	public void setNum(double num) {
+	public void setNum(Integer num) {
 		this.num = num;
+	}
+	public Integer getSaleNum() {
+		return saleNum;
+	}
+	public void setSaleNum(Integer saleNum) {
+		this.saleNum = saleNum;
 	}
 	public double getBuyingPrice() {
 		return buyingPrice;
@@ -143,11 +151,12 @@ public class SpaGoods extends BaseEntity {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	public String getDescribe() {
-		return describe;
+	
+	public String getDescribeText() {
+		return describeText;
 	}
-	public void setDescribe(String describe) {
-		this.describe = describe;
+	public void setDescribeText(String describeText) {
+		this.describeText = describeText;
 	}
 	public String getSupplier() {
 		return supplier;

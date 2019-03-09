@@ -55,17 +55,17 @@ public class GoodsServiceImpl implements GoodsService{
 	 * 删除spa账号
 	 */
 	@Override
-	public CommObjResponse<List<SpaGoods>> delete(SpaRequest<SpaGoods> req) {
+	public CommObjResponse<List<SpaGoods>> delete(SpaRequest<List<SpaGoods>> req) {
 		CommObjResponse<List<SpaGoods>> resp = new CommObjResponse<List<SpaGoods>>();
-		SpaGoods spaGoods = req.getBody();
-		SpaGoods queryGoods = new SpaGoods();
-		queryGoods.setEid(spaGoods.getEid());
-		queryGoods.setAppid(spaGoods.getAppid());
-		int count = goodsDao.delete(spaGoods);
+		List<SpaGoods> delList = req.getBody();
+		SpaGoods query = new SpaGoods();
+		query.setEid(req.getEid());
+		query.setAppid(req.getAppid());
+		int count = goodsDao.delete(delList);
 		if (count == 0 ) {
 			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
 		}else{
-			List<SpaGoods>  spaList = goodsDao.list(queryGoods);
+			List<SpaGoods>  spaList = goodsDao.list(query);
 			resp.setBody(spaList);
 		}
 		return resp;
@@ -97,13 +97,13 @@ public class GoodsServiceImpl implements GoodsService{
 	@Override
 	public void updateGoodsNum(List<SpaGoods> goodsList, String inoutdepottype) {
 		List<SpaGoods> oldGoodsList = new ArrayList<SpaGoods>();
-		Map<String,Double> goodsNumMap = new HashMap<String,Double>();
+		Map<String,Integer> goodsNumMap = new HashMap<String,Integer>();
 		for(SpaGoods spaGoods : goodsList){
 			SpaGoods goods = goodsDao.getGoodsByPara(spaGoods);
 			oldGoodsList.add(goods);
 			goodsNumMap.put(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getAppid(), spaGoods.getNum());
 		}
-		double num = 0.0;
+		Integer num = 0;
 		for(SpaGoods spaGoods :oldGoodsList){
 			if(inoutdepottype.equals("2")){
 				num = spaGoods.getNum()+goodsNumMap.get(spaGoods.getId()+"-"+spaGoods.getEid()+spaGoods.getAppid());
