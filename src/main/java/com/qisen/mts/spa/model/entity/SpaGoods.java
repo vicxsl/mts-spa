@@ -33,6 +33,7 @@ public class SpaGoods extends BaseEntity {
 	private String remark;//备注
 	private String describe;//商品描述
 	private String supplier;//供货商
+	private String imgUrl;//商品图片
 	private String status;// 状态:0正常,1停售,2删除
 	public Integer getId() {
 		return id;
@@ -159,6 +160,12 @@ public class SpaGoods extends BaseEntity {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 	
 }

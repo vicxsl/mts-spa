@@ -46,7 +46,7 @@ public class GoodsController {
 		return goodsService.delete(req);
 	}
 	
-//	查询商品主图、轮播图列表接口
+	//	查询商品主图、轮播图列表接口
 	@RequestMapping("/goodsImgList")
 	@ResponseBody
 	public CommObjResponse<List<SpaImg>> goodsImgList(@RequestBody SpaRequest<SpaImg> req) throws Exception {

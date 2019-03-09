@@ -18,14 +18,14 @@
 	
 	
 	
-	<!-- 通过手机号码检测账号是否存在 -->
+	<!-- 查询商户轮播图 -->
 	<select id="shopsImgList" resultType="com.qisen.mts.spa.model.entity.SpaImg" parameterType="com.qisen.mts.spa.model.entity.SpaImg">
 		<![CDATA[
 			select *  from  imgTable
 		]]>
 		<where>
 			<![CDATA[
-				 appid = #{appid} and eid = #{eid} and status = "0"
+				 appid = #{appid} and eid = #{eid} and status = "0" and type="0"
 			]]>
 		</where>
 	</select>
