@@ -4,20 +4,14 @@
 <mapper namespace="com.qisen.mts.spa.dao.ShopBonusDao">
 
 	<update id="updateList" parameterType="list">
-		<foreach collection="list" separator=";" item="i" index="index">
+		<foreach collection="list" separator=";" item="item" index="index"
+			open="" close="">
 			<![CDATA[
-	            update shopBonus
-	        ]]>
-			<set>
-				<![CDATA[
-					bonusLevel=#{i.bonusLevel},bonusType=#{i.bonusType},bonusValue=#{i.bonusValue}
-				 ]]>
-			</set>
-			<where>
-		 		<![CDATA[
-             		id=#{i.id} and eid = #{i.eid} and appid = #{i.appid}  
-             	]]>
-			</where>
+	            update shopBonus set 
+	            	bonusLevel=#{item.bonusLevel},bonusType=#{item.bonusType},bonusValue=#{item.bonusValue}
+				where
+             		id=#{item.id} and eid = #{item.eid} and appid = #{item.appid}  
+             ]]>
 		</foreach>
 	</update>
 </mapper>

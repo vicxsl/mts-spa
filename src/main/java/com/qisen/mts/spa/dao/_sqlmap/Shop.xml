@@ -25,7 +25,7 @@
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaShop" id="shopInfo">
 		<id property="id" column="id"/>
 		<result property="eid" column="eid" />
-		<result property="appId" column="appId" />
+		<result property="appid" column="appid" />
 		<result property="secret" column="secret" />
 		<result property="name" column="name" />
 		<result property="createDate" column="createDate" />

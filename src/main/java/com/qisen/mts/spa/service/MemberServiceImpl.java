@@ -109,7 +109,7 @@ public class MemberServiceImpl implements MemberService {
 		String requestUrl = "https://api.weixin.qq.com/sns/jscode2session"; // 请求地址
 																			// https://api.weixin.qq.com/sns/jscode2session
 		Map<String, String> requestUrlParam = new HashMap<String, String>();
-		requestUrlParam.put("appid", appid); // 开发者设置中的appId
+		requestUrlParam.put("appid", appid); // 开发者设置中的appid
 		requestUrlParam.put("secret", secret); // 开发者设置中的appSecret
 		requestUrlParam.put("js_code", js_code); // 小程序调用wx.login返回的code
 		requestUrlParam.put("grant_type", "authorization_code"); // 默认参数 authorization_code

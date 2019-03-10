@@ -9,11 +9,10 @@ public class ShopBonus extends BaseEntity{
 	
 	private Integer id;
 	private Integer eid;
-	private String appId;
+	private String appid;
 	private Integer bonusLevel;//提成层级
 	private String bonusType;//提成类型
 	private double bonusValue;//提成数字
-	private String status;
 	public Integer getId() {
 		return id;
 	}
@@ -26,11 +25,12 @@ public class ShopBonus extends BaseEntity{
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public String getAppId() {
-		return appId;
+	
+	public String getAppid() {
+		return appid;
 	}
-	public void setAppId(String appId) {
-		this.appId = appId;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 	public Integer getBonusLevel() {
 		return bonusLevel;
@@ -50,11 +50,4 @@ public class ShopBonus extends BaseEntity{
 	public void setBonusValue(double bonusValue) {
 		this.bonusValue = bonusValue;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
 }

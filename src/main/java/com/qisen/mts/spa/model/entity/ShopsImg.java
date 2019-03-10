@@ -9,7 +9,7 @@ public class ShopsImg extends BaseEntity{
 	
 	private Integer id;
 	private Integer eid;
-	private String appId;
+	private String appid;
 	private Integer goodsId;
 	private String imgUrl;
 	private String type;
@@ -26,11 +26,11 @@ public class ShopsImg extends BaseEntity{
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public String getAppId() {
-		return appId;
+	public String getAppid() {
+		return appid;
 	}
-	public void setAppId(String appId) {
-		this.appId = appId;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
 	public Integer getGoodsId() {
 		return goodsId;

@@ -11,7 +11,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				 appId = #{appId} and eid = #{eid}
+				 appid = #{appid} and eid = #{eid}
 			]]>
 			<if test="orderId != null and orderId != ''">
 				<![CDATA[
@@ -28,7 +28,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				 appId = #{appId} and eid = #{eid} and openid = #{openid}
+				 appid = #{appid} and eid = #{eid} and openid = #{openid}
 			]]>
 		</where>
 		<![CDATA[
