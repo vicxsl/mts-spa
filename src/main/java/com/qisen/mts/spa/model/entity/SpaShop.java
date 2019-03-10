@@ -1,5 +1,7 @@
 package com.qisen.mts.spa.model.entity;
 
+import java.util.List;
+
 import com.qisen.mts.common.model.entity.BaseEntity;
 
 /**
@@ -15,28 +17,21 @@ public class SpaShop extends BaseEntity {
 
 	private Integer id;
 	private Integer eid;
-	private String no;//门店编号
+	private String appid;//小程序id
+	private String secret;//小程序id
 	private String name;//门店名称
 	private String createDate;//接入日期
 	private String endDate;//结束日期
-	private String version;//版本
+	private double openMoney;//新开费用
+	private double reNewMoney;//接入费用
 	private String status;//状态
-	private String address;//地址
-	private String depotAddress;//仓库地址
-	private String linkMan;//联系人
-	private String linkMobile;//联系人电话
-	private String depotPhone;//仓库电话
-	private String telePhone;//门店电话
+	private Integer addressId;//办公地址id
+	private Integer depotAddressId;//仓库地址id
+	private MemberAddress address;//地址
+	private MemberAddress depotAddress;//仓库地址
+	private Integer bonusNum;//提成层级：0、1、2、3
 	private String shopImg;//门店logo
-	private String appId;//小程序id
-	private String secret;//小程序id
-	private String shopBonus;//新零售提成机制
-	public String getShopBonus() {
-		return shopBonus;
-	}
-	public void setShopBonus(String shopBonus) {
-		this.shopBonus = shopBonus;
-	}
+	private List<ShopBonus> shopBonusList;//新零售提成机制
 	public Integer getId() {
 		return id;
 	}
@@ -49,11 +44,18 @@ public class SpaShop extends BaseEntity {
 	public void setEid(Integer eid) {
 		this.eid = eid;
 	}
-	public String getNo() {
-		return no;
+	
+	public String getAppid() {
+		return appid;
 	}
-	public void setNo(String no) {
-		this.no = no;
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
+	public String getSecret() {
+		return secret;
+	}
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 	public String getName() {
 		return name;
@@ -73,11 +75,17 @@ public class SpaShop extends BaseEntity {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	public String getVersion() {
-		return version;
+	public double getOpenMoney() {
+		return openMoney;
 	}
-	public void setVersion(String version) {
-		this.version = version;
+	public void setOpenMoney(double openMoney) {
+		this.openMoney = openMoney;
+	}
+	public double getReNewMoney() {
+		return reNewMoney;
+	}
+	public void setReNewMoney(double reNewMoney) {
+		this.reNewMoney = reNewMoney;
 	}
 	public String getStatus() {
 		return status;
@@ -85,41 +93,35 @@ public class SpaShop extends BaseEntity {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getAddress() {
+	public Integer getAddressId() {
+		return addressId;
+	}
+	public void setAddressId(Integer addressId) {
+		this.addressId = addressId;
+	}
+	public Integer getDepotAddressId() {
+		return depotAddressId;
+	}
+	public void setDepotAddressId(Integer depotAddressId) {
+		this.depotAddressId = depotAddressId;
+	}
+	public MemberAddress getAddress() {
 		return address;
 	}
-	public void setAddress(String address) {
+	public void setAddress(MemberAddress address) {
 		this.address = address;
 	}
-	public String getDepotAddress() {
+	public MemberAddress getDepotAddress() {
 		return depotAddress;
 	}
-	public void setDepotAddress(String depotAddress) {
+	public void setDepotAddress(MemberAddress depotAddress) {
 		this.depotAddress = depotAddress;
 	}
-	public String getLinkMan() {
-		return linkMan;
+	public Integer getBonusNum() {
+		return bonusNum;
 	}
-	public void setLinkMan(String linkMan) {
-		this.linkMan = linkMan;
-	}
-	public String getLinkMobile() {
-		return linkMobile;
-	}
-	public void setLinkMobile(String linkMobile) {
-		this.linkMobile = linkMobile;
-	}
-	public String getDepotPhone() {
-		return depotPhone;
-	}
-	public void setDepotPhone(String depotPhone) {
-		this.depotPhone = depotPhone;
-	}
-	public String getTelePhone() {
-		return telePhone;
-	}
-	public void setTelePhone(String telePhone) {
-		this.telePhone = telePhone;
+	public void setBonusNum(Integer bonusNum) {
+		this.bonusNum = bonusNum;
 	}
 	public String getShopImg() {
 		return shopImg;
@@ -127,17 +129,11 @@ public class SpaShop extends BaseEntity {
 	public void setShopImg(String shopImg) {
 		this.shopImg = shopImg;
 	}
-	public String getAppId() {
-		return appId;
+	public List<ShopBonus> getShopBonusList() {
+		return shopBonusList;
 	}
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
-	public String getSecret() {
-		return secret;
-	}
-	public void setSecret(String secret) {
-		this.secret = secret;
+	public void setShopBonusList(List<ShopBonus> shopBonusList) {
+		this.shopBonusList = shopBonusList;
 	}
 	
 }

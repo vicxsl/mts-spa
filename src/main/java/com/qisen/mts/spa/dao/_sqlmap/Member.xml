@@ -119,23 +119,25 @@
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaMyInfoGains"
 		id="MyInfoGains">
 		<result property="myMoney" column="balance" />
-		<association property="todayPeople" column="appid" javaType="int" select="getTodayPeople" />
-	<association property="todayMoney" column="openid" select="getTodayMoney" />
-		<association property="myPeople" column="appid" select="getMyPeople" />
+		<association property="todayPeople" column="{appid=appid,openid=openid}" javaType="int" select="getTodayPeople" />
+		<association property="todayMoney" column="{appid=appid,openid=openid}" select="getTodayMoney" />
+		<association property="myPeople" column="{appid=appid,openid=openid,createTime=createDate}" select="getMyPeople" />
 	</resultMap>
-	<select id="getTodayPeople" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains" resultType="int">
+	<select id="getTodayPeople" parameterType="java.util.Map" resultType="int">
 	    <![CDATA[
         	select count(id) from member where appid=#{appid}  and openid = #{openid}
         ]]>
 	</select>
-	<select id="getMyPeople" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains" resultType="int">
+	<select id="getMyPeople" parameterType="java.util.Map" resultType="int">
     	<![CDATA[
         	select count(id) from member where appid=#{appid} and recommendOneId = #{openid}
         ]]>
 	</select>
-	<select id="getTodayMoney" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains" resultType="int">
+	<select id="getTodayMoney" parameterType="java.util.Map" resultType="int">
     	<![CDATA[
         	select sum(money) from incomeDetails where appid=#{appid} and openid = #{openid}and createTime > #{createTime} 
         ]]>
 	</select>
+	
+	
 </mapper>

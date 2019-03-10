@@ -47,7 +47,7 @@
 		]]>
 	</insert>
 
-	<!-- 删除账号 -->
+	<!-- 删除商品 -->
 	<update id="delete" parameterType="list">
 		<![CDATA[
             update goods

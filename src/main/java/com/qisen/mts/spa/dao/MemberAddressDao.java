@@ -1,5 +1,7 @@
 package com.qisen.mts.spa.dao;
 
+import java.util.List;
+
 import com.qisen.mts.spa.model.entity.MemberAddress;
 import com.qisen.mts.spa.model.entity.SpaMallOrder;
 import com.qisen.mts.spa.model.entity.SpaMember;
@@ -30,4 +32,11 @@ public interface MemberAddressDao {
 	 * @param address
 	 */
 	public void create(MemberAddress address);
+	
+	/**
+	 * 批量更新地址
+	 * @param address
+	 */
+	public void updateList(List<MemberAddress> list);
+	
 }

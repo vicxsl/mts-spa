@@ -17,6 +17,19 @@ public interface ShopService {
 	 */
 	public CommObjResponse<SpaShop> queryByAppId(SpaRequest<JSONObject> req);
 	
+	/**
+	 * 查询spa商户列表
+	 * @param req
+	 * @return
+	 */
+	public CommObjResponse<List<SpaShop>> list(SpaRequest<SpaShop> req);
+	
+	/**
+	 * 编辑商户列表
+	 * @param req
+	 * @return
+	 */
+	public CommObjResponse<List<SpaShop>> edit(SpaRequest<SpaShop> req);
 	
 	/**
 	 * 查询商户轮播图

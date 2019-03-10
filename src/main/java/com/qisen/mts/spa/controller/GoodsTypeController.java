@@ -41,7 +41,7 @@ public class GoodsTypeController {
 //	删除商品接口
 	@RequestMapping("/delete")
 	@ResponseBody
-	public CommObjResponse<List<SpaGoodsType>> delete(@RequestBody SpaRequest<SpaGoodsType> req) throws Exception {
+	public CommObjResponse<List<SpaGoodsType>> delete(@RequestBody SpaRequest<List<SpaGoodsType>> req) throws Exception {
 		return goodsTypeService.delete(req);
 	}
 	

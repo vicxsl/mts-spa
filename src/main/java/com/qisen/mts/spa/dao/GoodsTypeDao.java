@@ -18,7 +18,7 @@ public interface GoodsTypeDao {
 	 * @param spaAccount
 	 * @return
 	 */
-	public int delete(SpaGoodsType spaGoodsType);
+	public int delete(List<SpaGoodsType> list);
 
 	/**
 	 * 新增spa账号 

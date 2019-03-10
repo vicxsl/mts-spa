@@ -20,7 +20,7 @@ public interface GoodsTypeService {
 	 * @param req
 	 * @return
 	 */
-	public CommObjResponse<List<SpaGoodsType>> delete(SpaRequest<SpaGoodsType> req);
+	public CommObjResponse<List<SpaGoodsType>> delete(SpaRequest<List<SpaGoodsType>> req);
 	
 	/**
 	 * 查询spa商品

@@ -21,24 +21,36 @@ import com.qisen.mts.spa.service.ShopService;
 @Controller
 @RequestMapping("/spa/shop")
 public class ShopController {
-	
+
 	@Autowired
 	private ShopService shopService;
 
-
-   //通过小程序id查询商户
+	// 通过小程序id查询商户
 	@RequestMapping("/spaMall/queryByAppId")
 	@ResponseBody
 	public CommObjResponse<SpaShop> queryByAppId(@RequestBody SpaRequest<JSONObject> req) throws Exception {
 		return shopService.queryByAppId(req);
 	}
-	
-	//查询店铺轮播图集合
+
+	// 通过企业eid、小程序id查询商户
+	@RequestMapping("/list")
+	@ResponseBody
+	public CommObjResponse<List<SpaShop>> list(@RequestBody SpaRequest<SpaShop> req) throws Exception {
+		return shopService.list(req);
+	}
+
+	// 编辑商户
+	@RequestMapping("/edit")
+	@ResponseBody
+	public CommObjResponse<List<SpaShop>> edit(@RequestBody SpaRequest<SpaShop> req) throws Exception {
+		return shopService.edit(req);
+	}
+
+	// 查询店铺轮播图集合
 	@RequestMapping("/shopsImgList")
 	@ResponseBody
 	public CommObjResponse<List<SpaImg>> shopsImgList(@RequestBody SpaRequest<SpaImg> req) throws Exception {
 		return shopService.shopsImgList(req);
 	}
-	
-}
 
+}

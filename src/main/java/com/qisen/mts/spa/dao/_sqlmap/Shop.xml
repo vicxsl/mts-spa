@@ -7,7 +7,7 @@
 	<select id="queryByAppId" resultType="com.qisen.mts.spa.model.entity.SpaShop"
 		parameterType="String">
 		<![CDATA[
-			select *  from  shops
+			select * from  shops 
 		]]>
 		<where>
 			<![CDATA[
@@ -16,7 +16,46 @@
 		</where>
 	</select>
 	
-	
+	<!-- 通过eid 查询商户列表 -->
+	<select id="list" resultMap="shopInfo" parameterType="com.qisen.mts.spa.model.entity.SpaShop">
+		<![CDATA[
+			select *  from  shops where eid=#{eid} order By status+0,name
+		]]>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaShop" id="shopInfo">
+		<id property="id" column="id"/>
+		<result property="eid" column="eid" />
+		<result property="appId" column="appId" />
+		<result property="secret" column="secret" />
+		<result property="name" column="name" />
+		<result property="createDate" column="createDate" />
+		<result property="endDate" column="endDate" />
+		<result property="openMoney" column="openMoney" />
+		<result property="reNewMoney" column="reNewMoney" />
+		<result property="status" column="status" />
+		<result property="addressId" column="addressId" />
+		<result property="depotAddressId" column="depotAddressId" />
+		<result property="bonusNum" column="bonusNum" />
+		<result property="shopImg" column="shopImg" />
+		<association property="address" column="{appid=appid,eid=eid,addressId=addressId}" javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getAddress" />
+		<association property="depotAddress" column="{appid=appid,eid=eid,depotAddressId=depotAddressId}" javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getDepotAddress" />
+		<collection property="shopBonusList" column="{appid=appid,eid=eid}" ofType="com.qisen.mts.spa.model.entity.ShopBonus" javaType="ArrayList" select="getShopBonusList" />
+	</resultMap>
+	<select id="getAddress" parameterType="java.util.Map" resultType="com.qisen.mts.spa.model.entity.MemberAddress">
+	    <![CDATA[
+        	select * from memberAddress where appid=#{appid} and eid = #{eid} and id=#{addressId}
+        ]]>
+	</select>
+	<select id="getDepotAddress" parameterType="java.util.Map" resultType="com.qisen.mts.spa.model.entity.MemberAddress">
+    	<![CDATA[
+        	select * from memberAddress where appid=#{appid}  and eid = #{eid} and id=#{depotAddressId}
+        ]]>
+	</select>
+	<select id="getShopBonusList" parameterType="java.util.Map" resultType="com.qisen.mts.spa.model.entity.ShopBonus">
+    	<![CDATA[
+        	select * from shopBonus where appid=#{appid} and eid = #{eid} 
+        ]]>
+	</select>
 	
 	<!-- 查询商户轮播图 -->
 	<select id="shopsImgList" resultType="com.qisen.mts.spa.model.entity.SpaImg" parameterType="com.qisen.mts.spa.model.entity.SpaImg">
@@ -29,4 +68,21 @@
 			]]>
 		</where>
 	</select>
+	
+	<!--  批量更新地址-->
+	<update id="edit" parameterType="com.qisen.mts.spa.model.entity.SpaShop">
+		<![CDATA[
+	            update shops
+	        ]]>
+			<set>
+				<![CDATA[
+					name=#{name},bonusNum=#{bonusNum}
+				 ]]>
+			</set>
+			<where>
+		 		<![CDATA[
+             		id=#{id} and eid = #{eid} and appid = #{appid}  
+             	]]>
+			</where>
+	</update>
 </mapper>

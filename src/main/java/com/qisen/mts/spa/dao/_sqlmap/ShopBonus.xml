@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.ShopBonusDao">
+
+	<update id="updateList" parameterType="list">
+		<foreach collection="list" separator=";" item="i" index="index">
+			<![CDATA[
+	            update shopBonus
+	        ]]>
+			<set>
+				<![CDATA[
+					bonusLevel=#{i.bonusLevel},bonusType=#{i.bonusType},bonusValue=#{i.bonusValue}
+				 ]]>
+			</set>
+			<where>
+		 		<![CDATA[
+             		id=#{i.id} and eid = #{i.eid} and appid = #{i.appid}  
+             	]]>
+			</where>
+		</foreach>
+	</update>
+</mapper>

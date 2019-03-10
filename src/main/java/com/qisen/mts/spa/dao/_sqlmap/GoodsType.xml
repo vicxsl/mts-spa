@@ -36,16 +36,23 @@
 	</insert>
 	
 	<!-- 删除商品类型 -->
-	<delete id="delete" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+	<update id="delete" parameterType="list">
 		<![CDATA[
-			delete from goodsType
-		]]>
+            update goodsType
+        ]]>
+		<set>
+				<![CDATA[
+					 status = "-1"
+				 ]]>
+		</set>
 		<where>
-			<![CDATA[
-				eid = #{eid} and appid = #{appid} and id=#{id}
-			]]>
+			<foreach collection="list" separator="or" item="i" index="index">
+			 	<![CDATA[
+              		id=#{i.id} and eid = #{i.eid} and appid = #{i.appid}  
+              	]]>
+			</foreach>
 		</where>
-	</delete>
+	</update>
 	
 	<!-- 更新商品类型 -->
 	<update id="update" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsType">

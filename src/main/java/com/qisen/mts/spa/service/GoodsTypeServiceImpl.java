@@ -51,17 +51,17 @@ public class GoodsTypeServiceImpl implements GoodsTypeService{
 	 * 删除spa商品类型
 	 */
 	@Override
-	public CommObjResponse<List<SpaGoodsType>> delete(SpaRequest<SpaGoodsType> req) {
+	public CommObjResponse<List<SpaGoodsType>> delete(SpaRequest<List<SpaGoodsType>> req) {
 		CommObjResponse<List<SpaGoodsType>> resp = new CommObjResponse<List<SpaGoodsType>>();
-		SpaGoodsType spaGoodsType = req.getBody();
-		SpaGoodsType queryGoodsType = new SpaGoodsType();
-		queryGoodsType.setEid(spaGoodsType.getEid());
-		queryGoodsType.setAppid(spaGoodsType.getAppid());
-		int count = goodsTypeDao.delete(spaGoodsType);
+		List<SpaGoodsType> spa = req.getBody();
+		SpaGoodsType query = new SpaGoodsType();
+		query.setEid(req.getEid());
+		query.setAppid(req.getAppid());
+		int count = goodsTypeDao.delete(spa);
 		if (count == 0 ) {
 			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
 		}else{
-			List<SpaGoodsType>  spaList = goodsTypeDao.list(queryGoodsType);
+			List<SpaGoodsType>  spaList = goodsTypeDao.list(query);
 			resp.setBody(spaList);
 		}
 		return resp;

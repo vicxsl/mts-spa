@@ -20,8 +20,8 @@
 			</if>
 		</where>
 	</select>
-	
-		<select id="queryNewAddressByMember" resultType="com.qisen.mts.spa.model.entity.MemberAddress"
+
+	<select id="queryNewAddressByMember" resultType="com.qisen.mts.spa.model.entity.MemberAddress"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
 			select *  from  memberAddress
@@ -35,7 +35,7 @@
 		ORDER BY id DESC LIMIT 1
 		]]>
 	</select>
-	
+
 	<delete id="deleteByOrder" parameterType="com.qisen.mts.spa.model.entity.MemberAddress">
 		<![CDATA[
 			delete from memberAddress
@@ -46,11 +46,25 @@
 			]]>
 		</where>
 	</delete>
-	
+
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.MemberAddress">
 		<![CDATA[
 			insert into memberAddress(eid,appid,openid,userName,postalCode,provinceName,cityName,countyName,detailInfo,nationalCode,telNumber,orderId,status) 
 			values(#{eid},#{appid},#{openid},#{userName},#{postalCode},#{provinceName},#{cityName},#{countyName},#{detailInfo},#{nationalCode},#{telNumber},#{orderId},0)
 		]]>
 	</insert>
+
+	<!-- 批量更新地址 -->
+	<update id="updateList" parameterType="list">
+		<foreach collection="list" separator=";" item="i" index="index"
+			open="" close="">
+			<![CDATA[
+	            update memberAddress set 
+	            	userName=#{i.userName},provinceName=#{i.provinceName},cityName=#{i.cityName},
+	            	countyName=#{i.countyName},detailInfo=#{i.detailInfo},telNumber=#{i.telNumber}
+				where 
+             		id=#{i.id} and eid = #{i.eid} and appid = #{i.appid}  
+             ]]>
+		</foreach>
+	</update>
 </mapper>

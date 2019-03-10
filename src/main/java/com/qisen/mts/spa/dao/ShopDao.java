@@ -14,6 +14,19 @@ public interface ShopDao {
 	 * @return
 	 */
 	public SpaShop queryByAppId(@Param("appid")String appid);
+	/**
+	 * 查询商户
+	 * @param 
+	 * @return
+	 */
+	public List<SpaShop> list(SpaShop spa);
+	
+	/**
+	 * 编辑商户
+	 * @param 
+	 * @return
+	 */
+	public void edit(SpaShop spa);
 	
 	/**
 	 * 查询轮播图urls,按顺序返回
