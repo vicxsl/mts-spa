@@ -2,6 +2,7 @@ package com.qisen.mts.spa.service;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaGoods;
 import com.qisen.mts.spa.model.entity.SpaImg;
@@ -33,6 +34,8 @@ public interface GoodsService {
 	void updateGoodsNum(List<SpaGoods> goodsList, String inoutdepottype);
 	
 	public CommObjResponse<List<SpaImg>> goodsImgList(SpaRequest<SpaImg> req);
+	
+	public CommObjResponse<JSONObject> details(SpaRequest<SpaGoods> req);
 		
 	
 }

@@ -202,5 +202,13 @@
 			</if>
 		</where>
 	</select>
+	
+	<!-- 查询单个SPA商品 -->
+	<select id="details" resultType="com.qisen.mts.spa.model.entity.SpaGoods"
+		parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
+		<![CDATA[
+			select * from goods where id=#{id}
+		]]>
+	</select>
 
 </mapper>

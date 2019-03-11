@@ -9,10 +9,10 @@ public class PageRequest<T> extends BaseRequest<T> {
 	 */
 	private static final long serialVersionUID = 7861414123053831925L;
 
-	public Integer pageNum; // 页码
-	public Integer pageSize; // 每页记录数
-	public Integer startIndex; // 起始记录
-	public Integer endIndex; // 结束记录
+	public Integer pageNum; // 椤电爜
+	public Integer pageSize; // 姣忛〉璁板綍鏁�
+	public Integer startIndex; // 璧峰璁板綍
+	public Integer endIndex; // 缁撴潫璁板綍
 
 	public PageRequest() {
 		super();

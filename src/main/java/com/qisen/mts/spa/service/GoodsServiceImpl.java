@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsDao;
@@ -114,6 +115,23 @@ public class GoodsServiceImpl implements GoodsService{
 			goodsDao.update(spaGoods);
 		}
 		
+	}
+
+	@Override
+	public CommObjResponse<JSONObject> details(SpaRequest<SpaGoods> req) {
+		CommObjResponse<JSONObject> resp=new CommObjResponse<JSONObject> ();
+		SpaGoods good = req.getBody();
+		SpaImg spa=new SpaImg();
+		spa.setGoodsId(good.getId());
+		spa.setAppid(good.getAppid());
+		spa.setEid(good.getEid());
+		List<SpaImg>  spaList = goodsDao.goodsImgList(spa);
+		SpaGoods goods=goodsDao.details(good);
+		JSONObject resBody=new JSONObject();
+		resBody.put("goodsImgList", spaList);
+		resBody.put("goods", goods);
+		resp.setBody(resBody);
+		return resp;
 	}
 	
 }

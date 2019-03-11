@@ -43,6 +43,8 @@ public interface GoodsDao {
 	
 	public List<SpaImg> goodsImgList(SpaImg spa);
 	
+	public SpaGoods details(SpaGoods spa);//查询商品信息
+	
 	public void updateGoodsNum(List<SpaGoods> goodList);
 
 	public SpaGoods getGoodsByPara(SpaGoods spaGoods);

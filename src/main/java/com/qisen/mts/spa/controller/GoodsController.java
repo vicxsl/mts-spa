@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaGoods;
 import com.qisen.mts.spa.model.entity.SpaImg;
@@ -53,6 +54,11 @@ public class GoodsController {
 		return goodsService.goodsImgList(req);
 	}
 	
+	@RequestMapping("/detials")
+	@ResponseBody
+	public CommObjResponse<JSONObject> detials(@RequestBody SpaRequest<SpaGoods> req) throws Exception {
+		return goodsService.details(req);
+	}
 
 
 }
