@@ -19,16 +19,11 @@ import org.springframework.util.CollectionUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
-import com.qisen.mts.spa.dao.GoodsShopCarDao;
-import com.qisen.mts.spa.dao.GoodsTypeDao;
 import com.qisen.mts.spa.dao.MemberDao;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.MetaData;
-import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
-import com.qisen.mts.spa.model.entity.SpaGoodsType;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
-import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
@@ -38,11 +33,6 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDao memberDao;
 	@Autowired
 	private ShopDao shopDao;
-
-	@Autowired
-	private GoodsShopCarDao goodsShopCarDao;
-	@Autowired
-	private GoodsTypeDao goodsTypeDao;
 	
 	@Value("#{configProperties['PHOTO_PATH']}")
 	private String PHOTO_PATH;
@@ -52,48 +42,18 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req) {
 		CommObjResponse<MetaData> resp = new CommObjResponse<MetaData>();
-		SpaMember body = req.getBody();
-		String appid = body.getAppid();
-		String js_code = body.getJs_code();// wx.login临时js_code
-		SpaMember query = new SpaMember();
-		MetaData metaData = new MetaData();
-		SpaShop shop = shopDao.queryByAppId(appid);
-		SpaGoodsType goodstype = new SpaGoodsType();
-		goodstype.setAppid(appid);
-		goodstype.setEid(shop.getEid());
-		metaData.setShop(shop);// 储存门店信息
-		metaData.setPhotoPath(PHOTO_PATH);
-		List<SpaGoodsType> goodsTypes = goodsTypeDao.list(goodstype);
-		metaData.setGoodsTypes(goodsTypes);//储存商品类型集合
-		String secret = shop.getSecret();
+		SpaMember query = req.getBody();
+		String appid = query.getAppid();
+		String js_code = query.getJs_code();// wx.login临时js_code
+		String secret = shopDao.getSecret(appid);
 		JSONObject wxObject = MemberServiceImpl.getSessionKeyOropenid(js_code, appid, secret);
 		String openid = wxObject.getString("openid");
 		String session_key = wxObject.getString("session_key");
-		query.setEid(shop.getEid());
-		query.setAppid(appid);
 		query.setOpenid(openid);
-		SpaMember checkMember = memberDao.check(query);
-		if (checkMember != null && checkMember.getId() > 0) {
-			if ((body.getMobile() != null && checkMember.getMobile() != body.getMobile())
-					|| (body.getName() != null && checkMember.getName() != body.getName())
-					|| (body.getAvatarUrl() != null && checkMember.getAvatarUrl() != body.getAvatarUrl())) {
-				memberDao.update(body);
-			}
-			checkMember.setSession_key(session_key);
-			checkMember.setOpenid(openid);
-		} else {
-			body.setEid(shop.getEid());
-			body.setOpenid(openid);
-			body.setSession_key(session_key);
-			checkMember = body;
-			memberDao.create(body);
-		}
-		metaData.setMember(checkMember);// 储存会员信息
-		SpaGoodsShopCar queryShopCar = new SpaGoodsShopCar();
-		queryShopCar.setAppid(appid);
-		queryShopCar.setOpenid(openid);
-		List<SpaGoodsShopCar> ShopCarList = goodsShopCarDao.list(queryShopCar);
-		metaData.setShopCarList(ShopCarList);// 储存会员购物车信息
+		query.setSession_key(session_key);
+		memberDao.saveOrUpdate(query);//新增或者更新会员
+		MetaData metaData = memberDao.getMallMetaData(query);//查询metaData信息
+		metaData.setPhotoPath(PHOTO_PATH);//图片访问前缀
 		resp.setBody(metaData);
 		return resp;
 	}

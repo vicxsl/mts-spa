@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.qisen.mts.spa.model.entity.MetaData;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 
@@ -15,6 +16,14 @@ public interface MemberDao {
 	 * @return
 	 */
 	public SpaMember check(SpaMember spa);
+	
+	
+	/**
+	 * 新增或更新会员
+	 * @param spa
+	 * @return
+	 */
+	public void saveOrUpdate(SpaMember spa);
 	
 	/**
 	 * 删除spa账号
@@ -42,6 +51,9 @@ public interface MemberDao {
 	public List<SpaMember> levelThree(@Param("list")List<SpaMember> list,@Param("eid")String eid);
 
 	public SpaMyInfoGains myInfoGains(SpaMyInfoGains spa);
+	
+	//获取小程序metaData
+	public MetaData getMallMetaData(SpaMember spa);
 	
 
 }

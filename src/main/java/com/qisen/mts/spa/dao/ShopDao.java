@@ -32,4 +32,6 @@ public interface ShopDao {
 	 * 查询轮播图urls,按顺序返回
 	 */
 	public List<SpaImg> shopsImgList(SpaImg spaShopsImg);
+	
+	public String getSecret(@Param("appid")String appid);
 }

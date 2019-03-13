@@ -21,20 +21,86 @@
 		</where>
 	</select>
 
+	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<selectKey keyProperty="id" resultType="int"
+			order="BEFORE">
+			select count(id) as id from member where appid = #{appid} and
+			openid =
+			#{openid}
+		</selectKey>
+		<if test="id == 1">
+    		<![CDATA[
+				update member
+			]]>
+			<set>
+				<if test="name != null and name !=''">
+					<![CDATA[
+						 name = #{name},
+					 ]]>
+				</if>
+				<if test="mobile != null and mobile !=''">
+					<![CDATA[
+						 mobile = #{mobile},
+					 ]]>
+				</if>
+				<if test="avatarUrl != null and avatarUrl !=''">
+					<![CDATA[
+						 avatarUrl = #{avatarUrl},
+					 ]]>
+				</if>
+			</set>
+			<where>
+				<![CDATA[
+					 appid = #{appid} and openid = #{openid}
+				]]>
+			</where>
+		</if>
+		<if test="id == 0">
+		    <![CDATA[
+		    	insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId) 
+					SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as mobile,#{totalMoney} as totalMoney,#{balance} as balance,
+					#{createDate} as createDate,#{openid} as openid,#{session_key} as session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as avatarUrl,
+				
+		    ]]>
+			<choose>
+				<when test="recommendOneId !=null and recommendOneId != ''">
+					a.recommendTwoId as
+					recommendThreeId,a.recommendOneId as
+					recommendTwoId,#{recommendOneId} as recommendOneId from member a
+					where a.openid=#{recommendOneId}
+				</when>
+				<otherwise>
+					'' as recommendThreeId,'' as recommendTwoId,'' as
+					recommendOneId from
+					dual
+				</otherwise>
+			</choose>
+		</if>
+	</insert>
+
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-			insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId) 
-			SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as mobile,#{totalMoney} as totalMoney,#{balance} as balance,
-			#{createDate} as createDate,#{openid} as openid,#{session_key} as session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as avatarUrl,
+		insert into
+		member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId)
+		SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as
+		mobile,#{totalMoney} as totalMoney,#{balance} as balance,
+		#{createDate} as createDate,#{openid} as openid,#{session_key} as
+		session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as
+		avatarUrl,
 		<choose>
-        	<when test="recommendOneId !=null and recommendOneId != ''">
-            	a.recommendTwoId as recommendThreeId,a.recommendOneId as recommendTwoId,#{recommendOneId} as recommendOneId   from member a where a.openid=#{recommendOneId}
-        	</when>
-        	<otherwise>
-            	'' as recommendThreeId,'' as recommendTwoId,'' as recommendOneId  from dual
-        	</otherwise>
-    	</choose>
-			
+			<when test="recommendOneId !=null and recommendOneId != ''">
+				a.recommendTwoId as recommendThreeId,a.recommendOneId
+				as
+				recommendTwoId,#{recommendOneId} as recommendOneId from member a
+				where a.openid=#{recommendOneId}
+			</when>
+			<otherwise>
+				'' as recommendThreeId,'' as recommendTwoId,'' as
+				recommendOneId from
+				dual
+			</otherwise>
+		</choose>
+
 	</insert>
 
 	<!-- 删除账号 -->
@@ -83,35 +149,54 @@
 	</select>
 
 	<!-- 查询会员推荐人员集合 及其所带来的获利集合 -->
-	<select id="profitLevelOne" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-	  select b.buyOpenid as openid,b.eid, b.name,b.createDate,sum(b.money) as balance from (select t.name,t.eid,a.createDate,t.buyOpenid,t.money FROM incomeDetails t ,
-	     member a where t.buyOpenid = a.openid and t.eid = #{eid} and t.openid=#{openid} ) b group by b.buyOpenid, b.name,b.createDate
+	<select id="profitLevelOne" resultType="com.qisen.mts.spa.model.entity.SpaMember"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		select b.buyOpenid as openid,b.eid,
+		b.name,b.createDate,sum(b.money) as
+		balance from (select
+		t.name,t.eid,a.createDate,t.buyOpenid,t.money
+		FROM incomeDetails t ,
+		member a where t.buyOpenid = a.openid and t.eid = #{eid} and
+		t.openid=#{openid} ) b group by b.buyOpenid, b.name,b.createDate
 	</select>
-	
-	<select id="levelTwo" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-	  select b.openid,b.eid, b.name,b.createDate,sum(b.money) as balance from (select t.name,t.eid,a.createDate,t.openid,t.money FROM incomeDetails t ,
-	     member a where t.openid = a.openid and t.eid = #{eid} and t.Level=1 and t.openid in
-	     <foreach collection="list" item="member" index="index" open="("  separator="," close=")">
+
+	<select id="levelTwo" resultType="com.qisen.mts.spa.model.entity.SpaMember"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		select b.openid,b.eid, b.name,b.createDate,sum(b.money) as balance
+		from (select t.name,t.eid,a.createDate,t.openid,t.money FROM
+		incomeDetails t ,
+		member a where t.openid = a.openid and t.eid = #{eid}
+		and t.Level=1 and
+		t.openid in
+		<foreach collection="list" item="member" index="index" open="("
+			separator="," close=")">
 				<![CDATA[
 					#{member.openid}
 				]]>
-			</foreach>
-	      ) b group by b.openid, b.name,b.createDate
+		</foreach>
+		) b group by b.openid, b.name,b.createDate
 	</select>
-	
-	<select id="levelThree" resultType="com.qisen.mts.spa.model.entity.SpaMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-	  select b.openid, b.name,b.eid,b.createDate,sum(b.money) as balance from (select t.name,t.eid,a.createDate,t.openid,t.money FROM incomeDetails t ,
-	     member a where t.openid = a.openid and t.eid = #{eid} and t.Level=2 and t.openid in
-	     <foreach collection="list" item="member" index="index" open="("  separator="," close=")">
+
+	<select id="levelThree" resultType="com.qisen.mts.spa.model.entity.SpaMember"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		select b.openid, b.name,b.eid,b.createDate,sum(b.money) as balance
+		from (select t.name,t.eid,a.createDate,t.openid,t.money FROM
+		incomeDetails t ,
+		member a where t.openid = a.openid and t.eid = #{eid}
+		and t.Level=2 and
+		t.openid in
+		<foreach collection="list" item="member" index="index" open="("
+			separator="," close=")">
 				<![CDATA[
 					#{member.openid}
 				]]>
-			</foreach>
-	      ) b group by b.openid, b.name,b.createDate
+		</foreach>
+		) b group by b.openid, b.name,b.createDate
 	</select>
 
 
-	<select id="myInfoGains" resultMap="MyInfoGains" parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains">
+	<select id="myInfoGains" resultMap="MyInfoGains"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains">
 		<![CDATA[
         	select * from member where appid=#{appid} and openid = #{openid} and eid=#{eid} order By createDate
         ]]>
@@ -119,25 +204,137 @@
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaMyInfoGains"
 		id="MyInfoGains">
 		<result property="myMoney" column="balance" />
-		<association property="todayPeople" column="{appid=appid,openid=openid}" javaType="int" select="getTodayPeople" />
-		<association property="todayMoney" column="{appid=appid,openid=openid}" select="getTodayMoney" />
-		<association property="myPeople" column="{appid=appid,openid=openid,createTime=createDate}" select="getMyPeople" />
+		<association property="todayPeople" column="{appid=appid,openid=openid}"
+			javaType="int" select="getTodayPeople" />
+		<association property="todayMoney" column="{appid=appid,openid=openid}"
+			select="getTodayMoney" />
+		<association property="myPeople"
+			column="{appid=appid,openid=openid,createTime=createDate}" select="getMyPeople" />
 	</resultMap>
-	<select id="getTodayPeople" parameterType="java.util.Map" resultType="int">
+	<select id="getTodayPeople" parameterType="java.util.Map"
+		resultType="int">
 	    <![CDATA[
         	select count(id) from member where appid=#{appid}  and openid = #{openid}
         ]]>
 	</select>
-	<select id="getMyPeople" parameterType="java.util.Map" resultType="int">
+	<select id="getMyPeople" parameterType="java.util.Map"
+		resultType="int">
     	<![CDATA[
         	select count(id) from member where appid=#{appid} and recommendOneId = #{openid}
         ]]>
 	</select>
-	<select id="getTodayMoney" parameterType="java.util.Map" resultType="int">
+	<select id="getTodayMoney" parameterType="java.util.Map"
+		resultType="int">
     	<![CDATA[
         	select sum(money) from incomeDetails where appid=#{appid} and openid = #{openid}and createTime > #{createTime} 
         ]]>
 	</select>
-	
-	
+
+
+	<!-- 获取mall 小程序 metaData数据 -->
+	<select id="getMallMetaData" resultMap="mallMetaData"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+        	select * from shops where appid=#{appid}
+        ]]>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.MetaData" id="mallMetaData">
+		<association property="shop" column="{appid=appid}"
+			select="getShop" />
+		<association property="member" column="{appid=appid,openid=openid}"
+			select="getMember" />
+		<association property="goodsTypes" column="{appid=appid,openid=openid}"
+			select="getGoodsTypes" />
+		<association property="memberAddress" column="{appid=appid,openid=openid}"
+			select="getMemberAddresss" />
+		<collection property="shopCarList" column="{appid=appid,openid=openid}"
+			ofType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar" javaType="ArrayList"
+			select="getShopCarList" />
+	</resultMap>
+
+	<select id="getShop" resultMap="shopInfo" parameterType="java.util.Map">
+		<![CDATA[
+			select *  from  shops where appid=#{appid} order By status+0,name
+		]]>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaShop" id="shopInfo">
+		<id property="id" column="id" />
+		<result property="eid" column="eid" />
+		<result property="appid" column="appid" />
+		<result property="secret" column="secret" />
+		<result property="name" column="name" />
+		<result property="createDate" column="createDate" />
+		<result property="endDate" column="endDate" />
+		<result property="openMoney" column="openMoney" />
+		<result property="reNewMoney" column="reNewMoney" />
+		<result property="status" column="status" />
+		<result property="addressId" column="addressId" />
+		<result property="depotAddressId" column="depotAddressId" />
+		<result property="bonusNum" column="bonusNum" />
+		<result property="shopImg" column="shopImg" />
+		<association property="address"
+			column="{appid=appid,eid=eid,addressId=addressId}" javaType="com.qisen.mts.spa.model.entity.MemberAddress"
+			select="getAddress" />
+		<association property="depotAddress"
+			column="{appid=appid,eid=eid,depotAddressId=depotAddressId}"
+			javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getDepotAddress" />
+		<collection property="shopBonusList" column="{appid=appid,eid=eid}"
+			ofType="com.qisen.mts.spa.model.entity.ShopBonus" javaType="ArrayList"
+			select="getShopBonusList" />
+	</resultMap>
+
+	<select id="getAddress" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.MemberAddress">
+	    <![CDATA[
+        	select * from memberAddress where appid=#{appid} and eid = #{eid} and id=#{addressId}
+        ]]>
+	</select>
+	<select id="getDepotAddress" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.MemberAddress">
+    	<![CDATA[
+        	select * from memberAddress where appid=#{appid}  and eid = #{eid} and id=#{depotAddressId}
+        ]]>
+	</select>
+	<select id="getShopBonusList" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.ShopBonus">
+    	<![CDATA[
+        	select * from shopBonus where appid=#{appid} and eid = #{eid} 
+        ]]>
+	</select>
+
+
+	<select id="getMember" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.SpaMember">
+    	<![CDATA[
+        	select * from member where appid=#{appid} and openid = #{openid}
+        ]]>
+	</select>
+	<select id="getShopCarList" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
+    	<![CDATA[
+			select a.*,b.name,b.unit,b.salePrice,b.preferencePrice,b.spec,b.imgUrl from goodsShopCar a,goods b
+		]]>
+		<where>
+			<![CDATA[
+				a.appid = #{appid} and a.appid = b.appid and a.goodsId = b.id
+			]]>
+			<if test="openid != null and openid !=''">
+				<![CDATA[
+					and a.openid = #{openid} 
+				]]>
+			</if>
+		</where>
+	</select>
+	<select id="getGoodsTypes" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.SpaGoodsType">
+		<![CDATA[
+			select * from goodsType where appid=#{appid} and openid = #{openid} and status = '0'
+		]]>
+	</select>
+	<select id="getMemberAddresss" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.MemberAddress">
+		<![CDATA[
+			select * from member where appid=#{appid} and openid = #{openid}
+		]]>
+	</select>
 </mapper>

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.qisen.mts.spa.dao.ShopDao">
 
-	<!-- 通过手机号码检测账号是否存在 -->
+	<!-- 通过appid查询商户 -->
 	<select id="queryByAppId" resultType="com.qisen.mts.spa.model.entity.SpaShop"
 		parameterType="String">
 		<![CDATA[
@@ -14,6 +14,14 @@
 				 appid = #{appid} 
 			]]>
 		</where>
+	</select>
+	
+	<!-- 通过appid查询商户tSecret -->
+	<select id="getSecret" resultType="String"
+		parameterType="String">
+		<![CDATA[
+			select Secret from  shops where appid = #{appid} 
+		]]>
 	</select>
 	
 	<!-- 通过eid 查询商户列表 -->
