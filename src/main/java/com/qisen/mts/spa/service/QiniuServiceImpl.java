@@ -1,11 +1,15 @@
 package com.qisen.mts.spa.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONObject;
 import com.qiniu.common.Zone;
@@ -41,8 +45,9 @@ public class QiniuServiceImpl implements QiniuService {
 	}
 
 	@Override
-	public CommObjResponse<JSONObject>  saveImage(MultipartFile file) throws Exception {
+	public CommObjResponse<JSONObject>  saveImage(MultipartHttpServletRequest request) throws Exception {
 		CommObjResponse<JSONObject>  respone=new CommObjResponse<JSONObject> ();
+		MultipartFile file =  request.getFile("upload_file");
 		JSONObject body=new JSONObject();
 		int dotPos = file.getOriginalFilename().lastIndexOf(".");
         if (dotPos < 0) {
@@ -54,9 +59,9 @@ public class QiniuServiceImpl implements QiniuService {
         	 throw new Exception();
         }
 
-        String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;
+        String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;//图片名称
         // 调用put方法上传
-        Response res = uploadManager.put(file.getBytes(), fileName, getUpToken());
+        Response res = uploadManager.put(file.getBytes(), fileName, getUpToken());//图片上传动作
         // 打印返回的信息
         if (res.isOK() && res.isJson()) {
         	body.put("imgName", JSONObject.parseObject(res.bodyString()).get("key"));

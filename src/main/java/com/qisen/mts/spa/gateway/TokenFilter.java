@@ -45,7 +45,7 @@ public class TokenFilter extends OncePerRequestFilter {
 		JSONObject baseReq = null;
 		String token = null;
 //		未知上传什么内容使用，先保留--chali
-		if (request.getRequestURI().contains("/spa/upload") || request.getRequestURI().contains("/spa/import")) {
+		if (request.getRequestURI().contains("/spa/file/upload") || request.getRequestURI().contains("/spa/import")) {
 			if (multipartResolver == null)
 				multipartResolver = (MultipartResolver) SpringContextUtil.getBean("multipartResolver");
 			String lang = null;
@@ -53,12 +53,13 @@ public class TokenFilter extends OncePerRequestFilter {
 				// 防止流读取一次后就没有了
 				requestWrapper = multipartResolver.resolveMultipart(request);
 				token = requestWrapper.getParameter("token");
-				lang = requestWrapper.getParameter("lang");
+//				lang = requestWrapper.getParameter("lang");
 			} else {
 				token = request.getParameter("token");
 				lang = request.getParameter("lang");
 			}
-			requestWrapper.setAttribute("lang", lang);
+//			requestWrapper.setAttribute("lang", lang);
+//			requestWrapper = request;
 		} else {
 			// 防止流读取一次后就没有了
 			requestWrapper = new BodyReaderHttpServletRequestWrapper(request);

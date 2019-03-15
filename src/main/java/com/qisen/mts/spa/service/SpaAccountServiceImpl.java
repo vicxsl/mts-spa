@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.constant.ConfigConsts;
 import com.qisen.mts.common.model.response.BaseResponse;
@@ -35,7 +37,21 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 	private GoodsSubTypeDao goodsSubTypeDao;
 	@Autowired
 	private SpaInoutDepotTypeDao spaInoutDepotTypeDao;
-	
+	//七牛云图片路径PHOTO_PATH
+	@Value("#{configProperties['PHOTO_PATH']}")
+	private String PHOTO_PATH;
+	//七牛云AccessKey
+	@Value("#{configProperties['AccessKey']}")
+	private String AccessKey;
+	//七牛云SecretKey
+	@Value("#{configProperties['SecretKey']}")
+	private String SecretKey;
+	//七牛云BucketName
+	@Value("#{configProperties['BucketName']}")
+	private String BucketName;
+	//七牛云QINIU_IMAGE_DOMAIN
+	@Value("#{configProperties['QINIU_IMAGE_DOMAIN']}")
+	private String QINIU_IMAGE_DOMAIN;
 	
 	/**
 	 * 新增spa账号
@@ -104,6 +120,13 @@ public class SpaAccountServiceImpl implements SpaAccountService{
 					sessionSpa.setMeta("goodsTypeList", goodsTypeList);
 					sessionSpa.setMeta("goodsSubTypeList", goodsSubTypeList);
 					sessionSpa.setMeta("inOutDepotTypeList", inOutDepotTypeList);
+					JSONObject imgObject = new JSONObject();
+					imgObject.put("PHOTO_PATH", PHOTO_PATH);
+					imgObject.put("AccessKey", AccessKey);
+					imgObject.put("SecretKey", SecretKey);
+					imgObject.put("BucketName", BucketName);
+					imgObject.put("QINIU_IMAGE_DOMAIN", QINIU_IMAGE_DOMAIN);
+					sessionSpa.setMeta("imgObject", imgObject);//设置图片对象
 					String token = UUID.randomUUID().toString();
 					sessionSpa.setToken(token);
 					String sessionSpaKey = ConfigConsts.SESSION_SPA + token;
