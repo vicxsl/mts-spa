@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.SpaImgDao">
+
+	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaImg">
+		insert into imgTable
+		(eid,appid,goodsId,type,imgUrl,status) values
+		<foreach collection="list" item="item" index="index" open="("  separator="," close=")">
+			#{item.eid},#{item.appid},#{item.goodsId},#{item.type},#{item.imgUrl},0
+		</foreach>
+	</insert>
+
+	<!-- 查询图 -->
+	<select id="spaImgList" resultType="com.qisen.mts.spa.model.entity.SpaImg"
+		parameterType="com.qisen.mts.spa.model.entity.SpaImg">
+		<![CDATA[
+			select *  from  imgTable
+		]]>
+		<where>
+			<![CDATA[
+				 appid = #{appid} and eid = #{eid} and status = "0"
+			]]>
+			<if test="goodsId != null and goodsId !=''">
+				<![CDATA[
+					and goodsId = #{goodsId}
+				]]>
+			</if>
+			<if test="goodsId == null or goodsId ==''">
+				<![CDATA[
+					and goodsId == null or goodsId == ''
+				]]>
+			</if>
+			<if test="type != null and type !=''">
+				<![CDATA[
+					and type = #{type}
+				]]>
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteList">
+		<![CDATA[
+			delete from imgTable
+		]]>
+		<where>
+			<![CDATA[
+				appid = #{appid}
+			]]>
+			<if test="goodsId != null and goodsId !=''">
+				<![CDATA[
+					and goodsId = #{goodsId}
+				]]>
+			</if>
+			<if test="goodsId == null or goodsId ==''">
+				<![CDATA[
+					and goodsId = null or goodsId = ''
+				]]>
+			</if>
+		</where>
+	</delete>
+
+</mapper>

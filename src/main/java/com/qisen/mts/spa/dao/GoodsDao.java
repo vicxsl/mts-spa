@@ -40,6 +40,7 @@ public interface GoodsDao {
 	 * @return
 	 */
 	public List<SpaGoods> list(SpaGoods spaGoods);
+	public void saveOrUpdate(SpaGoods spaGoods);
 	
 	public List<SpaImg> goodsImgList(SpaImg spa);
 	

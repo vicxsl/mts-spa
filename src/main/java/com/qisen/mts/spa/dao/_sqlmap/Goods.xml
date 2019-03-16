@@ -46,7 +46,125 @@
 			values(#{eid},#{appid},#{name},#{no},#{barCode},#{type},#{unit},#{spec},#{num},#{saleNum},#{buyingPrice},#{costPrice},#{salePrice},#{preferencePrice},0,#{describeText},#{remark})
 		]]>
 	</insert>
-
+	
+	<!-- 新增或编辑商品 -->
+	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaGoods" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		<selectKey keyProperty="eid" resultType="int"
+			order="BEFORE">
+			<![CDATA[
+				select count(id) as eid from goods
+			]]>
+			<where>
+				<![CDATA[
+					 appid = #{appid} 
+				]]>
+			<if test="no != null and no !=''">
+				<![CDATA[
+					and no = #{no} 
+				]]>
+			</if>
+			<if test="name != null and name !=''">
+				<![CDATA[
+					and name = #{name} 
+				]]>
+			</if>
+			<if test="barCode != null and barCode !=''">
+				<![CDATA[
+					and barCode = #{barCode} 
+				]]>
+			</if>
+		</where>
+		</selectKey>
+		<if test="eid == 1">
+    		<![CDATA[
+			update goods
+		]]>
+		<set>
+			<if test="name != null and name !=''">
+				<![CDATA[
+					 name = #{name},
+				 ]]>
+			</if>
+			<if test="no != null and no !=''">
+				<![CDATA[
+					 no = #{no},
+				 ]]>
+			</if>
+			<if test="status != null and status !=''">
+				<![CDATA[
+					 status = #{status},
+				 ]]>
+			</if>
+			<if test="remark != null and remark !=''">
+				<![CDATA[
+					 remark = #{remark},
+				 ]]>
+			</if>
+			<if test="describeText != null and describeText !=''">
+				<![CDATA[
+					 describeText = #{describeText},
+				 ]]>
+			</if>
+			<if test="barCode != null and barCode !=''">
+				<![CDATA[
+					 barCode = #{barCode},
+				 ]]>
+			</if>
+			<if test="type != null and type !=''">
+				<![CDATA[
+					 type = #{type},
+				 ]]>
+			</if>
+			<if test="unit != null and unit !=''">
+				<![CDATA[
+					 unit = #{unit},
+				 ]]>
+			</if>
+			<if test="spec != null and spec !=''">
+				<![CDATA[
+					 spec = #{spec},
+				 ]]>
+			</if>
+			<if test="salePrice != null and salePrice !=''">
+				<![CDATA[
+					 salePrice = #{salePrice},
+				 ]]>
+			</if>
+			<if test="preferencePrice != null and preferencePrice !=''">
+				<![CDATA[
+					 preferencePrice = #{preferencePrice},
+				 ]]>
+			</if>
+		</set>
+		<where>
+			<![CDATA[
+				 appid = #{appid} and id=#{id}
+			]]>
+			<if test="no != null and no !=''">
+				<![CDATA[
+					and no = #{no} 
+				]]>
+			</if>
+			<if test="name != null and name !=''">
+				<![CDATA[
+					and name = #{name} 
+				]]>
+			</if>
+			<if test="barCode != null and barCode !=''">
+				<![CDATA[
+					and barCode = #{barCode} 
+				]]>
+			</if>
+		</where>
+		</if>
+		<if test="eid == 0">
+		    <![CDATA[
+				insert into goods(eid,appid,name,no,barCode,type,unit,spec,num,saleNum,buyingPrice,costPrice,salePrice,preferencePrice,status,describeText,remark) 
+				values(#{eid},#{appid},#{name},#{no},#{barCode},#{type},#{unit},#{spec},#{num},#{saleNum},#{buyingPrice},#{costPrice},#{salePrice},#{preferencePrice},0,#{describeText},#{remark})
+			]]>
+		</if>
+	</insert>
+	
 	<!-- 删除商品 -->
 	<update id="delete" parameterType="list">
 		<![CDATA[
@@ -137,7 +255,7 @@
 
 
 	<!-- 查询SPA商品列表 -->
-	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaGoods"
+	<select id="list" resultMap="goodsInfo"
 		parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
 		<![CDATA[
 			select * from goods
@@ -182,6 +300,38 @@
 		<![CDATA[
 			order by no+0
 		]]>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaGoods" id="goodsInfo">
+		<id property="id" column="id"/>
+		<result property="eid" column="eid" />
+		<result property="appid" column="appid" />
+		<result property="name" column="name" />
+		<result property="no" column="no" />
+		<result property="barCode" column="barCode" />
+		<result property="type" column="type" />
+		<result property="unit" column="unit" />
+		<result property="spec" column="spec" />
+		<result property="num" column="num" />
+		<result property="saleNum" column="saleNum" />
+		<result property="buyingPrice" column="buyingPrice" />
+		<result property="preferencePrice" column="preferencePrice" />
+		<result property="salePrice" column="salePrice" />
+		<result property="costPrice" column="costPrice" />
+		<result property="remark" column="remark" />
+		<result property="describeText" column="describeText" />
+		<result property="status" column="status" />
+		<collection property="goodsImgs" column="{appid=appid,goodsId=id}" ofType="com.qisen.mts.spa.model.entity.SpaImg" javaType="ArrayList" select="getGoodsImgs" />
+		<collection property="goodsDetailImgs" column="{appid=appid,goodsId=id}" ofType="com.qisen.mts.spa.model.entity.SpaImg" javaType="ArrayList" select="getGoodsDetailImgs" />
+	</resultMap>
+	<select id="getGoodsImgs" parameterType="java.util.Map" resultType="com.qisen.mts.spa.model.entity.SpaImg">
+	    <![CDATA[
+        	select * from imgTable where appid=#{appid} and goodsId = #{goodsId} and type="1"
+        ]]>
+	</select>
+	<select id="getGoodsDetailImgs" parameterType="java.util.Map" resultType="com.qisen.mts.spa.model.entity.SpaImg">
+	    <![CDATA[
+        	select * from imgTable where appid=#{appid} and goodsId = #{goodsId} and type="2"
+        ]]>
 	</select>
 
 	<!-- 查询SPA商品图文详情 -->

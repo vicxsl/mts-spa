@@ -1,5 +1,7 @@
 package com.qisen.mts.spa.model.entity;
 
+import java.util.List;
+
 import com.qisen.mts.common.model.entity.BaseEntity;
 
 /**
@@ -20,7 +22,7 @@ public class SpaGoods extends BaseEntity {
 	private String no;//商品编号
 	private String barCode;//商品编码
 	private Integer type;//商品类型id
-	private Integer son_type;//商品子类型id
+//	private Integer son_type;//商品子类型id
 	private String unit;//商品单位
 	private String spec;//商品规格
 	private Integer num;//数量
@@ -36,6 +38,8 @@ public class SpaGoods extends BaseEntity {
 	private String supplier;//供货商
 	private String imgUrl;//商品图片
 	private String status;// 状态:0正常,1停售,2删除
+	private List<SpaImg> goodsImgs;//商品图片
+	private List<SpaImg> goodsDetailImgs;//商品详情图
 	public Integer getId() {
 		return id;
 	}
@@ -78,12 +82,12 @@ public class SpaGoods extends BaseEntity {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	public Integer getSon_type() {
-		return son_type;
-	}
-	public void setSon_type(Integer son_type) {
-		this.son_type = son_type;
-	}
+//	public Integer getSon_type() {
+//		return son_type;
+//	}
+//	public void setSon_type(Integer son_type) {
+//		this.son_type = son_type;
+//	}
 	public String getUnit() {
 		return unit;
 	}
@@ -175,6 +179,18 @@ public class SpaGoods extends BaseEntity {
 	}
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+	public List<SpaImg> getGoodsImgs() {
+		return goodsImgs;
+	}
+	public void setGoodsImgs(List<SpaImg> goodsImgs) {
+		this.goodsImgs = goodsImgs;
+	}
+	public List<SpaImg> getGoodsDetailImgs() {
+		return goodsDetailImgs;
+	}
+	public void setGoodsDetailImgs(List<SpaImg> goodsDetailImgs) {
+		this.goodsDetailImgs = goodsDetailImgs;
 	}
 	
 }
