@@ -22,6 +22,7 @@ import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.MemberDao;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.MetaData;
+import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -33,9 +34,9 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDao memberDao;
 	@Autowired
 	private ShopDao shopDao;
-	
-	@Value("#{configProperties['PHOTO_PATH']}")
-	private String PHOTO_PATH;
+
+	@Value("#{configProperties['ImgCos']}")
+	private String ImgCos;
 	/**
 	 * 商城登录
 	 */
@@ -53,7 +54,12 @@ public class MemberServiceImpl implements MemberService {
 		query.setSession_key(session_key);
 		memberDao.saveOrUpdate(query);//新增或者更新会员
 		MetaData metaData = memberDao.getMallMetaData(query);//查询metaData信息
-		metaData.setPhotoPath(PHOTO_PATH);//图片访问前缀
+		List<SpaGoodsShopCar> carList =metaData.getShopCarList();
+		if(carList != null && carList.size() > 0){
+			for(SpaGoodsShopCar car:carList){
+				car.setImgUrl(ImgCos+car.getImgUrl());
+			}
+		}
 		resp.setBody(metaData);
 		return resp;
 	}

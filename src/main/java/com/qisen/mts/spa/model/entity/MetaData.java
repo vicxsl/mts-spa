@@ -19,7 +19,6 @@ public class MetaData extends BaseEntity {
 	private SpaMember member;
 	private List<SpaGoodsShopCar> shopCarList;//购物车
 	private List<SpaGoodsType> goodsTypes;//商品类型集合
-	private String photoPath;//图片地址
 	private MemberAddress memberAddress;//默认收货地址
 	
 	public MemberAddress getMemberAddress() {
@@ -27,12 +26,6 @@ public class MetaData extends BaseEntity {
 	}
 	public void setMemberAddress(MemberAddress memberAddress) {
 		this.memberAddress = memberAddress;
-	}
-	public String getPhotoPath() {
-		return photoPath;
-	}
-	public void setPhotoPath(String photoPath) {
-		this.photoPath = photoPath;
 	}
 	public SpaShop getShop() {
 		return shop;

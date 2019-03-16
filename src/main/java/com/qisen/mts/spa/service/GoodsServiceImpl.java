@@ -57,13 +57,13 @@ public class GoodsServiceImpl implements GoodsService{
 			List<SpaImg> goodsImgs = goods.getGoodsImgs();
 			List<SpaImg> goodsDetailImgs = goods.getGoodsDetailImgs();
 			if(goodsImgs != null && goodsImgs.size() > 0){
-				for(SpaImg img : goods.getGoodsImgs()){
+				for(SpaImg img : goodsImgs){
 					img.setImgUrl(ImgCos+img.getImgUrl());
 				}
 				goods.setImgUrl(goods.getGoodsImgs().get(0).getImgUrl());
 			}
 			if(goodsDetailImgs != null && goodsDetailImgs.size() > 0){
-				for(SpaImg img : goods.getGoodsDetailImgs()){
+				for(SpaImg img : goodsDetailImgs){
 					img.setImgUrl(ImgCos+img.getImgUrl());
 				}
 			}
@@ -104,13 +104,13 @@ public class GoodsServiceImpl implements GoodsService{
 			List<SpaImg> goodsImgs = goods.getGoodsImgs();
 			List<SpaImg> goodsDetailImgs = goods.getGoodsDetailImgs();
 			if(goodsImgs != null && goodsImgs.size() > 0){
-				for(SpaImg img : goods.getGoodsImgs()){
+				for(SpaImg img : goodsImgs){
 					img.setImgUrl(ImgCos+img.getImgUrl());
 				}
 				goods.setImgUrl(goods.getGoodsImgs().get(0).getImgUrl());
 			}
 			if(goodsDetailImgs != null && goodsDetailImgs.size() > 0){
-				for(SpaImg img : goods.getGoodsDetailImgs()){
+				for(SpaImg img : goodsDetailImgs){
 					img.setImgUrl(ImgCos+img.getImgUrl());
 				}
 			}

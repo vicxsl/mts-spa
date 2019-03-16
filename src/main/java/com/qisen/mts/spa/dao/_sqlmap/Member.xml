@@ -235,7 +235,7 @@
 	<select id="getMallMetaData" resultMap="mallMetaData"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
-        	select * from shops where appid=#{appid}
+        	select * from member where appid=#{appid} and openid =#{openid}
         ]]>
 	</select>
 	<resultMap type="com.qisen.mts.spa.model.entity.MetaData" id="mallMetaData">
@@ -312,11 +312,11 @@
 	<select id="getShopCarList" parameterType="java.util.Map"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
     	<![CDATA[
-			select a.*,b.name,b.unit,b.salePrice,b.preferencePrice,b.spec,b.imgUrl from goodsShopCar a,goods b
+			select a.*,b.name,b.unit,b.salePrice,b.preferencePrice,b.spec,c.imgUrl from goodsShopCar a,goods b,imgTable c
 		]]>
 		<where>
 			<![CDATA[
-				a.appid = #{appid} and a.appid = b.appid and a.goodsId = b.id
+				a.appid = #{appid} and a.appid = b.appid and a.goodsId = b.id and a.goodsId = c.goodsId
 			]]>
 			<if test="openid != null and openid !=''">
 				<![CDATA[
@@ -324,11 +324,12 @@
 				]]>
 			</if>
 		</where>
+		order by c.id limit 1
 	</select>
 	<select id="getGoodsTypes" parameterType="java.util.Map"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoodsType">
 		<![CDATA[
-			select * from goodsType where appid=#{appid} and openid = #{openid} and status = '0'
+			select * from goodsType where appid=#{appid} and status = '0'
 		]]>
 	</select>
 	<select id="getMemberAddresss" parameterType="java.util.Map"
