@@ -7,19 +7,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.service.QiniuService;
+import com.qisen.mts.spa.service.TenXunCosService;
 
 @Controller
 @RequestMapping("/spa/file")
 public class FileController {
 	@Autowired
     private QiniuService qiniuService;
+	@Autowired
+    private TenXunCosService tenXunCosService;
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-	public CommObjResponse<JSONObject> uploadImage(MultipartHttpServletRequest  request)throws Exception {
-		return this.qiniuService.saveImage(request);
+	public CommObjResponse<SpaImg> uploadImage(MultipartHttpServletRequest  request)throws Exception {
+		return tenXunCosService.saveImage(request);
 	}
 }

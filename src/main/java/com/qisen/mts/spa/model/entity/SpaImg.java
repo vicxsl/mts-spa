@@ -9,10 +9,9 @@ import com.qisen.mts.common.model.entity.BaseEntity;
 public class SpaImg extends BaseEntity {
 
 	/**
-	 * spa商品资料
+	 * spa图片
 	 */
 	private static final long serialVersionUID = -589365615135389046L;
-
 	private Integer id;
 	private Integer eid;
 	private String appid;
