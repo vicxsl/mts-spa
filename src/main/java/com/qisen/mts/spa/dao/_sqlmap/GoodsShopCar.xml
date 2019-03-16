@@ -7,8 +7,8 @@
 	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
 		insert into goodsShopCar
 		(eid,appid,goodsId,openid,num,createDate,updateTime,status,sel) values
-		<foreach collection="list" item="goods" index="index" open="("  separator="," close=")">
-			#{goods.eid},#{goods.appid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},#{goods.updateTime},0,#{goods.sel}
+		<foreach collection="list" item="goods" index="index" open=""  separator="," close="">
+			(#{goods.eid},#{goods.appid},#{goods.goodsId},#{goods.openid},#{goods.num},#{goods.createDate},#{goods.updateTime},0,#{goods.sel})
 		</foreach>
 	</insert>
 

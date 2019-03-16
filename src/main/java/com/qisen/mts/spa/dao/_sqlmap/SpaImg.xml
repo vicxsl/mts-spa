@@ -6,8 +6,8 @@
 	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaImg">
 		insert into imgTable
 		(eid,appid,goodsId,type,imgUrl,status) values
-		<foreach collection="list" item="item" index="index" open="("  separator="," close=")">
-			#{item.eid},#{item.appid},#{item.goodsId},#{item.type},#{item.imgUrl},0
+		<foreach collection="list" item="item" index="index" open=""  separator="," close="">
+			(#{item.eid},#{item.appid},#{item.goodsId},#{item.type},#{item.imgUrl},'0')
 		</foreach>
 	</insert>
 
