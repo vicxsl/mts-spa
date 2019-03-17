@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -14,8 +15,10 @@ import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.MemberAddressDao;
 import com.qisen.mts.spa.dao.ShopBonusDao;
 import com.qisen.mts.spa.dao.ShopDao;
+import com.qisen.mts.spa.dao.SpaImgDao;
 import com.qisen.mts.spa.model.entity.MemberAddress;
 import com.qisen.mts.spa.model.entity.ShopBonus;
+import com.qisen.mts.spa.model.entity.SpaGoods;
 import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -32,6 +35,10 @@ public class ShopServiceImpl implements ShopService{
 	private MemberAddressDao memberAddressDao;
 	@Autowired
 	private ShopBonusDao shopBonusDao;
+	@Autowired
+	private SpaImgDao spaImgDao;
+	@Value("#{configProperties['ImgCos']}")
+	private String ImgCos;
 	
 	/**
 	 * 查询spa商户
@@ -59,6 +66,14 @@ public class ShopServiceImpl implements ShopService{
 		SpaShop query = new SpaShop();
 		query.setEid(req.getEid());
 		List<SpaShop> list = shopDao.list(query);
+		for(SpaShop shop: list){
+			List<SpaImg> shopImgs = shop.getShopImgs();
+			if(shopImgs != null && shopImgs.size() > 0){
+				for(SpaImg img : shopImgs){
+					img.setImgUrl(ImgCos+img.getImgUrl());
+				}
+			}
+		}
 		resp.setBody(list);
 		return resp;
 	}
@@ -79,6 +94,19 @@ public class ShopServiceImpl implements ShopService{
 		memberAddressDao.updateList(memberAddressList);
 		List<ShopBonus> shopBonusList = spa.getShopBonusList();
 		shopBonusDao.updateList(shopBonusList);
+		List<SpaImg> imgs = spa.getShopImgs();
+		for(SpaImg img : imgs){
+			String imgurl = img.getImgUrl();
+			if(imgurl.indexOf(ImgCos) != -1){
+				imgurl = imgurl.replace(ImgCos, "");
+				img.setImgUrl(imgurl);
+			}
+		}
+		SpaImg spaImg = new SpaImg();
+		spaImg.setAppid(spa.getAppid());
+		spaImg.setType("0");
+		spaImgDao.deleteList(spaImg);
+		spaImgDao.saveList(imgs);
 		List<SpaShop> list = shopDao.list(query);
 		resp.setBody(list);
 		return resp;
@@ -90,6 +118,11 @@ public class ShopServiceImpl implements ShopService{
 	public CommObjResponse<List<SpaImg>> shopsImgList(SpaRequest<SpaImg> req) {
 		CommObjResponse<List<SpaImg>> resp = new CommObjResponse<List<SpaImg>>();
 		List<SpaImg> imgList = shopDao.shopsImgList(req.getBody());
+		if(imgList != null && imgList.size() > 0){
+			for(SpaImg img : imgList){
+				img.setImgUrl(ImgCos+img.getImgUrl());
+			}
+		}
 		resp.setBody(imgList);
 		return resp;
 	}

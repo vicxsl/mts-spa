@@ -32,6 +32,7 @@ public class SpaShop extends BaseEntity {
 	private Integer bonusNum;//提成层级：0、1、2、3
 	private String shopImg;//门店logo
 	private List<ShopBonus> shopBonusList;//新零售提成机制
+	private List<SpaImg> shopImgs;//店铺轮播图
 	public Integer getId() {
 		return id;
 	}
@@ -134,6 +135,12 @@ public class SpaShop extends BaseEntity {
 	}
 	public void setShopBonusList(List<ShopBonus> shopBonusList) {
 		this.shopBonusList = shopBonusList;
+	}
+	public List<SpaImg> getShopImgs() {
+		return shopImgs;
+	}
+	public void setShopImgs(List<SpaImg> shopImgs) {
+		this.shopImgs = shopImgs;
 	}
 	
 }

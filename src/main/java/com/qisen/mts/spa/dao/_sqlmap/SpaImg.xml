@@ -52,9 +52,14 @@
 					and goodsId = #{goodsId}
 				]]>
 			</if>
-			<if test="goodsId == null or goodsId ==''">
+			<if test="type != null and type !=''">
 				<![CDATA[
-					and goodsId = null or goodsId = ''
+					and type = #{type}
+				]]>
+			</if>
+			<if test="type == null or type ==''">
+				<![CDATA[
+					and type != '0'
 				]]>
 			</if>
 		</where>
