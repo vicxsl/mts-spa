@@ -38,7 +38,7 @@ public class ShopPreferentialServiceImpl implements ShopPreferentialService{
 	public CommObjResponse<List<SpaShopPreferential>> edit(SpaRequest<SpaShopPreferential> req) {
 		CommObjResponse<List<SpaShopPreferential>> resp = new CommObjResponse<List<SpaShopPreferential>>();
 		SpaShopPreferential query = req.getBody();
-		shopPreferentialDao.edit(query);//编辑优惠
+		shopPreferentialDao.saveOrUpdate(query);//编辑优惠
 		List<SpaShopPreferential> list = shopPreferentialDao.list(query);
 		resp.setBody(list);
 		return resp;

@@ -17,7 +17,7 @@ public interface ShopPreferentialDao {
 	 * @param 
 	 * @return
 	 */
-	public void edit(SpaShopPreferential spa);
+	public void saveOrUpdate(SpaShopPreferential spa);
 	
 	/**
 	 * 删除

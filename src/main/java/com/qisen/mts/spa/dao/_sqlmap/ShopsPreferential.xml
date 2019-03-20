@@ -4,7 +4,7 @@
 <mapper namespace="com.qisen.mts.spa.dao.ShopPreferentialDao">
 
 	<!-- 查询商户优惠列表 -->
-	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaShop"
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaShopPreferential"
 		parameterType="String">
 		<![CDATA[
 			select * from  shopsPreferential
@@ -28,7 +28,7 @@
 	
 	
 	<!-- 新增或编辑商品 -->
-	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaGoods" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaShopPreferential" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 		<selectKey keyProperty="eid" resultType="int"
 			order="BEFORE">
 			<![CDATA[
