@@ -3,6 +3,7 @@ package com.qisen.mts.spa.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -12,6 +13,7 @@ import com.qisen.mts.spa.dao.MemberAddressDao;
 import com.qisen.mts.spa.dao.SpaInoutDepotDetailDao;
 import com.qisen.mts.spa.dao.SpaMallOrderDao;
 import com.qisen.mts.spa.model.entity.MemberAddress;
+import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotDetail;
 import com.qisen.mts.spa.model.entity.SpaMallOrder;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -30,6 +32,8 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 
 	@Autowired
 	private GoodsShopCarDao goodsShopCarDao;
+	@Value("#{configProperties['ImgCos']}")
+	private String ImgCos;
 
 	@Override
 	public CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) {
@@ -45,7 +49,8 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 			List<SpaInoutDepotDetail> details = body.getGoodsList();
 			for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
 				spaInoutDepotDetail.setOrderId(orderId);
-				spaInoutDepotDetail.setTotalMoney(spaInoutDepotDetail.getNum() * spaInoutDepotDetail.getPreferencePrice());
+				spaInoutDepotDetail
+						.setTotalMoney(spaInoutDepotDetail.getNum() * spaInoutDepotDetail.getPreferencePrice());
 			}
 			// 执行明细表的插入或修改操作
 			inoutDepotDetailDao.saveList(details);
@@ -65,7 +70,15 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	public CommObjResponse<List<SpaMallOrder>> list(SpaRequest<SpaMallOrder> req) {
 		SpaMallOrder body = req.getBody();
 		CommObjResponse<List<SpaMallOrder>> response = new CommObjResponse<List<SpaMallOrder>>();
-		response.setBody(spaMallOrderDao.list(body));
+		List<SpaMallOrder> list = spaMallOrderDao.list(body);
+		for (SpaMallOrder order : list) {
+			List<SpaInoutDepotDetail> goodsList = order.getGoodsList();
+			for (SpaInoutDepotDetail detail : goodsList) {
+				String imgurl = detail.getImgUrl();
+				detail.setImgUrl(ImgCos + detail.getImgUrl());
+			}
+		}
+		response.setBody(list);
 		return response;
 	}
 

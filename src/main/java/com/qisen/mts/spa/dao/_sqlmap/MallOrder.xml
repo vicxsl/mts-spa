@@ -13,11 +13,11 @@
 	
 	<select id="list" resultMap="orderMap" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
 		<![CDATA[
-			select a.*,b.* ,c.*,d.name  from mallOrder a,memberAddress b, inOutDepotDetail c, goods d
+			select * from mallOrder a
 		]]>
 		<where>
 			<![CDATA[
-				a.appid = #{appid} and a.eid = #{eid}  and a.openid = #{openid} and a.id = b.orderId and a.id = c.orderId and c.goodsId = d.id
+				a.appid = #{appid} and a.eid = #{eid}  and a.openid = #{openid}
 			]]>
 		</where>
 		<![CDATA[
@@ -40,37 +40,35 @@
          <result property="goodsCost" column="goodsCost"/>
          <result property="bonusCost" column="bonusCost"/>
          <result property="orderProfit" column="orderProfit"/>
-         <association property="memberAddress" javaType="com.qisen.mts.spa.model.entity.MemberAddress">
-             
-	         <result property="eid" column="eid"/>
-	         <result property="appid" column="appid"/>
-	         <result property="openid" column="openid"/>
-             <result property="userName" column="userName"/>
-             <result property="postalCode" column="postalCode"/>
-             <result property="provinceName" column="provinceName"/>
-             <result property="cityName" column="cityName"/>
-             <result property="countyName" column="countyName"/>
-             <result property="detailInfo" column="detailInfo"/>
-             <result property="nationalCode" column="nationalCode"/>
-             <result property="telNumber" column="telNumber"/>
-             <result property="orderId" column="orderId"/>
-             <result property="status" column="status"/>
-         </association>
+         <association property="memberAddress" column="{appid=appid,eid=eid,orderId=id}" javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getAddress" />
         <!-- ofType指定students集合中的对象类型 -->
-         <collection property="goodsList" ofType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" javaType="ArrayList" >
-             
-	         <result property="eid" column="eid"/>
-	         <result property="appid" column="appid"/>
-	         <result property="openid" column="openid"/>
-             <result property="goodsId" column="goodsId"/>
-             <result property="orderId" column="orderId"/>
-             <result property="num" column="num"/>
-             <result property="preferencePrice" column="preferencePrice"/>
-             <result property="costPrice" column="costPrice"/>
-             <result property="totalMoney" column="totalMoney"/>
-             <result property="status" column="status"/>
-             <result property="name"  column="name"/>
-         </collection>
+         <collection property="goodsList" ofType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" javaType="ArrayList" column="{appid=appid,orderId=id}" select="getGoodsList"></collection>
      </resultMap>
-	
+     <select id="getAddress" parameterType="java.util.Map" resultType="com.qisen.mts.spa.model.entity.MemberAddress">
+	    <![CDATA[
+        	select * from memberAddress where appid=#{appid} and eid = #{eid} and orderId=#{orderId}
+        ]]>
+	</select>
+	<select id="getGoodsList" parameterType="java.util.Map" resultMap="goodsMap">
+	    <![CDATA[
+        	select a.*,b.name  from inOutDepotDetail a,goods b where a.appid=#{appid}  and a.orderId=#{orderId} and a.goodsId = b.id 
+        ]]>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" id="goodsMap">
+         <id property="id" column="id"/>
+         <result property="id" column="id"/>
+         <result property="eid" column="eid"/>
+         <result property="appid" column="appid"/>
+         <result property="goodsId" column="goodsId"/>
+         <result property="num" column="num"/>
+         <result property="costPrice" column="costPrice"/>
+         <result property="preferencePrice" column="preferencePrice"/>
+         <result property="totalMoney" column="totalMoney"/>
+         <association property="imgUrl" column="{appid=appid,goodsId=goodsId}"  select="getImgUrl" />
+   </resultMap>
+   <select id="getImgUrl" parameterType="java.util.Map" resultType="String">
+	    <![CDATA[
+        	select imgUrl from imgTable where appid=#{appid}  and goodsId = #{goodsId} and type = '1' limit 1
+        ]]>
+	</select>
 </mapper>

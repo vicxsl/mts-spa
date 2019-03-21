@@ -140,21 +140,6 @@
 			<![CDATA[
 				 appid = #{appid} and id=#{id}
 			]]>
-			<if test="no != null and no !=''">
-				<![CDATA[
-					and no = #{no} 
-				]]>
-			</if>
-			<if test="name != null and name !=''">
-				<![CDATA[
-					and name = #{name} 
-				]]>
-			</if>
-			<if test="barCode != null and barCode !=''">
-				<![CDATA[
-					and barCode = #{barCode} 
-				]]>
-			</if>
 		</where>
 		</if>
 		<if test="eid == 0">

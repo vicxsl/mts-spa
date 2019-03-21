@@ -18,7 +18,7 @@ public class SpaInoutDepotDetail extends BaseEntity{
     private String openid;//会员id
     
     private Integer goodsId;//产品id
-
+    private String imgUrl;
     private String barCode;//产品条码
 
     private String unit;
@@ -48,6 +48,14 @@ public class SpaInoutDepotDetail extends BaseEntity{
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	public String getName() {
