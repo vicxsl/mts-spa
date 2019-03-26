@@ -44,7 +44,7 @@
 		<result property="addressId" column="addressId" />
 		<result property="depotAddressId" column="depotAddressId" />
 		<result property="bonusNum" column="bonusNum" />
-		<result property="shopImg" column="shopImg" />
+		<result property="mchId" column="mchId" />
 		<association property="address" column="{appid=appid,eid=eid,addressId=addressId}" javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getAddress" />
 		<association property="depotAddress" column="{appid=appid,eid=eid,depotAddressId=depotAddressId}" javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getDepotAddress" />
 		<collection property="shopBonusList" column="{appid=appid,eid=eid}" ofType="com.qisen.mts.spa.model.entity.ShopBonus" javaType="ArrayList" select="getShopBonusList" />

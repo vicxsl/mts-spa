@@ -72,12 +72,8 @@ public class MemberServiceImpl implements MemberService {
 		if(shopStr==null){
 			shop=metaData.getShop();
 //			添加到缓存中,两小时内有效
+			memcachedClient.delete(appid);
 			memcachedClient.add(appid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(shop));
-			String string = memcachedClient.get(appid);
-			System.out.println("--------------------------------");
-			System.out.println(string);
-			
-			System.out.println("--------------------------------");
 		}
 		List<SpaGoodsShopCar> carList =metaData.getShopCarList();
 		if(carList != null && carList.size() > 0){

@@ -1,15 +1,14 @@
 package com.qisen.mts.spa.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -19,11 +18,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.qisen.mts.common.model.response.CommObjResponse;
@@ -56,23 +52,24 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	@Value("#{configProperties['ImgCos']}")
 	private String ImgCos;
 
-    @Value("#{configProperties['unifiedorderUrl']}")
-    private String unifiedorderUrl;
+	@Value("#{configProperties['unifiedorderUrl']}")
+	private String unifiedorderUrl;
 	@Autowired
 	private MemcachedClient memcachedClient;
 
 	@Override
-	public CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) throws Exception{
+	public CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) throws Exception {
 		CommObjResponse<SpaMallOrder> resp = new CommObjResponse<SpaMallOrder>();
 		SpaMallOrder body = req.getBody();
 		if (!CollectionUtils.isEmpty(body.getGoodsList())) {
 			int eid = req.getEid();
 			String appid = req.getAppid();
 			String openid = req.getToken();
-			SpaShop shop = JSONObject.toJavaObject(JSONObject.parseObject(memcachedClient.get(appid)), SpaShop.class);;
+			SpaShop shop = JSONObject.toJavaObject(JSONObject.parseObject(memcachedClient.get(appid)), SpaShop.class);
+			;
 			spaMallOrderDao.create(body);// 插入订单表
 			int orderId = body.getId();
-			wxPay(shop,body);
+			JSONObject wxpayObject = wxPay(shop, body);//生成微信预支付单
 			body.setStatus("0");
 			List<SpaInoutDepotDetail> details = body.getGoodsList();
 			for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
@@ -89,13 +86,12 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 			address.setOpenid(openid);
 			address.setOrderId(orderId);
 			memberAddressDao.create(address);
+			body.setWxpayObject(wxpayObject);
 			resp.setBody(body);
 		}
 		return resp;
 	}
 
-	
-	
 	@Override
 	public CommObjResponse<List<SpaMallOrder>> list(SpaRequest<SpaMallOrder> req) {
 		SpaMallOrder body = req.getBody();
@@ -105,120 +101,84 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 			List<SpaInoutDepotDetail> goodsList = order.getGoodsList();
 			for (SpaInoutDepotDetail detail : goodsList) {
 				String imgurl = detail.getImgUrl();
-				detail.setImgUrl(ImgCos + detail.getImgUrl());
+				detail.setImgUrl(ImgCos + imgurl);
 			}
 		}
 		response.setBody(list);
 		return response;
 	}
-	
-//	    @Value("${weixinKey}")
-//	    private String weixinKey;
 
 
-	    public void wxPay(SpaShop shop, SpaMallOrder body)
-	            throws Exception {
-	        try {
-	            HashMap<String, String> dataMap = new HashMap<>();
-	            dataMap.put("appid", shop.getAppid()); //公众账号ID
-	            dataMap.put("mch_id", shop.getMchId()); //商户号
-	            dataMap.put("nonce_str", WXPayUtil.generateNonceStr()); //随机字符串，长度要求在32位以内。
-	            dataMap.put("body", JSON.toJSONString(body)); //商品描述
-	            dataMap.put("out_trade_no", body.getId()+""); //商品订单号
-	            dataMap.put("total_fee", body.getTotalMoney()+""); //商品金
-	            dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); //客户端ip
-	            dataMap.put("notify_url", "www.baidu.com"); //通知地址(假设是百度)
-	            dataMap.put("trade_type", "NATIVE"); //交易类型
-	            dataMap.put("product_id", "1"); //trade_type=NATIVE时，此参数必传。商品ID，商户自行定义。
-	            //生成签名
-	            String signature = WXPayUtil.generateSignature(dataMap, shop.getSecret());
-	            dataMap.put("sign", signature);//签名
-	            //将类型为map的参数转换为xml
-	            String requestXml = WXPayUtil.mapToXml(dataMap);
-	            //发送参数,调用微信统一下单接口,返回xml
-	            String responseXml = doPost(unifiedorderUrl, requestXml);
-	            Map<String, String> map = WXPayUtil.xmlToMap(responseXml);
-	            if (map.get("return_code").toString().equals("SUCCESS") && map.get("result_code")
-	                    .toString().equals("SUCCESS")) {
-//	                String urlCode = (String) map.get("code_url"); //微信二维码短链接
-//	                // 生成微信二维码，输出到response流中
-//
-//	                Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
-//	                // 内容所使用编码
-//	                hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-//	                BitMatrix bitMatrix = new MultiFormatWriter().encode(urlCode, BarcodeFormat
-//	                        .QR_CODE, 300, 300, hints);
-//	                // 生成二维码
-//	                MatrixToImageWriter.writeToFile(bitMatrix, "gif", new File("C:/downloads/二维码文件" +
-//	                        ".gif"));
-	            } else {
-	            }
-	        } catch (Exception e) {
+	public JSONObject wxPay(SpaShop shop, SpaMallOrder body) throws Exception {
+		JSONObject wxpayObject = new JSONObject();
+		HashMap<String, String> dataMap = new HashMap<>();
+		String key = shop.getSecret();//微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置   API密钥是交易过程生成签名的密钥
+		dataMap.put("appid", shop.getAppid()); // 公众账号ID
+		dataMap.put("mch_id", shop.getMchId()); // 商户号
+		dataMap.put("nonce_str", WXPayUtil.generateNonceStr()); // 随机字符串，长度要求在32位以内。
+		dataMap.put("body", body.getOpenid()); // 商品描述
+		dataMap.put("out_trade_no", body.getId() + ""); // 商品订单号
+		Math.round(body.getTotalMoney() * 100);
+		dataMap.put("total_fee", String.valueOf(Math.round(body.getTotalMoney() * 100))); // 商品金
+		dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); // 客户端ip
+		dataMap.put("notify_url", "www.baidu.com"); // 通知地址(假设是百度)
+		dataMap.put("trade_type", "JSAPI"); // 交易类型
+		dataMap.put("openid", body.getOpenid());// 用户openid
+		// 生成签名
+		String signature = WXPayUtil.generateSignature(dataMap, key);
+		dataMap.put("sign", signature);// 签名
+		// 将类型为map的参数转换为xml
+		String requestXml = WXPayUtil.mapToXml(dataMap);
+		// 发送参数,调用微信统一下单接口,返回xml
+		String responseXml = doPost(unifiedorderUrl, requestXml);
+		Map<String, String> map = WXPayUtil.xmlToMap(responseXml);
+		if (map.get("return_code").toString().equals("SUCCESS")
+				&& map.get("result_code").toString().equals("SUCCESS")) {
+			map.get("prepay_id");
+			wxpayObject.put("package", "prepay_id="+map.get("prepay_id"));
+			wxpayObject.put("nonceStr", dataMap.get("nonce_str"));
 
-	        }
-	    }
-//
-//	    @RequestMapping("/notifyUrl")
-//	    public String notifyUrl(String unifiedorderUrl, String requestXml) {
-//	        System.out.print("h");
-//	        return "回调成功";
-//
-//	    }
-	    public static String doPost(String url, String requestXml) {
-	        CloseableHttpClient httpClient = null;
-	        CloseableHttpResponse httpResponse = null;
-	        //创建httpClient连接对象
-	        httpClient = HttpClients.createDefault();
-	        //创建post请求连接对象
-	        HttpPost httpPost = new HttpPost(url);
-	        //创建连接请求对象,并设置连接参数
-	        RequestConfig requestConfig = RequestConfig.custom()
-	                .setConnectTimeout(15000)   //连接服务区主机超时时间
-	                .setConnectionRequestTimeout(60000) //连接请求超时时间
-	                .setSocketTimeout(60000).build(); //设置读取响应数据超时时间
-	        //为httppost请求设置参数
-	        httpPost.setConfig(requestConfig);
-	        //将上传参数放到entity属性中
-	        httpPost.setEntity(new StringEntity(requestXml, "UTF-8"));
-	        //添加头信息
-	        httpPost.addHeader("Content-type", "text/xml");
-	        String result = "";
-	        try {
-	            //发送请求
-	            httpResponse = httpClient.execute(httpPost);
-	            //从相应对象中获取返回内容
-	            HttpEntity entity = (HttpEntity) httpResponse.getEntity();
-	            result = EntityUtils.toString((org.apache.http.HttpEntity) entity, "UTF-8");
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	        return result;
+			wxpayObject.put("key", key);
+			
+		}
+		return wxpayObject;
+	}
 
-	    }
-//
-//	    /**
-//	     * 获取IP地址
-//	     *
-//	     * @param request
-//	     * @return
-//	     */
-//	    public static String getIpAddress(HttpServletRequest request) {
-//	        String ip = request.getHeader("x-forwarded-for");
-//	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//	            ip = request.getHeader("Proxy-Client-IP");
-//	        }
-//	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//	            ip = request.getHeader("WL-Proxy-Client-IP");
-//	        }
-//	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//	            ip = request.getHeader("HTTP_CLIENT_IP");
-//	        }
-//	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//	            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-//	        }
-//	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//	            ip = request.getRemoteAddr();
-//	        }
-//	        return ip;
-//	    }
+	//
+	// @RequestMapping("/notifyUrl")
+	// public String notifyUrl(String unifiedorderUrl, String requestXml) {
+	// System.out.print("h");
+	// return "回调成功";
+	//
+	// }
+	public static String doPost(String url, String requestXml) {
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse httpResponse = null;
+		// 创建httpClient连接对象
+		httpClient = HttpClients.createDefault();
+		// 创建post请求连接对象
+		HttpPost httpPost = new HttpPost(url);
+		// 创建连接请求对象,并设置连接参数
+		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(15000) // 连接服务区主机超时时间
+				.setConnectionRequestTimeout(60000) // 连接请求超时时间
+				.setSocketTimeout(60000).build(); // 设置读取响应数据超时时间
+		// 为httppost请求设置参数
+		httpPost.setConfig(requestConfig);
+		// 将上传参数放到entity属性中
+		httpPost.setEntity(new StringEntity(requestXml, "UTF-8"));
+		// 添加头信息
+		httpPost.addHeader("Content-type", "text/xml");
+		String result = "";
+		try {
+			// 发送请求
+			httpResponse = httpClient.execute(httpPost);
+			// 从相应对象中获取返回内容
+			HttpEntity entity = httpResponse.getEntity();
+			result = EntityUtils.toString((org.apache.http.HttpEntity) entity, "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}
 }

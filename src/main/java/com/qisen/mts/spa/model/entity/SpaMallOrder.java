@@ -2,6 +2,7 @@ package com.qisen.mts.spa.model.entity;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.entity.BaseEntity;
 
 public class SpaMallOrder extends BaseEntity {
@@ -29,6 +30,7 @@ public class SpaMallOrder extends BaseEntity {
 	private String status;
 	private List<SpaInoutDepotDetail> goodsList;
 	private MemberAddress memberAddress;
+	private JSONObject wxpayObject;
 	public Integer getId() {
 		return id;
 	}
@@ -37,6 +39,13 @@ public class SpaMallOrder extends BaseEntity {
 	}
 	public Integer getEid() {
 		return eid;
+	}
+	
+	public JSONObject getWxpayObject() {
+		return wxpayObject;
+	}
+	public void setWxpayObject(JSONObject wxpayObject) {
+		this.wxpayObject = wxpayObject;
 	}
 	public void setEid(Integer eid) {
 		this.eid = eid;
