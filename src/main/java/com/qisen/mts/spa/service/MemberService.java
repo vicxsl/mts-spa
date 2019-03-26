@@ -14,8 +14,9 @@ public interface MemberService {
 	 * 商城登录
 	 * @param req
 	 * @return
+	 * @throws Exception 
 	 */
-	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req);
+	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req) throws Exception;
 
 	public CommObjResponse<List<SpaMember>> memberIncomeDetailsList(SpaRequest<SpaMember> req);
 	

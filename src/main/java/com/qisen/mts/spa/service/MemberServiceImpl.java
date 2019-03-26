@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+import com.qisen.mts.common.model.constant.ConfigConsts;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.MemberDao;
 import com.qisen.mts.spa.dao.ShopDao;
@@ -25,7 +27,10 @@ import com.qisen.mts.spa.model.entity.MetaData;
 import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
+import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
+
+import net.rubyeye.xmemcached.MemcachedClient;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -37,16 +42,27 @@ public class MemberServiceImpl implements MemberService {
 
 	@Value("#{configProperties['ImgCos']}")
 	private String ImgCos;
+
+	@Autowired
+	private MemcachedClient memcachedClient;
 	/**
 	 * 商城登录
 	 */
 	@Override
-	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req) {
+	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req) throws Exception{
 		CommObjResponse<MetaData> resp = new CommObjResponse<MetaData>();
 		SpaMember query = req.getBody();
 		String appid = query.getAppid();
 		String js_code = query.getJs_code();// wx.login临时js_code
-		String secret = shopDao.getSecret(appid);
+		String shopStr = memcachedClient.get(appid);//从缓存中取商户信息
+		SpaShop shop = new SpaShop();
+		String secret = "";//会话密钥
+		if(shopStr!=null){
+			shop = JSONObject.toJavaObject(JSONObject.parseObject(shopStr), SpaShop.class);
+			secret = shop.getSecret();
+		}else{
+			secret = shopDao.getSecret(appid);
+		}
 		JSONObject wxObject = MemberServiceImpl.getSessionKeyOropenid(js_code, appid, secret);
 		String openid = wxObject.getString("openid");
 		String session_key = wxObject.getString("session_key");
@@ -54,6 +70,16 @@ public class MemberServiceImpl implements MemberService {
 		query.setSession_key(session_key);
 		memberDao.saveOrUpdate(query);//新增或者更新会员
 		MetaData metaData = memberDao.getMallMetaData(query);//查询metaData信息
+		if(shopStr==null){
+			shop=metaData.getShop();
+//			添加到缓存中,两小时内有效
+			memcachedClient.add(appid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(shop));
+			String string = memcachedClient.get(appid);
+			System.out.println("--------------------------------");
+			System.out.println(string);
+			
+			System.out.println("--------------------------------");
+		}
 		List<SpaGoodsShopCar> carList =metaData.getShopCarList();
 		if(carList != null && carList.size() > 0){
 			for(SpaGoodsShopCar car:carList){
