@@ -23,6 +23,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
@@ -32,7 +34,10 @@ import com.qisen.mts.spa.dao.SpaMallOrderDao;
 import com.qisen.mts.spa.model.entity.MemberAddress;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotDetail;
 import com.qisen.mts.spa.model.entity.SpaMallOrder;
+import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
+
+import net.rubyeye.xmemcached.MemcachedClient;
 
 @Service
 public class SpaMallOrderServiceImpl implements SpaMallOrderService {
@@ -51,17 +56,23 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	@Value("#{configProperties['ImgCos']}")
 	private String ImgCos;
 
+    @Value("#{configProperties['unifiedorderUrl']}")
+    private String unifiedorderUrl;
+	@Autowired
+	private MemcachedClient memcachedClient;
+
 	@Override
-	public CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) {
+	public CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) throws Exception{
 		CommObjResponse<SpaMallOrder> resp = new CommObjResponse<SpaMallOrder>();
 		SpaMallOrder body = req.getBody();
 		if (!CollectionUtils.isEmpty(body.getGoodsList())) {
 			int eid = req.getEid();
 			String appid = req.getAppid();
 			String openid = req.getToken();
+			SpaShop shop = JSONObject.toJavaObject(JSONObject.parseObject(memcachedClient.get(appid)), SpaShop.class);;
 			spaMallOrderDao.create(body);// 插入订单表
 			int orderId = body.getId();
-//			wxPay(req,openid,orderId+"");
+			wxPay(shop,body);
 			body.setStatus("0");
 			List<SpaInoutDepotDetail> details = body.getGoodsList();
 			for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
@@ -101,68 +112,51 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		return response;
 	}
 	
-//	 @Value("${appid}")
-//	    private String appid;
-//
-//	    @Value("${mchid}")
-//	    private String mchId;
-//
 //	    @Value("${weixinKey}")
 //	    private String weixinKey;
+
+
+	    public void wxPay(SpaShop shop, SpaMallOrder body)
+	            throws Exception {
+	        try {
+	            HashMap<String, String> dataMap = new HashMap<>();
+	            dataMap.put("appid", shop.getAppid()); //公众账号ID
+	            dataMap.put("mch_id", shop.getMchId()); //商户号
+	            dataMap.put("nonce_str", WXPayUtil.generateNonceStr()); //随机字符串，长度要求在32位以内。
+	            dataMap.put("body", JSON.toJSONString(body)); //商品描述
+	            dataMap.put("out_trade_no", body.getId()+""); //商品订单号
+	            dataMap.put("total_fee", body.getTotalMoney()+""); //商品金
+	            dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); //客户端ip
+	            dataMap.put("notify_url", "www.baidu.com"); //通知地址(假设是百度)
+	            dataMap.put("trade_type", "NATIVE"); //交易类型
+	            dataMap.put("product_id", "1"); //trade_type=NATIVE时，此参数必传。商品ID，商户自行定义。
+	            //生成签名
+	            String signature = WXPayUtil.generateSignature(dataMap, shop.getSecret());
+	            dataMap.put("sign", signature);//签名
+	            //将类型为map的参数转换为xml
+	            String requestXml = WXPayUtil.mapToXml(dataMap);
+	            //发送参数,调用微信统一下单接口,返回xml
+	            String responseXml = doPost(unifiedorderUrl, requestXml);
+	            Map<String, String> map = WXPayUtil.xmlToMap(responseXml);
+	            if (map.get("return_code").toString().equals("SUCCESS") && map.get("result_code")
+	                    .toString().equals("SUCCESS")) {
+//	                String urlCode = (String) map.get("code_url"); //微信二维码短链接
+//	                // 生成微信二维码，输出到response流中
 //
-//	    @Value("${unifiedorderUrl}")
-//	    private String unifiedorderUrl;
-//
-//	    /**
-//	     * @param httpServletRequest
-//	     * @param httpServletResponse
-//	     * @param orderNo             订单号
-//	     * @param money               金额
-//	     * @param body                商品内容
-//	     */
-//	    @RequestMapping("/pay")
-//	    public void pay(HttpServletRequest httpServletRequest, HttpServletResponse
-//	            httpServletResponse, String orderNo, String money, String body)
-//	            throws Exception {
-//	        try {
-//	            HashMap<String, String> dataMap = new HashMap<>();
-//	            dataMap.put("appid", appid); //公众账号ID
-//	            dataMap.put("mch_id", mchId); //商户号
-//	            dataMap.put("nonce_str", WXPayUtil.generateNonceStr()); //随机字符串，长度要求在32位以内。
-//	            dataMap.put("body", body); //商品描述
-//	            dataMap.put("out_trade_no", orderNo); //商品订单号
-//	            dataMap.put("total_fee", money); //商品金
-//	            dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); //客户端ip
-//	            dataMap.put("notify_url", "www.baidu.com"); //通知地址(假设是百度)
-//	            dataMap.put("trade_type", "NATIVE"); //交易类型
-//	            dataMap.put("product_id", "1"); //trade_type=NATIVE时，此参数必传。商品ID，商户自行定义。
-//	            //生成签名
-//	            String signature = WXPayUtil.generateSignature(dataMap, weixinKey);
-//	            dataMap.put("sign", signature);//签名
-//	            //将类型为map的参数转换为xml
-//	            String requestXml = WXPayUtil.mapToXml(dataMap);
-//	            //发送参数,调用微信统一下单接口,返回xml
-//	            String responseXml = doPost(unifiedorderUrl, requestXml);
-//	            Map<String, String> map = WXPayUtil.xmlToMap(responseXml);
-//	            if (map.get("return_code").toString().equals("SUCCESS") && map.get("result_code")
-//	                    .toString().equals("SUCCESS")) {
-////	                String urlCode = (String) map.get("code_url"); //微信二维码短链接
-////	                // 生成微信二维码，输出到response流中
-////
-////	                Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
-////	                // 内容所使用编码
-////	                hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-////	                BitMatrix bitMatrix = new MultiFormatWriter().encode(urlCode, BarcodeFormat
-////	                        .QR_CODE, 300, 300, hints);
-////	                // 生成二维码
-////	                MatrixToImageWriter.writeToFile(bitMatrix, "gif", new File("C:/downloads/二维码文件" +
-////	                        ".gif"));
-//	            } else {
-//	            }
-//	        } catch (Exception e) {
-//
-//	        }
-//	    }
+//	                Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
+//	                // 内容所使用编码
+//	                hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+//	                BitMatrix bitMatrix = new MultiFormatWriter().encode(urlCode, BarcodeFormat
+//	                        .QR_CODE, 300, 300, hints);
+//	                // 生成二维码
+//	                MatrixToImageWriter.writeToFile(bitMatrix, "gif", new File("C:/downloads/二维码文件" +
+//	                        ".gif"));
+	            } else {
+	            }
+	        } catch (Exception e) {
+
+	        }
+	    }
 //
 //	    @RequestMapping("/notifyUrl")
 //	    public String notifyUrl(String unifiedorderUrl, String requestXml) {
@@ -170,37 +164,37 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 //	        return "回调成功";
 //
 //	    }
-//	    public static String doPost(String url, String requestXml) {
-//	        CloseableHttpClient httpClient = null;
-//	        CloseableHttpResponse httpResponse = null;
-//	        //创建httpClient连接对象
-//	        httpClient = HttpClients.createDefault();
-//	        //创建post请求连接对象
-//	        HttpPost httpPost = new HttpPost(url);
-//	        //创建连接请求对象,并设置连接参数
-//	        RequestConfig requestConfig = RequestConfig.custom()
-//	                .setConnectTimeout(15000)   //连接服务区主机超时时间
-//	                .setConnectionRequestTimeout(60000) //连接请求超时时间
-//	                .setSocketTimeout(60000).build(); //设置读取响应数据超时时间
-//	        //为httppost请求设置参数
-//	        httpPost.setConfig(requestConfig);
-//	        //将上传参数放到entity属性中
-//	        httpPost.setEntity(new StringEntity(requestXml, "UTF-8"));
-//	        //添加头信息
-//	        httpPost.addHeader("Content-type", "text/xml");
-//	        String result = "";
-//	        try {
-//	            //发送请求
-//	            httpResponse = httpClient.execute(httpPost);
-//	            //从相应对象中获取返回内容
-//	            HttpEntity entity = (HttpEntity) httpResponse.getEntity();
-//	            result = EntityUtils.toString((org.apache.http.HttpEntity) entity, "UTF-8");
-//	        } catch (IOException e) {
-//	            e.printStackTrace();
-//	        }
-//	        return result;
-//
-//	    }
+	    public static String doPost(String url, String requestXml) {
+	        CloseableHttpClient httpClient = null;
+	        CloseableHttpResponse httpResponse = null;
+	        //创建httpClient连接对象
+	        httpClient = HttpClients.createDefault();
+	        //创建post请求连接对象
+	        HttpPost httpPost = new HttpPost(url);
+	        //创建连接请求对象,并设置连接参数
+	        RequestConfig requestConfig = RequestConfig.custom()
+	                .setConnectTimeout(15000)   //连接服务区主机超时时间
+	                .setConnectionRequestTimeout(60000) //连接请求超时时间
+	                .setSocketTimeout(60000).build(); //设置读取响应数据超时时间
+	        //为httppost请求设置参数
+	        httpPost.setConfig(requestConfig);
+	        //将上传参数放到entity属性中
+	        httpPost.setEntity(new StringEntity(requestXml, "UTF-8"));
+	        //添加头信息
+	        httpPost.addHeader("Content-type", "text/xml");
+	        String result = "";
+	        try {
+	            //发送请求
+	            httpResponse = httpClient.execute(httpPost);
+	            //从相应对象中获取返回内容
+	            HttpEntity entity = (HttpEntity) httpResponse.getEntity();
+	            result = EntityUtils.toString((org.apache.http.HttpEntity) entity, "UTF-8");
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        return result;
+
+	    }
 //
 //	    /**
 //	     * 获取IP地址

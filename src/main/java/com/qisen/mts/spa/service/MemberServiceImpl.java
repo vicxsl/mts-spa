@@ -18,7 +18,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
 import com.qisen.mts.common.model.constant.ConfigConsts;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.MemberDao;

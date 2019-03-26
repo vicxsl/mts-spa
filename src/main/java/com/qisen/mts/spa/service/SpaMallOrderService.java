@@ -8,8 +8,8 @@ import com.qisen.mts.spa.model.request.SpaRequest;
 
 public interface SpaMallOrderService {
 
-	CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req);
+	CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) throws Exception;
 
-	CommObjResponse<List<SpaMallOrder>> list(SpaRequest<SpaMallOrder> req);
+	CommObjResponse<List<SpaMallOrder>> list(SpaRequest<SpaMallOrder> req) throws Exception;
 
 }

@@ -31,6 +31,8 @@ public class SpaShop extends BaseEntity {
 	private MemberAddress depotAddress;//仓库地址
 	private Integer bonusNum;//提成层级：0、1、2、3
 	private String shopImg;//门店logo
+
+	private String mchId;//门店logo
 	private List<ShopBonus> shopBonusList;//新零售提成机制
 	private List<SpaImg> shopImgs;//店铺轮播图
 	public Integer getId() {
@@ -41,6 +43,13 @@ public class SpaShop extends BaseEntity {
 	}
 	public Integer getEid() {
 		return eid;
+	}
+	
+	public String getMchId() {
+		return mchId;
+	}
+	public void setMchId(String mchId) {
+		this.mchId = mchId;
 	}
 	public void setEid(Integer eid) {
 		this.eid = eid;
