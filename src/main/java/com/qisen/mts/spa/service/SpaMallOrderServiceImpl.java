@@ -1,11 +1,15 @@
 package com.qisen.mts.spa.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.Document;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.http.HttpEntity;
@@ -16,6 +20,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.poi.util.DocumentHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -54,6 +59,9 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 
 	@Value("#{configProperties['unifiedorderUrl']}")
 	private String unifiedorderUrl;
+
+	@Value("#{configProperties['notify_url']}")
+	private String notify_url;
 	@Autowired
 	private MemcachedClient memcachedClient;
 
@@ -121,7 +129,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		Math.round(body.getTotalMoney() * 100);
 		dataMap.put("total_fee", String.valueOf(Math.round(body.getTotalMoney() * 100))); // 商品金
 		dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); // 客户端ip
-		dataMap.put("notify_url", "www.baidu.com"); // 通知地址(假设是百度)
+		dataMap.put("notify_url", notify_url); // 通知地址(假设是百度)
 		dataMap.put("trade_type", "JSAPI"); // 交易类型
 		dataMap.put("openid", body.getOpenid());// 用户openid
 		// 生成签名
@@ -137,8 +145,8 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 			map.get("prepay_id");
 			wxpayObject.put("package", "prepay_id="+map.get("prepay_id"));
 			wxpayObject.put("nonceStr", dataMap.get("nonce_str"));
-
 			wxpayObject.put("key", key);
+			wxpayObject.put("key", key);//paySignStr
 			
 		}
 		return wxpayObject;
@@ -180,5 +188,31 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		}
 		return result;
 
+	}
+
+	@Override
+	public String changePayStatus(HttpServletRequest req) throws Exception {
+		// TODO Auto-generated method stub
+		 InputStream inStream = req.getInputStream();
+         int _buffer_size = 1024;
+         if (inStream != null) {
+             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+             byte[] tempBytes = new byte[_buffer_size];
+             int count = -1;
+             while ((count = inStream.read(tempBytes, 0, _buffer_size)) != -1) {
+                 outStream.write(tempBytes, 0, count);
+             }
+             tempBytes = null;
+             outStream.flush();
+             //将流转换成字符串
+             String result = new String(outStream.toByteArray(), "UTF-8");
+             //将字符串解析成XML
+//             Document doc = DocumentHelper.parseText(result);
+             Map<String, String> resultMap = WXPayUtil.xmlToMap(result);
+             //将XML格式转化成MAP格式数据
+             //后续具体自己实现
+         }
+         //通知微信支付系统接收到信息
+     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
 	}
 }

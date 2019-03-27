@@ -45,7 +45,7 @@ public class TokenFilter extends OncePerRequestFilter {
 		JSONObject baseReq = null;
 		String token = null;
 //		未知上传什么内容使用，先保留--chali
-		if (request.getRequestURI().contains("/spa/file/upload") || request.getRequestURI().contains("/spa/import")) {
+		if (request.getRequestURI().contains("/spa/file/upload") || request.getRequestURI().contains("/spa/mallOrder/changePayStatus")) {
 			if (multipartResolver == null)
 				multipartResolver = (MultipartResolver) SpringContextUtil.getBean("multipartResolver");
 			String lang = null;
