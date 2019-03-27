@@ -2,7 +2,8 @@ package com.qisen.mts.spa.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,8 +36,8 @@ public class SpaMallOrderController {
 	}
 
 	@RequestMapping("/changePayStatus")
-	@ResponseBody
-	public String  changePayStatus(HttpServletRequest req) throws Exception {
-		return spaMallOrderService.changePayStatus(req);
+//	@ResponseBody
+	public void  changePayStatus(ServletRequest req,HttpServletResponse response) throws Exception {
+		spaMallOrderService.changePayStatus(req, response);
 	}
 }

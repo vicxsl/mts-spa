@@ -2,7 +2,8 @@ package com.qisen.mts.spa.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.SpaMallOrder;
@@ -14,7 +15,7 @@ public interface SpaMallOrderService {
 
 	CommObjResponse<List<SpaMallOrder>> list(SpaRequest<SpaMallOrder> req) throws Exception;
 	
-	String changePayStatus(HttpServletRequest req) throws Exception;
+	void changePayStatus(ServletRequest req,HttpServletResponse response) throws Exception;
 
 	
 

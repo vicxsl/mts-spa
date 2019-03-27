@@ -71,4 +71,17 @@
         	select imgUrl from imgTable where appid=#{appid}  and goodsId = #{goodsId} and type = '1' limit 1
         ]]>
 	</select>
+	
+	<!-- 查询待支付订单 -->
+	<select id="getOrder"  resultType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	    <![CDATA[
+        	select  * from mallOrder where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '0'  
+        ]]>
+	</select>
+	
+	<update id="updatePayStatus" >
+	 <![CDATA[
+        	update mallOrder set status = '2' where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '0'  
+        ]]>
+	</update>
 </mapper>

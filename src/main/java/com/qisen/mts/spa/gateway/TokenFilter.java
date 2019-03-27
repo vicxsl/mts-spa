@@ -58,6 +58,7 @@ public class TokenFilter extends OncePerRequestFilter {
 				token = request.getParameter("token");
 				lang = request.getParameter("lang");
 			}
+			requestWrapper = request;
 //			requestWrapper.setAttribute("lang", lang);
 //			requestWrapper = request;
 		} else {

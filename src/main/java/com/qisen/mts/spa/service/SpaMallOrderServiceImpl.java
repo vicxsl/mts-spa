@@ -3,13 +3,15 @@ package com.qisen.mts.spa.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.Document;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.http.HttpEntity;
@@ -20,7 +22,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.poi.util.DocumentHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ import com.github.wxpay.sdk.WXPayUtil;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
 import com.qisen.mts.spa.dao.MemberAddressDao;
+import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.dao.SpaInoutDepotDetailDao;
 import com.qisen.mts.spa.dao.SpaMallOrderDao;
 import com.qisen.mts.spa.model.entity.MemberAddress;
@@ -51,7 +55,9 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 
 	@Autowired
 	private MemberAddressDao memberAddressDao;
-
+	@Autowired
+	private ShopDao shopDao;
+	
 	@Autowired
 	private GoodsShopCarDao goodsShopCarDao;
 	@Value("#{configProperties['ImgCos']}")
@@ -65,36 +71,53 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	@Autowired
 	private MemcachedClient memcachedClient;
 
+	private static final Logger logger = LoggerFactory.getLogger(SpaMallOrderServiceImpl.class);
+
 	@Override
 	public CommObjResponse<SpaMallOrder> save(SpaRequest<SpaMallOrder> req) throws Exception {
 		CommObjResponse<SpaMallOrder> resp = new CommObjResponse<SpaMallOrder>();
 		SpaMallOrder body = req.getBody();
+		SpaMallOrder order = new SpaMallOrder();
 		if (!CollectionUtils.isEmpty(body.getGoodsList())) {
-			int eid = req.getEid();
+			Integer eid = req.getEid();
 			String appid = req.getAppid();
 			String openid = req.getToken();
-			SpaShop shop = JSONObject.toJavaObject(JSONObject.parseObject(memcachedClient.get(appid)), SpaShop.class);
-			;
-			spaMallOrderDao.create(body);// 插入订单表
-			int orderId = body.getId();
-			JSONObject wxpayObject = wxPay(shop, body);//生成微信预支付单
-			body.setStatus("0");
-			List<SpaInoutDepotDetail> details = body.getGoodsList();
-			for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
-				spaInoutDepotDetail.setOrderId(orderId);
-				spaInoutDepotDetail
-						.setTotalMoney(spaInoutDepotDetail.getNum() * spaInoutDepotDetail.getPreferencePrice());
+			SpaShop shop = new SpaShop();
+			String shopStr = memcachedClient.get(appid);
+			if(shopStr !=null){
+				shop = JSONObject.toJavaObject(JSONObject.parseObject(shopStr), SpaShop.class);
+			}else{
+				shop = shopDao.queryByAppId(appid);
 			}
-			// 执行明细表的插入或修改操作
-			inoutDepotDetailDao.saveList(details);
-			goodsShopCarDao.deleteByOrder(body);
-			MemberAddress address = body.getMemberAddress();
-			address.setAppid(appid);
-			address.setEid(eid);
-			address.setOpenid(openid);
-			address.setOrderId(orderId);
-			memberAddressDao.create(address);
-			body.setWxpayObject(wxpayObject);
+					
+			Integer orderId = body.getId();
+			if(orderId != null){
+				order = body;
+			}else{
+				spaMallOrderDao.create(body);// 插入订单表
+				orderId = body.getId();
+				order = body;
+				order.setStatus("0");
+				List<SpaInoutDepotDetail> details = body.getGoodsList();//生成出入库明细
+				for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
+					spaInoutDepotDetail.setOrderId(orderId);
+					spaInoutDepotDetail
+							.setTotalMoney(spaInoutDepotDetail.getNum() * spaInoutDepotDetail.getPreferencePrice());
+				}
+				// 执行明细表的插入或修改操作
+				inoutDepotDetailDao.saveList(details);
+				goodsShopCarDao.deleteByOrder(body);//更新购物车
+				MemberAddress address = body.getMemberAddress();
+				address.setAppid(appid);
+				address.setEid(eid);
+				address.setOpenid(openid);
+				address.setOrderId(orderId);
+				memberAddressDao.create(address);
+			}
+			if(order.getStatus().equals("0")){
+				JSONObject wxpayObject = wxPay(shop, order);// 生成微信预支付单
+				order.setWxpayObject(wxpayObject);
+			}
 			resp.setBody(body);
 		}
 		return resp;
@@ -116,17 +139,15 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		return response;
 	}
 
-
 	public JSONObject wxPay(SpaShop shop, SpaMallOrder body) throws Exception {
 		JSONObject wxpayObject = new JSONObject();
 		HashMap<String, String> dataMap = new HashMap<>();
-		String key = shop.getSecret();//微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置   API密钥是交易过程生成签名的密钥
+		String key = shop.getSecret();// 微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置,API密钥是交易过程生成签名的密钥
 		dataMap.put("appid", shop.getAppid()); // 公众账号ID
 		dataMap.put("mch_id", shop.getMchId()); // 商户号
 		dataMap.put("nonce_str", WXPayUtil.generateNonceStr()); // 随机字符串，长度要求在32位以内。
 		dataMap.put("body", body.getOpenid()); // 商品描述
 		dataMap.put("out_trade_no", body.getId() + ""); // 商品订单号
-		Math.round(body.getTotalMoney() * 100);
 		dataMap.put("total_fee", String.valueOf(Math.round(body.getTotalMoney() * 100))); // 商品金
 		dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); // 客户端ip
 		dataMap.put("notify_url", notify_url); // 通知地址(假设是百度)
@@ -143,11 +164,11 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		if (map.get("return_code").toString().equals("SUCCESS")
 				&& map.get("result_code").toString().equals("SUCCESS")) {
 			map.get("prepay_id");
-			wxpayObject.put("package", "prepay_id="+map.get("prepay_id"));
+			wxpayObject.put("package", "prepay_id=" + map.get("prepay_id"));
 			wxpayObject.put("nonceStr", dataMap.get("nonce_str"));
 			wxpayObject.put("key", key);
-			wxpayObject.put("key", key);//paySignStr
-			
+			wxpayObject.put("key", key);// paySignStr
+
 		}
 		return wxpayObject;
 	}
@@ -191,28 +212,77 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	}
 
 	@Override
-	public String changePayStatus(HttpServletRequest req) throws Exception {
+	public void changePayStatus(ServletRequest req, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		 InputStream inStream = req.getInputStream();
-         int _buffer_size = 1024;
-         if (inStream != null) {
-             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-             byte[] tempBytes = new byte[_buffer_size];
-             int count = -1;
-             while ((count = inStream.read(tempBytes, 0, _buffer_size)) != -1) {
-                 outStream.write(tempBytes, 0, count);
-             }
-             tempBytes = null;
-             outStream.flush();
-             //将流转换成字符串
-             String result = new String(outStream.toByteArray(), "UTF-8");
-             //将字符串解析成XML
-//             Document doc = DocumentHelper.parseText(result);
-             Map<String, String> resultMap = WXPayUtil.xmlToMap(result);
-             //将XML格式转化成MAP格式数据
-             //后续具体自己实现
-         }
-         //通知微信支付系统接收到信息
-     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+		InputStream inStream = req.getInputStream();
+		PrintWriter writer = response.getWriter();
+		String returnStr = setXML("FAIL", "");
+		int _buffer_size = 1024;
+		if (inStream != null) {
+			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+			byte[] tempBytes = new byte[_buffer_size];
+			int count = -1;
+			while ((count = inStream.read(tempBytes, 0, _buffer_size)) != -1) {
+				outStream.write(tempBytes, 0, count);
+			}
+			tempBytes = null;
+			outStream.flush();
+			// 将流转换成字符串
+			String result = new String(outStream.toByteArray(), "UTF-8");
+			logger.debug("--------------接收到的信息---------------------");
+
+			logger.debug(result, "");
+
+			logger.debug("-----------------------------------");
+			Map<String, String> resultMap = WXPayUtil.xmlToMap(result);
+
+			logger.debug("-----------------------------------");
+			// 将XML格式转化成MAP格式数据
+			// 后续具体自己实现
+			// if(){
+			//
+			// }
+			if (resultMap.get("result_code").equals("SUCCESS")) {// 回调成功
+				String appid = resultMap.get("appid");
+				String totalMoney = new DecimalFormat("0.00").format(Double.valueOf(resultMap.get("total_fee")) / 100);
+				String orderId = resultMap.get("out_trade_no");
+				logger.debug(appid, "查询数据", totalMoney, orderId);
+				SpaMallOrder order = spaMallOrderDao.getOrder(orderId, appid, totalMoney);
+				logger.debug(order.toString(), "存在此订单");
+				if (order == null || order.getId() == null) {
+					// 不存在此订单
+					returnStr = setXML("FAIL", "不存在此订单");
+				} else {
+					// 校验签名
+					SpaShop shop = JSONObject.toJavaObject(JSONObject.parseObject(memcachedClient.get(appid)),
+							SpaShop.class);
+					// 生成签名
+					String signature = WXPayUtil.generateSignature(resultMap, shop.getSecret());
+					logger.debug(resultMap.get("sign"), "签名对比", signature);
+					if (resultMap.get("sign").equals(signature)) {
+						spaMallOrderDao.updatePayStatus(orderId, appid, totalMoney);
+						returnStr = setXML("SUCCESS", "OK");
+					} else {
+						// 签名错误
+						returnStr = setXML("FAIL", "签名错误");
+					}
+				}
+
+			} else {// 回调失败
+				returnStr = setXML("FAIL", resultMap.get("return_msg"));
+
+			}
+		}
+
+		writer.write(returnStr);
+		writer.flush();
+		writer.close();
+	}
+
+	// 设置通知微信回调内容
+	public static String setXML(String return_code, String return_msg) {
+		return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg
+				+ "]]></return_msg></xml>";
+
 	}
 }
