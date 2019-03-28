@@ -3,8 +3,6 @@ package com.qisen.mts.spa.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,16 +16,12 @@ import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.dao.SpaImgDao;
 import com.qisen.mts.spa.model.entity.MemberAddress;
 import com.qisen.mts.spa.model.entity.ShopBonus;
-import com.qisen.mts.spa.model.entity.SpaGoods;
 import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
 public class ShopServiceImpl implements ShopService{
-	
-	private static final Logger logger = LoggerFactory.getLogger(ShopServiceImpl.class);
-	
 	
 	@Autowired
 	private ShopDao shopDao;

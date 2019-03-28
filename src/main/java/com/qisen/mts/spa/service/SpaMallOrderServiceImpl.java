@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +33,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
+import com.qisen.mts.spa.dao.IncomeDetailsDao;
 import com.qisen.mts.spa.dao.MemberAddressDao;
+import com.qisen.mts.spa.dao.MemberDao;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.dao.SpaInoutDepotDetailDao;
 import com.qisen.mts.spa.dao.SpaMallOrderDao;
 import com.qisen.mts.spa.model.entity.MemberAddress;
+import com.qisen.mts.spa.model.entity.ShopBonus;
+import com.qisen.mts.spa.model.entity.SpaIncomeDetails;
 import com.qisen.mts.spa.model.entity.SpaInoutDepotDetail;
 import com.qisen.mts.spa.model.entity.SpaMallOrder;
+import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
@@ -56,7 +62,11 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	@Autowired
 	private MemberAddressDao memberAddressDao;
 	@Autowired
+	private MemberDao memberDao;
+	@Autowired
 	private ShopDao shopDao;
+	@Autowired
+	private IncomeDetailsDao incomeDetailsDao;
 	
 	@Autowired
 	private GoodsShopCarDao goodsShopCarDao;
@@ -84,21 +94,21 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 			String openid = req.getToken();
 			SpaShop shop = new SpaShop();
 			String shopStr = memcachedClient.get(appid);
-			if(shopStr !=null){
+			if (shopStr != null) {
 				shop = JSONObject.toJavaObject(JSONObject.parseObject(shopStr), SpaShop.class);
-			}else{
+			} else {
 				shop = shopDao.queryByAppId(appid);
 			}
-					
+
 			Integer orderId = body.getId();
-			if(orderId != null){
+			if (orderId != null) {
 				order = body;
-			}else{
+			} else {
 				spaMallOrderDao.create(body);// 插入订单表
 				orderId = body.getId();
 				order = body;
 				order.setStatus("0");
-				List<SpaInoutDepotDetail> details = body.getGoodsList();//生成出入库明细
+				List<SpaInoutDepotDetail> details = body.getGoodsList();// 生成出入库明细
 				for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
 					spaInoutDepotDetail.setOrderId(orderId);
 					spaInoutDepotDetail
@@ -106,7 +116,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				}
 				// 执行明细表的插入或修改操作
 				inoutDepotDetailDao.saveList(details);
-				goodsShopCarDao.deleteByOrder(body);//更新购物车
+				goodsShopCarDao.deleteByOrder(body);// 更新购物车
 				MemberAddress address = body.getMemberAddress();
 				address.setAppid(appid);
 				address.setEid(eid);
@@ -114,7 +124,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				address.setOrderId(orderId);
 				memberAddressDao.create(address);
 			}
-			if(order.getStatus().equals("0")){
+			if (order.getStatus().equals("0")) {
 				JSONObject wxpayObject = wxPay(shop, order);// 生成微信预支付单
 				order.setWxpayObject(wxpayObject);
 			}
@@ -139,6 +149,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		return response;
 	}
 
+	// 调用微信统一生成订单接口
 	public JSONObject wxPay(SpaShop shop, SpaMallOrder body) throws Exception {
 		JSONObject wxpayObject = new JSONObject();
 		HashMap<String, String> dataMap = new HashMap<>();
@@ -173,13 +184,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		return wxpayObject;
 	}
 
-	//
-	// @RequestMapping("/notifyUrl")
-	// public String notifyUrl(String unifiedorderUrl, String requestXml) {
-	// System.out.print("h");
-	// return "回调成功";
-	//
-	// }
+	// 向微信服务器发送请求
 	public static String doPost(String url, String requestXml) {
 		CloseableHttpClient httpClient = null;
 		CloseableHttpResponse httpResponse = null;
@@ -212,6 +217,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	}
 
 	@Override
+	// 支付成功后触发的回调函数，更改 订单状态，生成推广获益
 	public void changePayStatus(ServletRequest req, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		InputStream inStream = req.getInputStream();
@@ -229,23 +235,13 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 			outStream.flush();
 			// 将流转换成字符串
 			String result = new String(outStream.toByteArray(), "UTF-8");
-			logger.debug("--------------接收到的信息---------------------");
-
-			logger.debug(result, "");
-
-			logger.debug("-----------------------------------");
+			// 将字符串转为map
 			Map<String, String> resultMap = WXPayUtil.xmlToMap(result);
-
-			logger.debug("-----------------------------------");
-			// 将XML格式转化成MAP格式数据
-			// 后续具体自己实现
-			// if(){
-			//
-			// }
+			// 判断是否支付成功
 			if (resultMap.get("result_code").equals("SUCCESS")) {// 回调成功
 				String appid = resultMap.get("appid");
-				String totalMoney = new DecimalFormat("0.00").format(Double.valueOf(resultMap.get("total_fee")) / 100);
-				String orderId = resultMap.get("out_trade_no");
+				String totalMoney = new DecimalFormat("0.00").format(Double.valueOf(resultMap.get("total_fee")) / 100);// 订单总金额单位由分转为元
+				String orderId = resultMap.get("out_trade_no");// 系统订单id
 				logger.debug(appid, "查询数据", totalMoney, orderId);
 				SpaMallOrder order = spaMallOrderDao.getOrder(orderId, appid, totalMoney);
 				logger.debug(order.toString(), "存在此订单");
@@ -261,6 +257,9 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 					logger.debug(resultMap.get("sign"), "签名对比", signature);
 					if (resultMap.get("sign").equals(signature)) {
 						spaMallOrderDao.updatePayStatus(orderId, appid, totalMoney);
+						String openid = resultMap.get("openid");// 用户openid
+						SpaMember member = memberDao.queryByAppid(appid, openid);
+						createShopBonus(shop, member, order);// 推广收益
 						returnStr = setXML("SUCCESS", "OK");
 					} else {
 						// 签名错误
@@ -284,5 +283,57 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg
 				+ "]]></return_msg></xml>";
 
+	}
+
+	// 推广获益
+	public void createShopBonus(SpaShop shop, SpaMember member, SpaMallOrder order) {
+		int num = shop.getBonusNum();
+		if (0 < num) {
+			//启用新零售推广机制
+			List<SpaIncomeDetails> list = new ArrayList<SpaIncomeDetails>();
+			for (ShopBonus shopBonus : shop.getShopBonusList()) {
+				int bonusLevel = shopBonus.getBonusLevel();
+				String bonusType = shopBonus.getBonusType();
+				double bonusValue = shopBonus.getBonusValue();
+				String bonusOpenid = null;
+				SpaIncomeDetails details = new SpaIncomeDetails();
+				details.setBuyOpenid(member.getOpenid());
+				details.setAppid(member.getAppid());
+				details.setEid(member.getEid());
+				details.setName(member.getName());
+				details.setOrderId(order.getId());
+				double money = 0;
+				double totalMoney=order.getTotalMoney();//订单支付金额
+				double orderProfit=order.getOrderProfit();//订单利润
+				if (bonusLevel == 1) {
+					// 第一层推广收益
+					bonusOpenid = member.getRecommendOneId();
+				} else if (bonusLevel == 2) {
+					// 第二层推广收益
+					bonusOpenid = member.getRecommendTwoId();
+				} else if (bonusLevel == 3) {
+					// 第二层推广收益
+					bonusOpenid = member.getRecommendThreeId();
+				}
+				if(num >= bonusLevel && null != bonusOpenid){
+					//启用到这一级推广并存在这一级推广人员
+					details.setLevel(bonusLevel + "");
+					details.setOpenid(bonusOpenid);
+					if("1" == bonusType){
+						money = bonusValue;
+					}else if ("2" == bonusType) {
+						money = totalMoney * bonusValue / 100;
+					}else if ("3" == bonusType && 0 < orderProfit) {
+						money = orderProfit  * bonusValue / 100;
+					}
+					details.setMoney(money);
+					list.add(details);
+				}
+			}
+			if(0 < list.size()){
+				incomeDetailsDao.saveList(list);
+			}
+			
+		}
 	}
 }

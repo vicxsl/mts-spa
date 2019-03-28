@@ -12,4 +12,6 @@ public interface IncomeDetailsDao {
 	 * @return
 	 */
 	public List<SpaIncomeDetails> list(SpaIncomeDetails req);
+	//批量生成推广收益
+	public void saveList(List<SpaIncomeDetails> list);
 }

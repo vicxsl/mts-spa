@@ -55,17 +55,17 @@ public class MemberServiceImpl implements MemberService {
 		String js_code = query.getJs_code();// wx.login临时js_code
 		String shopStr = memcachedClient.get(appid);//从缓存中取商户信息
 		SpaShop shop = new SpaShop();
-		String secret = "";//会话密钥
 		if(shopStr!=null){
 			shop = JSONObject.toJavaObject(JSONObject.parseObject(shopStr), SpaShop.class);
-			secret = shop.getSecret();
 		}else{
-			secret = shopDao.getSecret(appid);
+			shop = shopDao.queryByAppId(appid);
 		}
+		String secret = shop.getSecret();//会话密钥
 		JSONObject wxObject = MemberServiceImpl.getSessionKeyOropenid(js_code, appid, secret);
 		String openid = wxObject.getString("openid");
 		String session_key = wxObject.getString("session_key");
 		query.setOpenid(openid);
+		query.setEid(shop.getEid());
 		query.setSession_key(session_key);
 		memberDao.saveOrUpdate(query);//新增或者更新会员
 		MetaData metaData = memberDao.getMallMetaData(query);//查询metaData信息

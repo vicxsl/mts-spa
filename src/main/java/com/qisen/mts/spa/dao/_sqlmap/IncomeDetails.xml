@@ -4,7 +4,8 @@
 <mapper namespace="com.qisen.mts.spa.dao.IncomeDetailsDao">
 
 	<!-- 查询获利详情 -->
-	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaIncomeDetails" parameterType="com.qisen.mts.spa.model.entity.SpaIncomeDetails">
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaIncomeDetails"
+		parameterType="com.qisen.mts.spa.model.entity.SpaIncomeDetails">
 		<![CDATA[
 			select *  from  incomeDetails 
 		]]>
@@ -19,8 +20,22 @@
 			</if>
 		</where>
 		<![CDATA[
-					order by createTime 
-				]]>
+			order by createTime 
+		]]>
 	</select>
+
+	<insert id="saveList" parameterType="com.qisen.mts.spa.model.entity.SpaIncomeDetails">
+		<![CDATA[
+			insert into incomeDetails
+			(eid,appid,buyOpenid,name,money,openid,orderId,level,createtime,status)
+			values
+		]]>
+		<foreach collection="list" item="item" index="index" open=""
+			separator="," close="">
+			<![CDATA[
+				(#{item.eid},#{item.appid},#{item.buyOpenid},#{item.name},#{item.money},#{item.openid},#{item.orderId},#{item.level},unix_timestamp(now())*1000,'0')
+			]]>
+		</foreach>
+	</insert>
 
 </mapper>

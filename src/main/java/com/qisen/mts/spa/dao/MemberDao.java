@@ -55,5 +55,5 @@ public interface MemberDao {
 	//获取小程序metaData
 	public MetaData getMallMetaData(SpaMember spa);
 	
-
+	SpaMember queryByAppid(@Param("appid")String appid,@Param("openid")String openid);
 }
