@@ -242,7 +242,6 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				String appid = resultMap.get("appid");
 				String totalMoney = new DecimalFormat("0.00").format(Double.valueOf(resultMap.get("total_fee")) / 100);// 订单总金额单位由分转为元
 				String orderId = resultMap.get("out_trade_no");// 系统订单id
-				logger.debug(appid, "查询数据", totalMoney, orderId);
 				SpaMallOrder order = spaMallOrderDao.getOrder(orderId, appid, totalMoney);
 				logger.debug(order.toString(), "存在此订单");
 				if (order == null || order.getId() == null) {
@@ -319,19 +318,31 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 					//启用到这一级推广并存在这一级推广人员
 					details.setLevel(bonusLevel + "");
 					details.setOpenid(bonusOpenid);
-					if("1" == bonusType){
+					if("1".equals(bonusType)){
 						money = bonusValue;
-					}else if ("2" == bonusType) {
+					}else if ("2".equals(bonusType)) {
 						money = totalMoney * bonusValue / 100;
-					}else if ("3" == bonusType && 0 < orderProfit) {
+					}else if ("3".equals(bonusType) && 0 < orderProfit) {
 						money = orderProfit  * bonusValue / 100;
 					}
 					details.setMoney(money);
 					list.add(details);
+					logger.debug("huolishuju");
+
+					logger.debug(bonusValue+"");
+
+					logger.debug(money+"");
+
+					logger.debug(details.toString());
+					logger.debug(totalMoney+"");
+					logger.debug(orderProfit+"");
 				}
 			}
 			if(0 < list.size()){
+				//生成推广收益单
 				incomeDetailsDao.saveList(list);
+				//更新收益人 推荐总金额
+				memberDao.updateTotalMoney(list);
 			}
 			
 		}

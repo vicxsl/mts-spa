@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.qisen.mts.spa.model.entity.MetaData;
+import com.qisen.mts.spa.model.entity.SpaIncomeDetails;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 
@@ -39,12 +40,38 @@ public interface MemberDao {
 	public void create(SpaMember spa);
 	
 	/**
+	 * 增加推荐总金额 
+	 * @param spaAccount
+	 */
+	public void updateTotalMoney(List<SpaIncomeDetails> list);
+	
+	/**
+	 * 被推广人员收货增加推广人余额
+	 * @param spaAccount
+	 */
+	public void addBalance(SpaMember spa);
+	
+	/**
+	 * 提现减少余额
+	 * @param spaAccount
+	 */
+	public void reduceBalance(SpaMember spa);
+	
+	/**
 	 * 编辑spa账号 
 	 * @param spaAccount
 	 */
 	public void update(SpaMember spa);
 	
 	public List<SpaMember> profitLevelOne(SpaMember spa);
+
+	/**
+	 * 获取推荐会员所带来的收益
+	 * @param spa
+	 * @return
+	 */
+	public List<SpaMember> memberIncomeDetailsList(SpaMember spa);
+	
 
 	public List<SpaMember> levelTwo(@Param("list")List<SpaMember> list,@Param("eid")String eid);
 

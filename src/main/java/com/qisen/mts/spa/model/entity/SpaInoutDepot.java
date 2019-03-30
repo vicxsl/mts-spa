@@ -23,7 +23,7 @@ public class SpaInoutDepot extends BaseEntity {
 
 	private String remark;
 
-	private Date createDate;
+	private Date createTime;
 
 	private Date auditingDate;
 
@@ -81,12 +81,12 @@ public class SpaInoutDepot extends BaseEntity {
 		this.remark = remark;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public Date getAuditingDate() {

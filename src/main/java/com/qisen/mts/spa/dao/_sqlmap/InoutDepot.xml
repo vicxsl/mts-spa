@@ -26,8 +26,8 @@
 			<if test="inOutDepotTypeId != null">
 				and inOutDepotTypeId = #{inOutDepotTypeId}
 			</if>
-			<if test="createDate != null">
-				and createDate = #{createDate}
+			<if test="createTime != null">
+				and createTime = #{createTime}
 			</if>
 			<if test="auditingDate != null">
 				and auditingDate = #{auditingDate}
@@ -61,7 +61,7 @@
 		insert into inOutDepot (
 		 No,type,
 		inOutDepotTypeId, Remark,
-		CreateDate, AuditingDate, 
+		createTime, AuditingDate, 
 		AccountId, Money, Status,
 		appid,
 		eid)

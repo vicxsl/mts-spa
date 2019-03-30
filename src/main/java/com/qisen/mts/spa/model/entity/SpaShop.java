@@ -20,7 +20,7 @@ public class SpaShop extends BaseEntity {
 	private String appid;//小程序id
 	private String secret;//小程序id
 	private String name;//门店名称
-	private String createDate;//接入日期
+	private String createTime;//接入日期
 	private String endDate;//结束日期
 	private double openMoney;//新开费用
 	private double reNewMoney;//接入费用
@@ -73,11 +73,11 @@ public class SpaShop extends BaseEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCreateDate() {
-		return createDate;
+	public String getCreateTime() {
+		return createTime;
 	}
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 	public String getEndDate() {
 		return endDate;

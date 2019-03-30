@@ -15,7 +15,7 @@
 			]]>
 			<if test="createTime != null and createTime !=''">
 				<![CDATA[
-					and createTime > #{createTime} 
+					and createTime > #{createTime}
 				]]>
 			</if>
 		</where>
@@ -33,7 +33,7 @@
 		<foreach collection="list" item="item" index="index" open=""
 			separator="," close="">
 			<![CDATA[
-				(#{item.eid},#{item.appid},#{item.buyOpenid},#{item.name},#{item.money},#{item.openid},#{item.orderId},#{item.level},unix_timestamp(now())*1000,'0')
+				(#{item.eid},#{item.appid},#{item.buyOpenid},#{item.name},#{item.money},#{item.openid},#{item.orderId},#{item.level},unix_timestamp(now())*1000,'2')
 			]]>
 		</foreach>
 	</insert>

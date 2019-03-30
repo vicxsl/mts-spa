@@ -22,9 +22,9 @@
 	</select>
 
 	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-		<selectKey keyProperty="id" resultType="int"
-			order="BEFORE">
-			select count(id) as id from member where appid = #{appid} and
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select
+			count(id) as id from member where appid = #{appid} and
 			openid =
 			#{openid}
 		</selectKey>
@@ -57,9 +57,9 @@
 		</if>
 		<if test="id == 0">
 		    <![CDATA[
-		    	insert into member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId) 
+		    	insert into member(eid,appid,name,mobile,totalMoney,balance,createTime,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId) 
 					SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as mobile,#{totalMoney} as totalMoney,#{balance} as balance,
-					unix_timestamp(now())*1000 as createDate,#{openid} as openid,#{session_key} as session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as avatarUrl,
+					unix_timestamp(now())*1000 as createTime,#{openid} as openid,#{session_key} as session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as avatarUrl,
 				
 		    ]]>
 			<choose>
@@ -81,10 +81,10 @@
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		insert into
-		member(eid,appid,name,mobile,totalMoney,balance,createDate,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId)
+		member(eid,appid,name,mobile,totalMoney,balance,createTime,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId)
 		SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as
 		mobile,#{totalMoney} as totalMoney,#{balance} as balance,
-		#{createDate} as createDate,#{openid} as openid,#{session_key} as
+		#{createTime} as createTime,#{openid} as openid,#{session_key} as
 		session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as
 		avatarUrl,
 		<choose>
@@ -132,8 +132,24 @@
 			]]>
 		</where>
 	</update>
-
-
+	<!-- 增加推荐总金额  -->
+	<update id="updateTotalMoney" parameterType="com.qisen.mts.spa.model.entity.SpaIncomeDetails">
+		<foreach collection="list" separator=";" item="income" index="index">
+			<![CDATA[
+				update member
+			]]>
+			<set>
+				<![CDATA[
+					 totalMoney = #{income.money} + totalMoney,
+				 ]]>
+			</set>
+			<where>
+			 	<![CDATA[
+	           		openid=#{income.openid} and appid = #{income.appid}  
+	           	]]>
+			</where>
+		</foreach>
+	</update>
 
 	<!-- 查询SPA商品列表 -->
 	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaMember"
@@ -147,23 +163,70 @@
 			]]>
 		</where>
 	</select>
+	
+	<!-- 收益列表 -->
+	<select id="memberIncomeDetailsList" resultMap="memberMap" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			select * from member
+		]]>
+		<where>
+			<![CDATA[
+				appid = #{appid} and recommendOneId = #{openid}
+			]]>
+			<if test="createTime !=null and createTime !=''">
+				<![CDATA[
+					and DATE_FORMAT(createTime,'%Y-%m-%d') = DATE_FORMAT(#{createTime},'%Y-%m-%d')
+				]]>
+			</if>
+		</where>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaMember"
+		id="memberMap">
+		<result property="name" column="name" />
+		<result property="createTime" column="createTime" />
+		<association property="balance" column="{appid=appid,openid=recommendOneId}"
+			select="getMemberBalance" />
+		<association property="totalMoney" column="{appid=appid,openid=recommendOneId}"
+			select="getMemberTtotalMoney" />
+	</resultMap>
+	<select id="getMemberBalance" parameterType="java.util.Map"
+		resultType="double">
+		<![CDATA[
+			select sum(money) from incomeDetails
+		]]>
+		<where>
+			<![CDATA[
+				 appid = #{appid} and openid = #{openid}
+			]]>
+		</where>
+	</select>
+	<select id="getMemberTtotalMoney" parameterType="java.util.Map"
+		resultType="double">
+		<![CDATA[
+			select sum(money) from (
+				select sum(a.money) as money from incomeDetails a where a.appid = #{appid} and a.openid = #{openid} and a.level = '1'
+				UNION ALL select sum(b.money) as money from incomeDetails b where b.appid = #{appid} and b.openid = #{openid} and b.level = '2'
+				UNION ALL select sum(c.money) as money from incomeDetails c where c.appid = #{appid} and c.openid = #{openid} and c.level = '3'
+			)  sumTable
+		]]>
+	</select>
 
 	<!-- 查询会员推荐人员集合 及其所带来的获利集合 -->
 	<select id="profitLevelOne" resultType="com.qisen.mts.spa.model.entity.SpaMember"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		select b.buyOpenid as openid,b.eid,
-		b.name,b.createDate,sum(b.money) as
+		b.name,b.createTime,sum(b.money) as
 		balance from (select
-		t.name,t.eid,a.createDate,t.buyOpenid,t.money
+		t.name,t.eid,a.createTime,t.buyOpenid,t.money
 		FROM incomeDetails t ,
 		member a where t.buyOpenid = a.openid and t.eid = #{eid} and
-		t.openid=#{openid} ) b group by b.buyOpenid, b.name,b.createDate
+		t.openid=#{openid} ) b group by b.buyOpenid, b.name,b.createTime
 	</select>
 
 	<select id="levelTwo" resultType="com.qisen.mts.spa.model.entity.SpaMember"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-		select b.openid,b.eid, b.name,b.createDate,sum(b.money) as balance
-		from (select t.name,t.eid,a.createDate,t.openid,t.money FROM
+		select b.openid,b.eid, b.name,b.createTime,sum(b.money) as balance
+		from (select t.name,t.eid,a.createTime,t.openid,t.money FROM
 		incomeDetails t ,
 		member a where t.openid = a.openid and t.eid = #{eid}
 		and t.Level=1 and
@@ -174,13 +237,13 @@
 					#{member.openid}
 				]]>
 		</foreach>
-		) b group by b.openid, b.name,b.createDate
+		) b group by b.openid, b.name,b.createTime
 	</select>
 
 	<select id="levelThree" resultType="com.qisen.mts.spa.model.entity.SpaMember"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-		select b.openid, b.name,b.eid,b.createDate,sum(b.money) as balance
-		from (select t.name,t.eid,a.createDate,t.openid,t.money FROM
+		select b.openid, b.name,b.eid,b.createTime,sum(b.money) as balance
+		from (select t.name,t.eid,a.createTime,t.openid,t.money FROM
 		incomeDetails t ,
 		member a where t.openid = a.openid and t.eid = #{eid}
 		and t.Level=2 and
@@ -191,42 +254,105 @@
 					#{member.openid}
 				]]>
 		</foreach>
-		) b group by b.openid, b.name,b.createDate
+		) b group by b.openid, b.name,b.createTime
 	</select>
 
-
+	<!-- 获取我的信息页面数据 -->
 	<select id="myInfoGains" resultMap="MyInfoGains"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMyInfoGains">
+		<!-- 查询用户自己 -->
 		<![CDATA[
-        	select * from member where appid=#{appid} and openid = #{openid} and eid=#{eid} order By createDate
+        	select *,#{createTime} as mapCreateTime from member where appid=#{appid} and openid = #{openid} and eid=#{eid} order By createTime
         ]]>
 	</select>
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaMyInfoGains"
 		id="MyInfoGains">
-		<result property="myMoney" column="balance" />
-		<association property="todayPeople" column="{appid=appid,openid=openid}"
-			javaType="int" select="getTodayPeople" />
-		<association property="todayMoney" column="{appid=appid,openid=openid}"
-			select="getTodayMoney" />
-		<association property="myPeople"
-			column="{appid=appid,openid=openid,createTime=createDate}" select="getMyPeople" />
+		<!-- 收益未提现余额 -->
+		<result property="myBalance" column="balance" />
+		<!-- 收益总额 -->
+		<result property="myTotalMoney" column="totalMoney" />
+		<!-- 我所有推广人员购买产生的收益 包括二级 、三级 -->
+		<result property="myPeopleMoney" column="totalMoney"  />
+		<!-- 今日推荐人数 一级 -->
+		<association property="todayPeople" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayPeople" />
+		<!-- 今日推荐人所购买产生的直接收益 一级-->
+		<association property="todayPeopleBalance" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayPeopleBalance" />
+		<!-- 今日推荐人所产生的所有收益 包括二级、三级-->
+		<association property="todayPeopleMoney" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayPeopleMoney" />
+		<!-- 今日收益金额总计多少笔 包括二级、三级 -->
+		<association property="todayOrderNum" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayOrderNum" />
+		<!-- 今日收益 未完成部分 -->
+		<association property="todayNoFinishMoney" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayNoFinishMoney" />
+		<!-- 所有推广人员今日购买产生的总计收益 包括二级、三级 -->
+		<association property="todayMoney" column="{appid=appid,openid=openid,createTime=mapCreateTime}" select="todayMoney" />
+		<!-- 我所有推广人员  一级 -->
+		<association property="myPeople" column="{appid=appid,openid=openid}" select="myPeople" />
+		<!-- 我所有推广人员购买产生的收益 一级 -->
+		<association property="myPeopleMoneyFromOne" column="{appid=appid,openid=openid}" javaType="int" select="myPeopleMoneyFromOne" />
+		<!-- 未完成订单将带来的收益 包括二级 、三级 -->
+		<association property="noFinishMoney" column="{appid=appid,openid=openid}" javaType="int" select="noFinishMoney" />
 	</resultMap>
-	<select id="getTodayPeople" parameterType="java.util.Map"
+	<!-- 今日推荐人数 一级 -->
+	<select id="todayPeople" parameterType="java.util.Map"
 		resultType="int">
 	    <![CDATA[
-        	select count(id) from member where appid=#{appid}  and openid = #{openid}
+        	select count(id) from member where appid=#{appid}  and recommendOneId = #{openid} and createTime > #{createTime}
         ]]>
 	</select>
-	<select id="getMyPeople" parameterType="java.util.Map"
+	<!-- 今日推荐人所购买产生的直接收益 一级-->
+	<select id="todayPeopleBalance" parameterType="java.util.Map"
+		resultType="int">
+	    <![CDATA[
+        	select sum(a.money) from incomeDetails a,member b where a.appid=#{appid}  and a.openid = #{openid} and a.createTime > #{createTime} and b.createTime > #{createTime} and a.buyOpenid = b.openid and a.level = '1'
+        ]]>
+	</select>
+	<!-- 今日推荐人所产生的所有收益 包括二级、三级-->
+	<select id="todayPeopleMoney" parameterType="java.util.Map"
+		resultType="int">
+	    <![CDATA[
+        	select sum(a.money) from incomeDetails a,member b where a.appid=#{appid}  and a.openid = #{openid} and a.createTime > #{createTime} and b.createTime > #{createTime} and a.buyOpenid = b.openid
+        ]]>
+	</select>
+	<!-- 今日收益金额总计多少笔 包括二级、三级 -->
+	<select id="todayOrderNum" parameterType="java.util.Map"
+		resultType="int">
+	    <![CDATA[
+        	select count(id) from incomeDetails where appid=#{appid}  and openid = #{openid} and createTime > #{createTime}
+        ]]>
+	</select>
+	<!-- 今日收益 未完成部分 -->
+	<select id="todayNoFinishMoney" parameterType="java.util.Map"
+		resultType="int">
+	    <![CDATA[
+        	select sum(money) from incomeDetails where appid=#{appid}  and openid = #{openid} and status = '2' or status = '5' and createTime > #{createTime} 
+        ]]>
+	</select>
+	<!-- 所有推广人员今日购买产生的总计收益 包括二级、三级 -->
+	<select id="todayMoney" parameterType="java.util.Map"
+		resultType="int">
+    	<![CDATA[
+        	select sum(money) from incomeDetails where appid=#{appid} and openid = #{openid} and createTime > #{createTime}
+        ]]>
+	</select>
+	<!-- 我所有推广人员  一级 -->
+	<select id="myPeople" parameterType="java.util.Map"
 		resultType="int">
     	<![CDATA[
         	select count(id) from member where appid=#{appid} and recommendOneId = #{openid}
         ]]>
 	</select>
-	<select id="getTodayMoney" parameterType="java.util.Map"
+	<!-- 我所有推广人员购买产生的收益 一级 -->
+	<select id="myPeopleMoneyFromOne" parameterType="java.util.Map"
 		resultType="int">
-    	<![CDATA[
-        	select sum(money) from incomeDetails where appid=#{appid} and openid = #{openid}and createTime > #{createTime} 
+	    <![CDATA[
+        	select sum(money) from incomeDetails where appid=#{appid}  and openid = #{openid} and level = '1'
+        ]]>
+	</select>
+	<!-- 未完成订单将带来的收益 包括二级 、三级 -->
+	<select id="noFinishMoney" parameterType="java.util.Map"
+		resultType="int">
+	    <![CDATA[
+        	select sum(money) from incomeDetails where appid=#{appid}  and openid = #{openid} and status = '2' or status = '5'
         ]]>
 	</select>
 
@@ -263,7 +389,7 @@
 		<result property="appid" column="appid" />
 		<result property="secret" column="secret" />
 		<result property="name" column="name" />
-		<result property="createDate" column="createDate" />
+		<result property="createTime" column="createTime" />
 		<result property="endDate" column="endDate" />
 		<result property="openMoney" column="openMoney" />
 		<result property="reNewMoney" column="reNewMoney" />
@@ -338,7 +464,7 @@
 			select * from member where appid=#{appid} and openid = #{openid}
 		]]>
 	</select>
-	
+
 	<select id="queryByAppid" resultType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
 			select * from member where appid=#{appid} and openid = #{openid}

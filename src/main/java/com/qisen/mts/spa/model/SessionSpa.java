@@ -14,7 +14,7 @@ public class SessionSpa extends SessionAccount {
 	private Integer id;
 	private String name;
 	private String mobile;// 手机号码
-	private Date createDate;// 创建日期
+	private Date createTime;// 创建日期
 	private String menuStr;// 菜单权限
 	private String optStr;// 操作权限
 	private String role;// 角色:0超级管理员,1管理员,2操作员
@@ -52,11 +52,11 @@ public class SessionSpa extends SessionAccount {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public Date getCreateDate() {
-		return createDate;
+	public Date getCreateTime() {
+		return createTime;
 	}
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 	public String getMenuStr() {
 		return menuStr;

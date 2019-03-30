@@ -29,7 +29,7 @@
 		<result property="appid" column="appid" />
 		<result property="secret" column="secret" />
 		<result property="name" column="name" />
-		<result property="createDate" column="createDate" />
+		<result property="createTime" column="createTime" />
 		<result property="endDate" column="endDate" />
 		<result property="openMoney" column="openMoney" />
 		<result property="reNewMoney" column="reNewMoney" />

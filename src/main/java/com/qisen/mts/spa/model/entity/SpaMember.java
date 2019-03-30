@@ -30,7 +30,7 @@ public class SpaMember extends BaseEntity {
 	private String recommendOneId;//第一推荐人
 	private String recommendTwoId;//第二推荐人
 	private String recommendThreeId;//第三推荐人
-	private String createDate;//加入时间
+	private String createTime;//加入时间
 	private String unionid;//开发者平台id
 	private String js_code;//临时会话码
 	private String session_key;//登录后的会话码
@@ -96,11 +96,11 @@ public class SpaMember extends BaseEntity {
 	public void setRecommendThreeId(String recommendThreeId) {
 		this.recommendThreeId = recommendThreeId;
 	}
-	public String getCreateDate() {
-		return createDate;
+	public String getCreateTime() {
+		return createTime;
 	}
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 	public String getUnionid() {
 		return unionid;

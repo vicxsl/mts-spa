@@ -25,7 +25,7 @@
 	<!--新增账号  -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaAccount">
 		<![CDATA[
-			insert into spa_account(eid,appid,name,mobile,createDate,menuStr,optStr,role,password,status) 
+			insert into spa_account(eid,appid,name,mobile,createTime,menuStr,optStr,role,password,status) 
 			values(#{eid},#{appid},#{name},#{mobile},now(),#{menuStr},#{optStr},#{role},#{password},0)
 		]]>
 	</insert>

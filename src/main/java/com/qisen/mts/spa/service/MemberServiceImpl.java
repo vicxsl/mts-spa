@@ -168,47 +168,27 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	/**
+	 * 推广收益列表
+	 */
 	@Override
 	public CommObjResponse<List<SpaMember>> memberIncomeDetailsList(SpaRequest<SpaMember> req) {
 		CommObjResponse<List<SpaMember>> resp = new CommObjResponse<List<SpaMember>>();
-		Map<String, Double> totalMap = new HashMap<String,Double>();
-		List<SpaMember> levelOne = memberDao.profitLevelOne(req.getBody());//一级获利
-		if(CollectionUtils.isEmpty(levelOne)){
-			return resp;
-		}
-		List<SpaMember> levelTwo = memberDao.levelTwo(levelOne,levelOne.get(0).getEid().toString());//二级
-		List<SpaMember> levelThree = memberDao.levelThree(levelOne,levelOne.get(0).getEid().toString());//三级
-		
-		for(SpaMember spaMember :levelTwo){
-			totalMap.put(spaMember.getOpenid(), spaMember.getBalance());
-		}
-		
-		for(SpaMember spaMember :levelThree){
-			if(null!=totalMap.get(spaMember.getOpenid())){
-				totalMap.put(spaMember.getOpenid(), 
-						totalMap.get(spaMember.getOpenid())+spaMember.getBalance());
-			}
-		}
-		
-		for(SpaMember spaMember :levelOne){
-			if(null!=totalMap.get(spaMember.getOpenid())){
-				spaMember.setTotalMoney(spaMember.getBalance()+
-						totalMap.get(spaMember.getOpenid()));
-			}
-		}
-		
-		resp.setBody(levelOne);
+		List<SpaMember> list =  memberDao.memberIncomeDetailsList(req.getBody());
+		resp.setBody(list);
 		
 		return resp;
 	}
 
 	@Override
+	/**
+	 * 获取我的信息页面数据
+	 */
 	public CommObjResponse<SpaMyInfoGains> myInfoGains(SpaRequest<SpaMyInfoGains> req) {
 		CommObjResponse<SpaMyInfoGains> resp = new CommObjResponse<SpaMyInfoGains>();
-		SpaMyInfoGains spa = memberDao.myInfoGains(req.getBody());//一级获利
-		
+		SpaMyInfoGains query = req.getBody();
+		SpaMyInfoGains spa = memberDao.myInfoGains(query);
 		resp.setBody(spa);
-		
 		return resp;
 	}
 }
