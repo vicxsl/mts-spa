@@ -11,16 +11,16 @@
 		]]>
 		<where>
 			<![CDATA[
-				 appid = #{appid} and openid = #{openid} and eid = #{eid} 
+				 appid = #{body.appid} and openid = #{body.openid} and eid = #{body.eid} 
 			]]>
-			<if test="createTime != null and createTime !=''">
+			<if test="body.createTime != null and body.createTime !=''">
 				<![CDATA[
-					and createTime > #{createTime}
+					and createTime > #{body.createTime}
 				]]>
 			</if>
 		</where>
 		<![CDATA[
-			order by createTime 
+			order by createTime limit #{startIndex},#{pageSize}
 		]]>
 	</select>
 

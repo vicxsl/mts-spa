@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qisen.mts.spa.dao.GetMoneyDao">
+
+	<!-- 查询获利详情 -->
+	<select id="list" resultType="com.qisen.mts.spa.model.entity.GetMoney">
+		<![CDATA[
+			select *  from  getMoneyTable 
+		]]>
+		<where>
+			<![CDATA[
+				 appid = #{body.appid} and openid = #{body.openid} and eid = #{body.eid} 
+			]]>
+			<if test="body.createTime != null and body.createTime !=''">
+				<![CDATA[
+					and createTime > #{body.createTime}
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			order by createTime limit  #{startIndex}, #{pageSize}
+		]]>
+	</select>
+
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaIncomeDetails">
+		<![CDATA[
+			insert into getMoneyTable (eid,appid,name,mobile,openid,getMoney,createtime,status)
+			values (#{eid},#{appid},#{item.name},#{mobile},#{openid},#{getMoney},unix_timestamp(now())*1000,'0')
+			]]>
+	</insert>
+
+</mapper>

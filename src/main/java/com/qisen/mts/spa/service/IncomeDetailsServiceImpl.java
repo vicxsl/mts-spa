@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.common.model.request.PageRequest;
+import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.dao.IncomeDetailsDao;
 import com.qisen.mts.spa.model.entity.SpaIncomeDetails;
-import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
 public class IncomeDetailsServiceImpl implements IncomeDetailsService {
@@ -20,10 +20,10 @@ public class IncomeDetailsServiceImpl implements IncomeDetailsService {
 	 * 查询获利列表
 	 */
 	@Override
-	public CommObjResponse<List<SpaIncomeDetails>> list(SpaRequest<SpaIncomeDetails> req) {
-		CommObjResponse<List<SpaIncomeDetails>> resp = new CommObjResponse<List<SpaIncomeDetails>>();
+	public PageResponse<List<SpaIncomeDetails>> list(PageRequest<SpaIncomeDetails> req) {
+		PageResponse<List<SpaIncomeDetails>> resp = new PageResponse<List<SpaIncomeDetails>>();
 		SpaIncomeDetails body = req.getBody();
-		List<SpaIncomeDetails> list = incomeDetailsDao.list(body);
+		List<SpaIncomeDetails> list = incomeDetailsDao.list(body,req.getStartIndex(),req.getPageSize());
 		resp.setBody(list);
 		return resp;
 	}

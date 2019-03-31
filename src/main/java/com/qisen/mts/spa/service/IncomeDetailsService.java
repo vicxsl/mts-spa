@@ -2,9 +2,9 @@ package com.qisen.mts.spa.service;
 
 import java.util.List;
 
-import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.common.model.request.PageRequest;
+import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.model.entity.SpaIncomeDetails;
-import com.qisen.mts.spa.model.request.SpaRequest;
 
 public interface IncomeDetailsService {
 
@@ -13,5 +13,5 @@ public interface IncomeDetailsService {
 	 * @param req
 	 * @return
 	 */
-	public CommObjResponse<List<SpaIncomeDetails>> list(SpaRequest<SpaIncomeDetails> req);
+	public PageResponse<List<SpaIncomeDetails>> list(PageRequest<SpaIncomeDetails> req);
 }
