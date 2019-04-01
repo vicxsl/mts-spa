@@ -10,23 +10,46 @@
 		]]>
 		<where>
 			<![CDATA[
-				 appid = #{body.appid} and openid = #{body.openid} and eid = #{body.eid} 
+				 appid = #{body.appid} and eid = #{body.eid} 
 			]]>
+			<if test="body.openid != null and body.openid !=''">
+				<![CDATA[
+					and openid = #{body.openid}
+				]]>
+			</if>
+			<if test="body.name != null and body.name !=''">
+				<![CDATA[
+					and body.name = #{body.body.name}
+				]]>
+			</if>
+			<if test="body.mobile!= null and body.mobile !=''">
+				<![CDATA[
+					and mobile = #{body.mobile}
+				]]>
+			</if>
 			<if test="body.createTime != null and body.createTime !=''">
 				<![CDATA[
 					and createTime > #{body.createTime}
 				]]>
 			</if>
+			<choose>
+                <when test="body.status !=null and body.status !=''">
+                    and status = #{body.status}
+                </when>
+                <otherwise>
+                    and status in ('0','1','2')
+                </otherwise>
+            </choose>
 		</where>
 		<![CDATA[
-			order by createTime limit  #{startIndex}, #{pageSize}
+			order by status,createTime limit  #{startIndex}, #{pageSize}
 		]]>
 	</select>
 
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaIncomeDetails">
 		<![CDATA[
 			insert into getMoneyTable (eid,appid,name,mobile,openid,getMoney,createtime,status)
-			values (#{eid},#{appid},#{item.name},#{mobile},#{openid},#{getMoney},unix_timestamp(now())*1000,'0')
+			values (#{eid},#{appid},#{name},#{mobile},#{openid},#{getMoney},unix_timestamp(now())*1000,'0')
 			]]>
 	</insert>
 

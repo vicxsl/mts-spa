@@ -17,7 +17,6 @@ public class MetaData extends BaseEntity {
 
 	private SpaShop shop;
 	private SpaMember member;
-	private List<SpaGoodsShopCar> shopCarList;//购物车
 	private List<SpaGoodsType> goodsTypes;//商品类型集合
 	private MemberAddress memberAddress;//默认收货地址
 	
@@ -38,12 +37,6 @@ public class MetaData extends BaseEntity {
 	}
 	public void setMember(SpaMember member) {
 		this.member = member;
-	}
-	public List<SpaGoodsShopCar> getShopCarList() {
-		return shopCarList;
-	}
-	public void setShopCarList(List<SpaGoodsShopCar> shopCarList) {
-		this.shopCarList = shopCarList;
 	}
 	public List<SpaGoodsType> getGoodsTypes() {
 		return goodsTypes;

@@ -6,18 +6,29 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.AlgorithmParameters;
+import java.security.Security;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.util.Base64;
+import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.constant.ConfigConsts;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.MemberDao;
@@ -33,6 +44,8 @@ import net.rubyeye.xmemcached.MemcachedClient;
 
 @Service
 public class MemberServiceImpl implements MemberService {
+
+	private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
 	@Autowired
 	private MemberDao memberDao;
@@ -66,8 +79,10 @@ public class MemberServiceImpl implements MemberService {
 		String session_key = wxObject.getString("session_key");
 		query.setOpenid(openid);
 		query.setEid(shop.getEid());
-		query.setSession_key(session_key);
-		memberDao.saveOrUpdate(query);//新增或者更新会员
+		int count = memberDao.check(query);
+		if(count == 0 ){
+			memberDao.create(query);//新增或者更新会员
+		}
 		MetaData metaData = memberDao.getMallMetaData(query);//查询metaData信息
 		if(shopStr==null){
 			shop=metaData.getShop();
@@ -75,12 +90,10 @@ public class MemberServiceImpl implements MemberService {
 			memcachedClient.delete(appid);
 			memcachedClient.add(appid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(shop));
 		}
-		List<SpaGoodsShopCar> carList =metaData.getShopCarList();
-		if(carList != null && carList.size() > 0){
-			for(SpaGoodsShopCar car:carList){
-				car.setImgUrl(ImgCos+car.getImgUrl());
-			}
-		}
+		SpaMember member = metaData.getMember();
+		member.setSession_key(session_key);
+		memcachedClient.delete(openid);
+		memcachedClient.add(openid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(member));
 		resp.setBody(metaData);
 		return resp;
 	}
@@ -180,15 +193,74 @@ public class MemberServiceImpl implements MemberService {
 		return resp;
 	}
 
-	@Override
 	/**
 	 * 获取我的信息页面数据
 	 */
+	@Override
 	public CommObjResponse<SpaMyInfoGains> myInfoGains(SpaRequest<SpaMyInfoGains> req) {
 		CommObjResponse<SpaMyInfoGains> resp = new CommObjResponse<SpaMyInfoGains>();
 		SpaMyInfoGains query = req.getBody();
 		SpaMyInfoGains spa = memberDao.myInfoGains(query);
 		resp.setBody(spa);
 		return resp;
+	}
+
+	/**
+	 * 更新用户手机号码
+	 */
+	@SuppressWarnings("deprecation")
+	@Override
+	public CommObjResponse<String> addMobile(SpaRequest<JSONObject> req) throws Exception {
+		// TODO Auto-generated method stub
+		CommObjResponse<String> res = new CommObjResponse<String>();
+		JSONObject body = req.getBody();
+		String encryptedData = body.getString("encryptedData");
+		String iv = body.getString("iv");
+		String openid = body.getString("openid");
+		String appid = body.getString("appid");
+		String memberStr = memcachedClient.get(openid);
+		SpaMember member;
+		if(null != memberStr){
+			member = JSONObject.toJavaObject(JSONObject.parseObject(memberStr), SpaMember.class);
+		}else{
+			res.setCode(MsgCode.MEMBER_RELOGIN);
+			return res;
+		}
+		String session_key = member.getSession_key(); 
+		byte[] dataByte = Base64.decodeFast(encryptedData);
+        // 加密秘钥
+        byte[] keyByte = Base64.decodeFast(session_key);
+        // 偏移量
+        byte[] ivByte = Base64.decodeFast(iv);
+        // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
+        int base = 16;
+        if (keyByte.length % base != 0) {
+            int groups = keyByte.length / base + (keyByte.length % base != 0 ? 1 : 0);
+            byte[] temp = new byte[groups * base];
+            Arrays.fill(temp, (byte) 0);
+            System.arraycopy(keyByte, 0, temp, 0, keyByte.length);
+            keyByte = temp;
+        }
+        // 初始化
+        Security.addProvider(new BouncyCastleProvider());
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
+        AlgorithmParameters parameters = AlgorithmParameters.getInstance("AES");
+        parameters.init(new IvParameterSpec(ivByte));
+        cipher.init(Cipher.DECRYPT_MODE, spec, parameters);// 初始化
+        byte[] resultByte = cipher.doFinal(dataByte);
+        if (null != resultByte && resultByte.length > 0) {
+            String result = new String(resultByte, "UTF-8");
+            JSONObject resultObj = JSONObject.parseObject(result);
+            String phoneNumber = resultObj.getString("phoneNumber");
+            member.setMobile(phoneNumber);
+            memberDao.update(member);
+            logger.debug("打印出来手机号码了么",result);
+            res.setBody(phoneNumber);
+        }else{
+        	res.setCode(MsgCode.MEMBER_RELOGIN);
+        }
+
+		return res;
 	}
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.qisen.mts.spa.model.entity.MetaData;
 import com.qisen.mts.spa.model.entity.SpaIncomeDetails;
+import com.qisen.mts.spa.model.entity.SpaMallOrder;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 
@@ -16,7 +17,7 @@ public interface MemberDao {
 	 * @param spaAccount
 	 * @return
 	 */
-	public SpaMember check(SpaMember spa);
+	public int check(SpaMember spa);
 	
 	
 	/**
@@ -49,7 +50,7 @@ public interface MemberDao {
 	 * 被推广人员收货增加推广人余额
 	 * @param spaAccount
 	 */
-	public void addBalance(SpaMember spa);
+	public void addBalance(SpaMallOrder spa);
 	
 	/**
 	 * 提现减少余额

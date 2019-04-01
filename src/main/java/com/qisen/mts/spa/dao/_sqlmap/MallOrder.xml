@@ -3,85 +3,136 @@
 
 <mapper namespace="com.qisen.mts.spa.dao.SpaMallOrderDao">
 
-	<!--新增订单  -->
-	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder" useGeneratedKeys="true" keyProperty="id">
+	<!--新增订单 -->
+	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder"
+		useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
 			insert into mallOrder(id,eid,appid,openid,totalMoney,preFee,expressCost,realFee,goodsCost,bonusCost,orderProfit,inOutDepotId,flowNo,createTime,status) 
-			values (#{id},#{eid},#{appid},#{openid},#{totalMoney},#{preFee},#{expressCost},#{realFee},#{goodsCost},#{bonusCost},#{orderProfit},#{inOutDepotId},#{flowNo},unix_timestamp(now())*1000,0)
+			values (#{id},#{eid},#{appid},#{openid},#{totalMoney},#{preFee},#{expressCost},#{realFee},#{goodsCost},#{bonusCost},#{orderProfit},#{inOutDepotId},#{flowNo},unix_timestamp(now())*1000,'1')
 		]]>
 	</insert>
-	
+
 	<select id="list" resultMap="orderMap">
 		<![CDATA[
 			select * from mallOrder a
 		]]>
 		<where>
 			<![CDATA[
-				a.appid = #{body.appid} and a.eid = #{body.eid}  and a.openid = #{body.openid}
+				a.appid = #{body.appid} and a.eid = #{body.eid}
 			]]>
+			<if test="body.openid !=null and body.openid !=''">
+				<![CDATA[
+					and a.openid = #{body.openid}
+				]]>
+			</if>
 		</where>
 		<![CDATA[
 			order by a.createTime desc limit #{startIndex},#{pageSize}
 		]]>
 	</select>
-	<resultMap type="com.qisen.mts.spa.model.entity.SpaMallOrder" id="orderMap">
-         <id property="id" column="id"/>
-         <result property="id" column="id"/>
-         <result property="eid" column="eid"/>
-         <result property="appid" column="appid"/>
-         <result property="openid" column="openid"/>
-         <result property="totalMoney" column="totalMoney"/>
-         <result property="preFee" column="preFee"/>
-         <result property="expressCost" column="expressCost"/>
-         <result property="realFee" column="realFee"/>
-         <result property="flowNo" column="flowNo"/>
-         <result property="createTime" column="createTime"/>
-         <result property="status" column="status"/>
-         <result property="goodsCost" column="goodsCost"/>
-         <result property="bonusCost" column="bonusCost"/>
-         <result property="orderProfit" column="orderProfit"/>
-         <association property="memberAddress" column="{appid=appid,eid=eid,orderId=id}" javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getAddress" />
-        <!-- ofType指定students集合中的对象类型 -->
-         <collection property="goodsList" ofType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" javaType="ArrayList" column="{appid=appid,orderId=id}" select="getGoodsList"></collection>
-     </resultMap>
-     <select id="getAddress" parameterType="java.util.Map" resultType="com.qisen.mts.spa.model.entity.MemberAddress">
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaMallOrder"
+		id="orderMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="eid" column="eid" />
+		<result property="appid" column="appid" />
+		<result property="openid" column="openid" />
+		<result property="totalMoney" column="totalMoney" />
+		<result property="preFee" column="preFee" />
+		<result property="expressCost" column="expressCost" />
+		<result property="realFee" column="realFee" />
+		<result property="flowNo" column="flowNo" />
+		<result property="createTime" column="createTime" />
+		<result property="status" column="status" />
+		<result property="goodsCost" column="goodsCost" />
+		<result property="bonusCost" column="bonusCost" />
+		<result property="orderProfit" column="orderProfit" />
+		<association property="memberAddress" column="{appid=appid,eid=eid,orderId=id}"
+			javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getAddress" />
+		<!-- ofType指定students集合中的对象类型 -->
+		<collection property="goodsList"
+			ofType="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" javaType="ArrayList"
+			column="{appid=appid,orderId=id}" select="getGoodsList"></collection>
+	</resultMap>
+	<select id="getAddress" parameterType="java.util.Map"
+		resultType="com.qisen.mts.spa.model.entity.MemberAddress">
 	    <![CDATA[
         	select * from memberAddress where appid=#{appid} and eid = #{eid} and orderId=#{orderId}
         ]]>
 	</select>
-	<select id="getGoodsList" parameterType="java.util.Map" resultMap="goodsMap">
+	<select id="getGoodsList" parameterType="java.util.Map"
+		resultMap="goodsMap">
 	    <![CDATA[
         	select a.*,b.name  from inOutDepotDetail a,goods b where a.appid=#{appid}  and a.orderId=#{orderId} and a.goodsId = b.id 
         ]]>
 	</select>
-	<resultMap type="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail" id="goodsMap">
-         <id property="id" column="id"/>
-         <result property="id" column="id"/>
-         <result property="eid" column="eid"/>
-         <result property="appid" column="appid"/>
-         <result property="goodsId" column="goodsId"/>
-         <result property="num" column="num"/>
-         <result property="costPrice" column="costPrice"/>
-         <result property="preferencePrice" column="preferencePrice"/>
-         <result property="totalMoney" column="totalMoney"/>
-         <association property="imgUrl" column="{appid=appid,goodsId=goodsId}"  select="getImgUrl" />
-   </resultMap>
-   <select id="getImgUrl" parameterType="java.util.Map" resultType="String">
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaInoutDepotDetail"
+		id="goodsMap">
+		<id property="id" column="id" />
+		<result property="id" column="id" />
+		<result property="eid" column="eid" />
+		<result property="appid" column="appid" />
+		<result property="goodsId" column="goodsId" />
+		<result property="num" column="num" />
+		<result property="costPrice" column="costPrice" />
+		<result property="preferencePrice" column="preferencePrice" />
+		<result property="totalMoney" column="totalMoney" />
+		<association property="imgUrl" column="{appid=appid,goodsId=goodsId}"
+			select="getImgUrl" />
+	</resultMap>
+	<select id="getImgUrl" parameterType="java.util.Map" resultType="String">
 	    <![CDATA[
         	select imgUrl from imgTable where appid=#{appid}  and goodsId = #{goodsId} and type = '1' limit 1
         ]]>
 	</select>
-	
+
 	<!-- 查询待支付订单 -->
-	<select id="getOrder"  resultType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	<select id="getOrder" resultType="com.qisen.mts.spa.model.entity.SpaMallOrder">
 	    <![CDATA[
         	select  * from mallOrder where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '0'  
         ]]>
 	</select>
-	
-	<update id="updatePayStatus" >
+
+	<update id="updatePayStatus">
 	 <![CDATA[
-        	update mallOrder set status = '2' where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '0'  
+        	update mallOrder set status = '2' where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '1'  
         ]]>
+	</update>
+	<!-- 发货 -->
+	<update id="sendGoods" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	 <![CDATA[
+        	update mallOrder 
+        ]]>
+		<set>
+        	<![CDATA[
+				status = '3',
+        	]]>
+			<if test="flowNo != null and flowNo != ''">
+	        	<![CDATA[
+					flowNo = #{flowNo}
+	        	]]>
+			</if>
+		</set>
+		<where>
+			<![CDATA[
+				appid=#{appid} and id = #{id} and status = '2' 
+        	]]>
+		</where>
+	</update>
+	<!-- 收货 -->
+	<update id="confirmGoods" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	 <![CDATA[
+        	update mallOrder 
+        ]]>
+		<set>
+        	<![CDATA[
+				status = '4',
+        	]]>
+		</set>
+		<where>
+			<![CDATA[
+				appid=#{appid} and id = #{id} and status = '3' 
+        	]]>
+		</where>
 	</update>
 </mapper>

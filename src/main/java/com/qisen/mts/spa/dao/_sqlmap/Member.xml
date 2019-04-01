@@ -4,10 +4,10 @@
 <mapper namespace="com.qisen.mts.spa.dao.MemberDao">
 
 	<!-- 通过手机号码检测账号是否存在 -->
-	<select id="check" resultType="com.qisen.mts.spa.model.entity.SpaMember"
+	<select id="check" resultType="int"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
-			select *  from  member 
+			select count(id)  from  member 
 		]]>
 		<where>
 			<![CDATA[
@@ -21,76 +21,18 @@
 		</where>
 	</select>
 
-	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-		<selectKey keyProperty="id" resultType="int" order="BEFORE">
-			select
-			count(id) as id from member where appid = #{appid} and
-			openid =
-			#{openid}
-		</selectKey>
-		<if test="id == 1">
-    		<![CDATA[
-				update member
-			]]>
-			<set>
-				<if test="name != null and name !=''">
-					<![CDATA[
-						 name = #{name},
-					 ]]>
-				</if>
-				<if test="mobile != null and mobile !=''">
-					<![CDATA[
-						 mobile = #{mobile},
-					 ]]>
-				</if>
-				<if test="avatarUrl != null and avatarUrl !=''">
-					<![CDATA[
-						 avatarUrl = #{avatarUrl},
-					 ]]>
-				</if>
-			</set>
-			<where>
-				<![CDATA[
-					 appid = #{appid} and openid = #{openid}
-				]]>
-			</where>
-		</if>
-		<if test="id == 0">
-		    <![CDATA[
-		    	insert into member(eid,appid,name,mobile,totalMoney,balance,createTime,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId) 
-					SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as mobile,#{totalMoney} as totalMoney,#{balance} as balance,
-					unix_timestamp(now())*1000 as createTime,#{openid} as openid,#{session_key} as session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as avatarUrl,
-				
-		    ]]>
-			<choose>
-				<when test="recommendOneId !=null and recommendOneId != ''">
-					a.recommendTwoId as
-					recommendThreeId,a.recommendOneId as
-					recommendTwoId,#{recommendOneId} as recommendOneId from member a
-					where a.openid=#{recommendOneId}
-				</when>
-				<otherwise>
-					'' as recommendThreeId,'' as recommendTwoId,'' as
-					recommendOneId from
-					dual
-				</otherwise>
-			</choose>
-		</if>
-	</insert>
-
 	<!--新增商品 -->
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
-		insert into
-		member(eid,appid,name,mobile,totalMoney,balance,createTime,openid,session_key,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId)
-		SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as
-		mobile,#{totalMoney} as totalMoney,#{balance} as balance,
-		#{createTime} as createTime,#{openid} as openid,#{session_key} as
-		session_key,#{unionid} as unionid,0 as status,#{avatarUrl} as
-		avatarUrl,
+		<![CDATA[
+	    	insert into member(eid,appid,name,mobile,totalMoney,balance,createTime,openid,unionid,status,avatarUrl,recommendThreeId,recommendTwoId,recommendOneId) 
+				SELECT #{eid} as eid ,#{appid} as appid,#{name} as name,#{mobile} as mobile,#{totalMoney} as totalMoney,#{balance} as balance,
+				unix_timestamp(now())*1000 as createTime,#{openid} as openid,#{unionid} as unionid,0 as status,#{avatarUrl} as avatarUrl,
+			
+	    ]]>
 		<choose>
 			<when test="recommendOneId !=null and recommendOneId != ''">
-				a.recommendTwoId as recommendThreeId,a.recommendOneId
-				as
+				a.recommendTwoId as
+				recommendThreeId,a.recommendOneId as
 				recommendTwoId,#{recommendOneId} as recommendOneId from member a
 				where a.openid=#{recommendOneId}
 			</when>
@@ -100,7 +42,6 @@
 				dual
 			</otherwise>
 		</choose>
-
 	</insert>
 
 	<!-- 删除账号 -->
@@ -123,6 +64,16 @@
 			<if test="name != null and name !=''">
 				<![CDATA[
 					 name = #{name},
+				 ]]>
+			</if>
+			<if test="mobile != null and mobile !=''">
+				<![CDATA[
+					 mobile = #{mobile},
+				 ]]>
+			</if>
+			<if test="avatarUrl != null and avatarUrl !=''">
+				<![CDATA[
+					 avatarUrl = #{avatarUrl},
 				 ]]>
 			</if>
 		</set>
@@ -164,6 +115,23 @@
 		<where>
 		 	<![CDATA[
            		appid = #{appid} and openid=#{openid} and status='0' and balance >= #{balance}
+           	]]>
+		</where>
+	</update>
+
+<!-- 确定收货增加会员余额 -->
+	<update id="addBalance" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+		<![CDATA[
+			update member a,incomeDetails b
+		]]>
+		<set>
+			<![CDATA[
+				 a.balance = a.balance + b.money
+			 ]]>
+		</set>
+		<where>
+		 	<![CDATA[
+           		a.appid = #{appid} and b.orderId = #{id} and a.openid = b.openid
            	]]>
 		</where>
 	</update>
@@ -356,7 +324,7 @@
 	<select id="todayNoFinishMoney" parameterType="java.util.Map"
 		resultType="int">
 	    <![CDATA[
-        	select sum(money) from incomeDetails where appid=#{appid}  and openid = #{openid} and status = '2' or status = '5' and createTime > #{createTime} 
+        	select sum(money) from incomeDetails where appid=#{appid}  and openid = #{openid} and status = '2' or status = '3' and createTime > #{createTime} 
         ]]>
 	</select>
 	<!-- 所有推广人员今日购买产生的总计收益 包括二级、三级 -->
@@ -383,7 +351,7 @@
 	<select id="noFinishMoney" parameterType="java.util.Map"
 		resultType="int">
 	    <![CDATA[
-        	select sum(money) from incomeDetails where appid=#{appid}  and openid = #{openid} and status = '2' or status = '5'
+        	select sum(money) from incomeDetails where appid=#{appid}  and openid = #{openid} and status = '2' or status = '3'
         ]]>
 	</select>
 
@@ -404,9 +372,6 @@
 			select="getGoodsTypes" />
 		<association property="memberAddress" column="{appid=appid,openid=openid}"
 			select="getMemberAddresss" />
-		<collection property="shopCarList" column="{appid=appid,openid=openid}"
-			ofType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar" javaType="ArrayList"
-			select="getShopCarList" />
 	</resultMap>
 
 	<select id="getShop" resultMap="shopInfo" parameterType="java.util.Map">
@@ -466,23 +431,7 @@
         	select * from member where appid=#{appid} and openid = #{openid}
         ]]>
 	</select>
-	<select id="getShopCarList" parameterType="java.util.Map"
-		resultType="com.qisen.mts.spa.model.entity.SpaGoodsShopCar">
-    	<![CDATA[
-			select a.*,b.name,b.unit,b.salePrice,b.preferencePrice,b.spec,c.imgUrl from goodsShopCar a,goods b,imgTable c
-		]]>
-		<where>
-			<![CDATA[
-				a.appid = #{appid} and a.appid = b.appid and a.goodsId = b.id and a.goodsId = c.goodsId
-			]]>
-			<if test="openid != null and openid !=''">
-				<![CDATA[
-					and a.openid = #{openid} 
-				]]>
-			</if>
-		</where>
-		order by c.id limit 1
-	</select>
+	
 	<select id="getGoodsTypes" parameterType="java.util.Map"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoodsType">
 		<![CDATA[

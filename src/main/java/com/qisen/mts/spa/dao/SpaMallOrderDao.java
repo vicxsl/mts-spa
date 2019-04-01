@@ -15,7 +15,12 @@ public interface SpaMallOrderDao {
 	int create(SpaMallOrder record);
 
 	void update(SpaMallOrder record);
+	//发货
+	int sendGoods(SpaMallOrder record);
 
+	//收货
+	int confirmGoods(SpaMallOrder record);
+	
 	List<SpaMallOrder> list(@Param("body")SpaMallOrder record,@Param("startIndex") Integer startIndex,@Param("pageSize")Integer pageSize);
 	
 	SpaMallOrder getOrder(@Param("id") String id,@Param("appid") String appid,@Param("totalMoney") String totalMoney);

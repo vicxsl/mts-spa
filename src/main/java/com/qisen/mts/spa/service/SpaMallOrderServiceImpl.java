@@ -31,7 +31,9 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPayUtil;
+import com.qisen.mts.common.model.MsgCode;
 import com.qisen.mts.common.model.request.PageRequest;
+import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
@@ -109,7 +111,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				spaMallOrderDao.create(body);// 插入订单表
 				orderId = body.getId();
 				order = body;
-				order.setStatus("0");
+				order.setStatus("1");
 				List<SpaInoutDepotDetail> details = body.getGoodsList();// 生成出入库明细
 				for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
 					spaInoutDepotDetail.setOrderId(orderId);
@@ -134,11 +136,44 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		}
 		return resp;
 	}
-
+	/**
+	 * 订单发货
+	 */
+	@Override
+	public BaseResponse sendGoods(SpaRequest<SpaMallOrder> req) throws Exception {
+		BaseResponse resp = new BaseResponse();
+		SpaMallOrder spa = req.getBody();
+		int count = spaMallOrderDao.sendGoods(spa);
+		if(count == 0){
+			resp.setCode(MsgCode.ORDER_SEND_FAILD);
+		}else{
+			incomeDetailsDao.sendGoods(spa);
+		}
+		return resp;
+	}
+	
+	/**
+	 * 订单确定收货
+	 */
+		@Override
+		public BaseResponse confirmGoods(SpaRequest<SpaMallOrder> req) throws Exception {
+			BaseResponse resp = new BaseResponse();
+			SpaMallOrder spa = req.getBody();
+			int count = spaMallOrderDao.confirmGoods(spa);
+			if(count == 0){
+				resp.setCode(MsgCode.ORDER_SEND_FAILD);
+				
+			}else{
+				incomeDetailsDao.confirmGoods(spa);
+				memberDao.addBalance(spa);
+			}
+			return resp;
+		}
+		
 	@Override
 	public PageResponse<List<SpaMallOrder>> list(PageRequest<SpaMallOrder> req) {
 		SpaMallOrder body = req.getBody();
-		PageResponse<List<SpaMallOrder>> response = new PageResponse<List<SpaMallOrder>>();
+		PageResponse<List<SpaMallOrder>> resp = new PageResponse<List<SpaMallOrder>>();
 		List<SpaMallOrder> list = spaMallOrderDao.list(body,req.getStartIndex(),req.getPageSize());
 		for (SpaMallOrder order : list) {
 			List<SpaInoutDepotDetail> goodsList = order.getGoodsList();
@@ -147,8 +182,8 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				detail.setImgUrl(ImgCos + imgurl);
 			}
 		}
-		response.setBody(list);
-		return response;
+		resp.setBody(list);
+		return resp;
 	}
 
 	// 调用微信统一生成订单接口

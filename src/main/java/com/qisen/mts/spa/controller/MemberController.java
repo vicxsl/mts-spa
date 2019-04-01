@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.model.entity.MetaData;
 import com.qisen.mts.spa.model.entity.SpaMember;
@@ -50,5 +51,16 @@ public class MemberController {
 		return memberService.myInfoGains(req);
 	}
 	
+	/**
+	 * 更新用户手机号码
+	 * @param req
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/addMobile")
+	@ResponseBody
+	public CommObjResponse<String> addMobile(@RequestBody SpaRequest<JSONObject> req) throws Exception {
+		return memberService.addMobile(req);
+	}
 }
 

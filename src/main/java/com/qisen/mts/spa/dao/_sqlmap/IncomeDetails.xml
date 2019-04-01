@@ -38,4 +38,37 @@
 		</foreach>
 	</insert>
 
+	<!-- 发货 -->
+	<update id="sendGoods" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	 <![CDATA[
+        	update incomeDetails 
+        ]]>
+		<set>
+        	<![CDATA[
+				status = '3',
+        	]]>
+		</set>
+		<where>
+			<![CDATA[
+				appid=#{appid} and orderId = #{id} and status = '2' 
+        	]]>
+		</where>
+	</update>
+	
+	<!-- 收货 -->
+	<update id="confirmGoods" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	 <![CDATA[
+        	update incomeDetails 
+        ]]>
+		<set>
+        	<![CDATA[
+				status = '4',
+        	]]>
+		</set>
+		<where>
+			<![CDATA[
+				appid=#{appid} and orderId = #{id} and status = '3' 
+        	]]>
+		</where>
+	</update>
 </mapper>
