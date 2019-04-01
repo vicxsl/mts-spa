@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qisen.mts.common.model.request.PageRequest;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.model.entity.SpaMallOrder;
 import com.qisen.mts.spa.model.request.SpaRequest;
 import com.qisen.mts.spa.service.SpaMallOrderService;
@@ -31,7 +33,7 @@ public class SpaMallOrderController {
 	
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommObjResponse<List<SpaMallOrder>> list(@RequestBody SpaRequest<SpaMallOrder> req) throws Exception {
+	public PageResponse<List<SpaMallOrder>> list(@RequestBody PageRequest<SpaMallOrder> req) throws Exception {
 		return spaMallOrderService.list(req);
 	}
 

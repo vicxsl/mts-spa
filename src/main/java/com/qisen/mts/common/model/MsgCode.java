@@ -96,6 +96,12 @@ public enum MsgCode {
 	 */
 	CITY_AREAID_EXIST("CITY_AREAID_EXIST", "城市区号已存在"),
 	
+
+	/*
+	 * 提现失败
+	 */
+	GET_MONEY_FAILD("GET_MONEY_FAILD", "提现失败"),
+	
 	/*
 	 * 部门及员工级别
 	 */

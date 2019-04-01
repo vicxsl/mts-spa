@@ -37,8 +37,8 @@ public class PageRequest<T> extends BaseRequest<T> {
 
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
-		this.setStartIndex((this.getPageNum() - 1) * pageSize + 1);
-		this.setEndIndex(this.startIndex + pageSize - 1);
+		this.setStartIndex((this.getPageNum() - 1) * pageSize);
+		this.setEndIndex(this.startIndex + pageSize);
 	}
 
 	public Integer getStartIndex() {

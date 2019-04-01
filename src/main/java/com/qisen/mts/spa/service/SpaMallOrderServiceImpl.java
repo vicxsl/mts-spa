@@ -31,7 +31,9 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPayUtil;
+import com.qisen.mts.common.model.request.PageRequest;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.dao.GoodsShopCarDao;
 import com.qisen.mts.spa.dao.IncomeDetailsDao;
 import com.qisen.mts.spa.dao.MemberAddressDao;
@@ -134,10 +136,10 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	}
 
 	@Override
-	public CommObjResponse<List<SpaMallOrder>> list(SpaRequest<SpaMallOrder> req) {
+	public PageResponse<List<SpaMallOrder>> list(PageRequest<SpaMallOrder> req) {
 		SpaMallOrder body = req.getBody();
-		CommObjResponse<List<SpaMallOrder>> response = new CommObjResponse<List<SpaMallOrder>>();
-		List<SpaMallOrder> list = spaMallOrderDao.list(body);
+		PageResponse<List<SpaMallOrder>> response = new PageResponse<List<SpaMallOrder>>();
+		List<SpaMallOrder> list = spaMallOrderDao.list(body,req.getStartIndex(),req.getPageSize());
 		for (SpaMallOrder order : list) {
 			List<SpaInoutDepotDetail> goodsList = order.getGoodsList();
 			for (SpaInoutDepotDetail detail : goodsList) {

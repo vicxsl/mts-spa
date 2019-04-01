@@ -16,7 +16,7 @@ public interface SpaMallOrderDao {
 
 	void update(SpaMallOrder record);
 
-	List<SpaMallOrder> list(SpaMallOrder record);
+	List<SpaMallOrder> list(@Param("body")SpaMallOrder record,@Param("startIndex") Integer startIndex,@Param("pageSize")Integer pageSize);
 	
 	SpaMallOrder getOrder(@Param("id") String id,@Param("appid") String appid,@Param("totalMoney") String totalMoney);
 	//更新支付状态

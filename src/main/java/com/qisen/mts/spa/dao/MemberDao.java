@@ -55,7 +55,7 @@ public interface MemberDao {
 	 * 提现减少余额
 	 * @param spaAccount
 	 */
-	public void reduceBalance(SpaMember spa);
+	public int reduceBalance(SpaMember spa);
 	
 	/**
 	 * 编辑spa账号 

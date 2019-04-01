@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qisen.mts.common.model.request.PageRequest;
+import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.model.entity.GetMoney;
 import com.qisen.mts.spa.service.GetMoneyService;
@@ -34,7 +35,7 @@ public class getMoneyController {
 //	新增提现记录
 	@RequestMapping("/create")
 	@ResponseBody
-	public PageResponse<List<GetMoney>> create(@RequestBody PageRequest<GetMoney> req) throws Exception {
+	public BaseResponse create(@RequestBody PageRequest<GetMoney> req) throws Exception {
 		return getMoneyService.create(req);
 	}
 }

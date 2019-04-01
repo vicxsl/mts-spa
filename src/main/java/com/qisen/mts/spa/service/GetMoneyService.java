@@ -3,6 +3,7 @@ package com.qisen.mts.spa.service;
 import java.util.List;
 
 import com.qisen.mts.common.model.request.PageRequest;
+import com.qisen.mts.common.model.response.BaseResponse;
 import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.model.entity.GetMoney;
 
@@ -21,5 +22,5 @@ public interface GetMoneyService {
 	 * @param req
 	 * @return
 	 */
-	public PageResponse<List<GetMoney>> create(PageRequest<GetMoney> req);
+	public BaseResponse create(PageRequest<GetMoney> req);
 }

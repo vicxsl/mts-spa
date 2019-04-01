@@ -11,17 +11,17 @@
 		]]>
 	</insert>
 	
-	<select id="list" resultMap="orderMap" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder">
+	<select id="list" resultMap="orderMap">
 		<![CDATA[
 			select * from mallOrder a
 		]]>
 		<where>
 			<![CDATA[
-				a.appid = #{appid} and a.eid = #{eid}  and a.openid = #{openid}
+				a.appid = #{body.appid} and a.eid = #{body.eid}  and a.openid = #{body.openid}
 			]]>
 		</where>
 		<![CDATA[
-			order by a.createTime desc
+			order by a.createTime desc limit #{startIndex},#{pageSize}
 		]]>
 	</select>
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaMallOrder" id="orderMap">

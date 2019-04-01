@@ -132,7 +132,7 @@
 			]]>
 		</where>
 	</update>
-	<!-- 增加推荐总金额  -->
+	<!-- 增加推荐总金额 -->
 	<update id="updateTotalMoney" parameterType="com.qisen.mts.spa.model.entity.SpaIncomeDetails">
 		<foreach collection="list" separator=";" item="income" index="index">
 			<![CDATA[
@@ -151,6 +151,23 @@
 		</foreach>
 	</update>
 
+	<!-- 提现、减少会员余额 -->
+	<update id="reduceBalance" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+		<![CDATA[
+			update member
+		]]>
+		<set>
+			<![CDATA[
+				 balance = balance - #{balance} 
+			 ]]>
+		</set>
+		<where>
+		 	<![CDATA[
+           		appid = #{appid} and openid=#{openid} and status='0' and balance >= #{balance}
+           	]]>
+		</where>
+	</update>
+
 	<!-- 查询SPA商品列表 -->
 	<select id="list" resultType="com.qisen.mts.spa.model.entity.SpaMember"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
@@ -163,9 +180,10 @@
 			]]>
 		</where>
 	</select>
-	
+
 	<!-- 收益列表 -->
-	<select id="memberIncomeDetailsList" resultMap="memberMap" parameterType="com.qisen.mts.spa.model.entity.SpaMember">
+	<select id="memberIncomeDetailsList" resultMap="memberMap"
+		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
 			select * from member
 		]]>
@@ -184,10 +202,10 @@
 		id="memberMap">
 		<result property="name" column="name" />
 		<result property="createTime" column="createTime" />
-		<association property="balance" column="{appid=appid,openid=recommendOneId}"
-			select="getMemberBalance" />
-		<association property="totalMoney" column="{appid=appid,openid=recommendOneId}"
-			select="getMemberTtotalMoney" />
+		<association property="balance"
+			column="{appid=appid,openid=recommendOneId}" select="getMemberBalance" />
+		<association property="totalMoney"
+			column="{appid=appid,openid=recommendOneId}" select="getMemberTtotalMoney" />
 	</resultMap>
 	<select id="getMemberBalance" parameterType="java.util.Map"
 		resultType="double">
@@ -272,25 +290,39 @@
 		<!-- 收益总额 -->
 		<result property="myTotalMoney" column="totalMoney" />
 		<!-- 我所有推广人员购买产生的收益 包括二级 、三级 -->
-		<result property="myPeopleMoney" column="totalMoney"  />
+		<result property="myPeopleMoney" column="totalMoney" />
 		<!-- 今日推荐人数 一级 -->
-		<association property="todayPeople" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayPeople" />
-		<!-- 今日推荐人所购买产生的直接收益 一级-->
-		<association property="todayPeopleBalance" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayPeopleBalance" />
-		<!-- 今日推荐人所产生的所有收益 包括二级、三级-->
-		<association property="todayPeopleMoney" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayPeopleMoney" />
+		<association property="todayPeople"
+			column="{appid=appid,openid=openid,createTime=mapCreateTime}"
+			javaType="int" select="todayPeople" />
+		<!-- 今日推荐人所购买产生的直接收益 一级 -->
+		<association property="todayPeopleBalance"
+			column="{appid=appid,openid=openid,createTime=mapCreateTime}"
+			javaType="int" select="todayPeopleBalance" />
+		<!-- 今日推荐人所产生的所有收益 包括二级、三级 -->
+		<association property="todayPeopleMoney"
+			column="{appid=appid,openid=openid,createTime=mapCreateTime}"
+			javaType="int" select="todayPeopleMoney" />
 		<!-- 今日收益金额总计多少笔 包括二级、三级 -->
-		<association property="todayOrderNum" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayOrderNum" />
+		<association property="todayOrderNum"
+			column="{appid=appid,openid=openid,createTime=mapCreateTime}"
+			javaType="int" select="todayOrderNum" />
 		<!-- 今日收益 未完成部分 -->
-		<association property="todayNoFinishMoney" column="{appid=appid,openid=openid,createTime=mapCreateTime}" javaType="int" select="todayNoFinishMoney" />
+		<association property="todayNoFinishMoney"
+			column="{appid=appid,openid=openid,createTime=mapCreateTime}"
+			javaType="int" select="todayNoFinishMoney" />
 		<!-- 所有推广人员今日购买产生的总计收益 包括二级、三级 -->
-		<association property="todayMoney" column="{appid=appid,openid=openid,createTime=mapCreateTime}" select="todayMoney" />
-		<!-- 我所有推广人员  一级 -->
-		<association property="myPeople" column="{appid=appid,openid=openid}" select="myPeople" />
+		<association property="todayMoney"
+			column="{appid=appid,openid=openid,createTime=mapCreateTime}" select="todayMoney" />
+		<!-- 我所有推广人员 一级 -->
+		<association property="myPeople" column="{appid=appid,openid=openid}"
+			select="myPeople" />
 		<!-- 我所有推广人员购买产生的收益 一级 -->
-		<association property="myPeopleMoneyFromOne" column="{appid=appid,openid=openid}" javaType="int" select="myPeopleMoneyFromOne" />
+		<association property="myPeopleMoneyFromOne" column="{appid=appid,openid=openid}"
+			javaType="int" select="myPeopleMoneyFromOne" />
 		<!-- 未完成订单将带来的收益 包括二级 、三级 -->
-		<association property="noFinishMoney" column="{appid=appid,openid=openid}" javaType="int" select="noFinishMoney" />
+		<association property="noFinishMoney" column="{appid=appid,openid=openid}"
+			javaType="int" select="noFinishMoney" />
 	</resultMap>
 	<!-- 今日推荐人数 一级 -->
 	<select id="todayPeople" parameterType="java.util.Map"
@@ -299,14 +331,14 @@
         	select count(id) from member where appid=#{appid}  and recommendOneId = #{openid} and createTime > #{createTime}
         ]]>
 	</select>
-	<!-- 今日推荐人所购买产生的直接收益 一级-->
+	<!-- 今日推荐人所购买产生的直接收益 一级 -->
 	<select id="todayPeopleBalance" parameterType="java.util.Map"
 		resultType="int">
 	    <![CDATA[
         	select sum(a.money) from incomeDetails a,member b where a.appid=#{appid}  and a.openid = #{openid} and a.createTime > #{createTime} and b.createTime > #{createTime} and a.buyOpenid = b.openid and a.level = '1'
         ]]>
 	</select>
-	<!-- 今日推荐人所产生的所有收益 包括二级、三级-->
+	<!-- 今日推荐人所产生的所有收益 包括二级、三级 -->
 	<select id="todayPeopleMoney" parameterType="java.util.Map"
 		resultType="int">
 	    <![CDATA[
@@ -334,9 +366,8 @@
         	select sum(money) from incomeDetails where appid=#{appid} and openid = #{openid} and createTime > #{createTime}
         ]]>
 	</select>
-	<!-- 我所有推广人员  一级 -->
-	<select id="myPeople" parameterType="java.util.Map"
-		resultType="int">
+	<!-- 我所有推广人员 一级 -->
+	<select id="myPeople" parameterType="java.util.Map" resultType="int">
     	<![CDATA[
         	select count(id) from member where appid=#{appid} and recommendOneId = #{openid}
         ]]>
