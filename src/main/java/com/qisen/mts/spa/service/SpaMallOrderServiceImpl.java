@@ -294,7 +294,10 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 					if (resultMap.get("sign").equals(signature)) {
 						spaMallOrderDao.updatePayStatus(orderId, appid, totalMoney);
 						String openid = resultMap.get("openid");// 用户openid
-						SpaMember member = memberDao.queryByAppid(appid, openid);
+						SpaMember member = new SpaMember();
+						member.setAppid(appid);
+						member.setOpenid(openid);
+						member = memberDao.getMember(member);
 						createShopBonus(shop, member, order);// 推广收益
 						returnStr = setXML("SUCCESS", "OK");
 					} else {

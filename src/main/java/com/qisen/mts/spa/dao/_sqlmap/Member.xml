@@ -360,18 +360,14 @@
 	<select id="getMallMetaData" resultMap="mallMetaData"
 		parameterType="com.qisen.mts.spa.model.entity.SpaMember">
 		<![CDATA[
-        	select * from member where appid=#{appid} and openid =#{openid}
+        	select * from shops where appid=#{appid}
         ]]>
 	</select>
 	<resultMap type="com.qisen.mts.spa.model.entity.MetaData" id="mallMetaData">
 		<association property="shop" column="{appid=appid}"
 			select="getShop" />
-		<association property="member" column="{appid=appid,openid=openid}"
-			select="getMember" />
-		<association property="goodsTypes" column="{appid=appid,openid=openid}"
+		<association property="goodsTypes" column="{appid=appid}"
 			select="getGoodsTypes" />
-		<association property="memberAddress" column="{appid=appid,openid=openid}"
-			select="getMemberAddresss" />
 	</resultMap>
 
 	<select id="getShop" resultMap="shopInfo" parameterType="java.util.Map">
@@ -394,15 +390,6 @@
 		<result property="depotAddressId" column="depotAddressId" />
 		<result property="bonusNum" column="bonusNum" />
 		<result property="mchId" column="mchId" />
-		<association property="address"
-			column="{appid=appid,eid=eid,addressId=addressId}" javaType="com.qisen.mts.spa.model.entity.MemberAddress"
-			select="getAddress" />
-		<association property="depotAddress"
-			column="{appid=appid,eid=eid,depotAddressId=depotAddressId}"
-			javaType="com.qisen.mts.spa.model.entity.MemberAddress" select="getDepotAddress" />
-		<collection property="shopBonusList" column="{appid=appid,eid=eid}"
-			ofType="com.qisen.mts.spa.model.entity.ShopBonus" javaType="ArrayList"
-			select="getShopBonusList" />
 	</resultMap>
 
 	<select id="getAddress" parameterType="java.util.Map"
@@ -425,12 +412,6 @@
 	</select>
 
 
-	<select id="getMember" parameterType="java.util.Map"
-		resultType="com.qisen.mts.spa.model.entity.SpaMember">
-    	<![CDATA[
-        	select * from member where appid=#{appid} and openid = #{openid}
-        ]]>
-	</select>
 	
 	<select id="getGoodsTypes" parameterType="java.util.Map"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoodsType">
@@ -438,16 +419,35 @@
 			select * from goodsType where appid=#{appid} and status = '0'
 		]]>
 	</select>
+	
+	<!-- 获取会员信息 -->
+	<select id="getMember" parameterType="com.qisen.mts.spa.model.entity.SpaMember"
+		resultMap="memberInfo">
+    	<![CDATA[
+        	select * from member where appid=#{appid} and openid = #{openid}
+        ]]>
+	</select>
+	<resultMap type="com.qisen.mts.spa.model.entity.SpaMember" id="memberInfo">
+		<id property="id" column="id" />
+		<result property="eid" column="eid" />
+		<result property="appid" column="appid" />
+		<result property="avatarUrl" column="avatarUrl" />
+		<result property="name" column="name" />
+		<result property="createTime" column="createTime" />
+		<result property="mobile" column="mobile" />
+		<result property="totalMoney" column="totalMoney" />
+		<result property="balance" column="balance" />
+		<result property="status" column="status" />
+		<result property="recommendOneId" column="recommendOneId" />
+		<result property="recommendTwoId" column="recommendTwoId" />
+		<result property="recommendThreeId" column="recommendThreeId" />
+		<result property="openid" column="openid" />
+		<association property="memberAddress" column="{appid=appid,openid=openid}" select="getMemberAddresss" />
+	</resultMap>
 	<select id="getMemberAddresss" parameterType="java.util.Map"
 		resultType="com.qisen.mts.spa.model.entity.MemberAddress">
 		<![CDATA[
-			select * from member where appid=#{appid} and openid = #{openid}
-		]]>
-	</select>
-
-	<select id="queryByAppid" resultType="com.qisen.mts.spa.model.entity.SpaMember">
-		<![CDATA[
-			select * from member where appid=#{appid} and openid = #{openid}
+			select * from memberAddress where appid=#{appid} and openid = #{openid} order by id limit 1
 		]]>
 	</select>
 </mapper>

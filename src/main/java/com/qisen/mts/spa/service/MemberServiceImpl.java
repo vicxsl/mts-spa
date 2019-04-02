@@ -34,7 +34,6 @@ import com.qisen.mts.common.model.response.CommObjResponse;
 import com.qisen.mts.spa.dao.MemberDao;
 import com.qisen.mts.spa.dao.ShopDao;
 import com.qisen.mts.spa.model.entity.MetaData;
-import com.qisen.mts.spa.model.entity.SpaGoodsShopCar;
 import com.qisen.mts.spa.model.entity.SpaMember;
 import com.qisen.mts.spa.model.entity.SpaMyInfoGains;
 import com.qisen.mts.spa.model.entity.SpaShop;
@@ -61,8 +60,8 @@ public class MemberServiceImpl implements MemberService {
 	 * 商城登录
 	 */
 	@Override
-	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req) throws Exception{
-		CommObjResponse<MetaData> resp = new CommObjResponse<MetaData>();
+	public CommObjResponse<SpaMember> login(SpaRequest<SpaMember> req) throws Exception{
+		CommObjResponse<SpaMember> resp = new CommObjResponse<SpaMember>();
 		SpaMember query = req.getBody();
 		String appid = query.getAppid();
 		String js_code = query.getJs_code();// wx.login临时js_code
@@ -83,6 +82,36 @@ public class MemberServiceImpl implements MemberService {
 		if(count == 0 ){
 			memberDao.create(query);//新增或者更新会员
 		}
+		SpaMember member;
+		String memberStr = memcachedClient.get(openid);
+		if(memberStr==null){
+			member=memberDao.getMember(query);//查询metaData信息
+		}else{
+			member = JSONObject.toJavaObject(JSONObject.parseObject(memberStr), SpaMember.class);
+		}
+		member.setSession_key(session_key);
+		//添加到缓存中,两小时内有效
+		memcachedClient.delete(openid);
+		memcachedClient.add(openid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(member));
+		resp.setBody(member);
+		return resp;
+	}
+
+	/**
+	 * 商城metaData
+	 */
+	@Override
+	public CommObjResponse<MetaData> metaData(SpaRequest<SpaMember> req) throws Exception{
+		CommObjResponse<MetaData> resp = new CommObjResponse<MetaData>();
+		SpaMember query = req.getBody();
+		String appid = query.getAppid();
+		String shopStr = memcachedClient.get(appid);//从缓存中取商户信息
+		SpaShop shop = new SpaShop();
+		if(shopStr!=null){
+			shop = JSONObject.toJavaObject(JSONObject.parseObject(shopStr), SpaShop.class);
+		}else{
+			shop = shopDao.queryByAppId(appid);
+		}
 		MetaData metaData = memberDao.getMallMetaData(query);//查询metaData信息
 		if(shopStr==null){
 			shop=metaData.getShop();
@@ -90,14 +119,11 @@ public class MemberServiceImpl implements MemberService {
 			memcachedClient.delete(appid);
 			memcachedClient.add(appid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(shop));
 		}
-		SpaMember member = metaData.getMember();
-		member.setSession_key(session_key);
-		memcachedClient.delete(openid);
-		memcachedClient.add(openid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(member));
+		metaData.setShop(shop);
 		resp.setBody(metaData);
 		return resp;
 	}
-
+	
 	/**
 	 * 获取微信小程序 session_key 和 openid
 	 *

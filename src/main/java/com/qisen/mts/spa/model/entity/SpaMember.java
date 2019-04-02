@@ -18,12 +18,6 @@ public class SpaMember extends BaseEntity {
 	private String appid;
 	private String name;
 	private String avatarUrl;//会员头像
-	public String getAvatarUrl() {
-		return avatarUrl;
-	}
-	public void setAvatarUrl(String avatarUrl) {
-		this.avatarUrl = avatarUrl;
-	}
 	private String mobile;
 	private double totalMoney;//总金额
 	private double balance;//余额
@@ -35,6 +29,7 @@ public class SpaMember extends BaseEntity {
 	private String js_code;//临时会话码
 	private String session_key;//登录后的会话码
 	private String openid;//会员微信小程序openid
+	private MemberAddress memberAddress;//默认地址
 	private String status;// 状态:0正常,1停用,-1删除
 	public Integer getId() {
 		return id;
@@ -59,6 +54,12 @@ public class SpaMember extends BaseEntity {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 	public String getMobile() {
 		return mobile;
@@ -125,6 +126,12 @@ public class SpaMember extends BaseEntity {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	public MemberAddress getMemberAddress() {
+		return memberAddress;
+	}
+	public void setMemberAddress(MemberAddress memberAddress) {
+		this.memberAddress = memberAddress;
 	}
 	public String getStatus() {
 		return status;

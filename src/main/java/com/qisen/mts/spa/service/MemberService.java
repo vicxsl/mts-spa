@@ -17,7 +17,15 @@ public interface MemberService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public CommObjResponse<MetaData> login(SpaRequest<SpaMember> req) throws Exception;
+	public CommObjResponse<SpaMember> login(SpaRequest<SpaMember> req) throws Exception;
+	
+	/**
+	 * 商城metaData
+	 * @param req
+	 * @return
+	 * @throws Exception 
+	 */
+	public CommObjResponse<MetaData> metaData(SpaRequest<SpaMember> req) throws Exception;
 	
 	/**
 	 * 更新用户手机号码

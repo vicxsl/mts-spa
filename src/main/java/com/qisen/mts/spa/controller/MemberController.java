@@ -27,12 +27,30 @@ public class MemberController {
 	private MemberService memberService;
 
 
-//	商城登录
+	/**
+	 * 商城登录
+	 * @param req
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/login")
 	@ResponseBody
-	public CommObjResponse<MetaData> list(@RequestBody SpaRequest<SpaMember> req) throws Exception {
+	public CommObjResponse<SpaMember> list(@RequestBody SpaRequest<SpaMember> req) throws Exception {
 		return memberService.login(req);
 	}
+	
+	/**
+	 * 商城metaData信息
+	 * @param req
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/metaData")
+	@ResponseBody
+	public CommObjResponse<MetaData> metaData(@RequestBody SpaRequest<SpaMember> req) throws Exception {
+		return memberService.metaData(req);
+	}
+	
 	
 	@RequestMapping("/memberIncomeDetailsList")
 	@ResponseBody
