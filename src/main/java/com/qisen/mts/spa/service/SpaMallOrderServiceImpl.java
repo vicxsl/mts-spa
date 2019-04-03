@@ -111,6 +111,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				spaMallOrderDao.create(body);// 插入订单表
 				orderId = body.getId();
 				order = body;
+				logger.debug(orderId+"",body,order);
 				order.setStatus("1");
 				List<SpaInoutDepotDetail> details = body.getGoodsList();// 生成出入库明细
 				for (SpaInoutDepotDetail spaInoutDepotDetail : details) {
@@ -128,7 +129,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				address.setOrderId(orderId);
 				memberAddressDao.create(address);
 			}
-			if (order.getStatus().equals("0")) {
+			if (order.getStatus().equals("1")) {
 				JSONObject wxpayObject = wxPay(shop, order);// 生成微信预支付单
 				order.setWxpayObject(wxpayObject);
 			}
@@ -190,12 +191,14 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 	public JSONObject wxPay(SpaShop shop, SpaMallOrder body) throws Exception {
 		JSONObject wxpayObject = new JSONObject();
 		HashMap<String, String> dataMap = new HashMap<>();
+		String orderId = body.getId() + "";
+		String appid = shop.getAppid();
 		String key = shop.getSecret();// 微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置,API密钥是交易过程生成签名的密钥
-		dataMap.put("appid", shop.getAppid()); // 公众账号ID
+		dataMap.put("appid", appid); // 公众账号ID
 		dataMap.put("mch_id", shop.getMchId()); // 商户号
 		dataMap.put("nonce_str", WXPayUtil.generateNonceStr()); // 随机字符串，长度要求在32位以内。
 		dataMap.put("body", body.getOpenid()); // 商品描述
-		dataMap.put("out_trade_no", body.getId() + ""); // 商品订单号
+		dataMap.put("out_trade_no", orderId); // 商品订单号
 		dataMap.put("total_fee", String.valueOf(Math.round(body.getTotalMoney() * 100))); // 商品金
 		dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); // 客户端ip
 		dataMap.put("notify_url", notify_url); // 通知地址(假设是百度)
@@ -209,14 +212,21 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		// 发送参数,调用微信统一下单接口,返回xml
 		String responseXml = doPost(unifiedorderUrl, requestXml);
 		Map<String, String> map = WXPayUtil.xmlToMap(responseXml);
-		if (map.get("return_code").toString().equals("SUCCESS")
-				&& map.get("result_code").toString().equals("SUCCESS")) {
+		if (map.get("return_code").toString().equals("SUCCESS")){
+			
+		if(map.get("result_code").toString().equals("SUCCESS")) {
 			map.get("prepay_id");
 			wxpayObject.put("package", "prepay_id=" + map.get("prepay_id"));
 			wxpayObject.put("nonceStr", dataMap.get("nonce_str"));
 			wxpayObject.put("key", key);
 			wxpayObject.put("key", key);// paySignStr
 
+		}else if(map.get("result_code").toString().equals("FAIL")) {
+			if(map.get("err_code_des").toString().equals("该订单已支付")){
+				spaMallOrderDao.updatePayStatus(orderId, appid, body.getTotalMoney()+"");
+			}
+
+		}
 		}
 		return wxpayObject;
 	}
@@ -280,7 +290,6 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 				String totalMoney = new DecimalFormat("0.00").format(Double.valueOf(resultMap.get("total_fee")) / 100);// 订单总金额单位由分转为元
 				String orderId = resultMap.get("out_trade_no");// 系统订单id
 				SpaMallOrder order = spaMallOrderDao.getOrder(orderId, appid, totalMoney);
-				logger.debug(order.toString(), "存在此订单");
 				if (order == null || order.getId() == null) {
 					// 不存在此订单
 					returnStr = setXML("FAIL", "不存在此订单");
@@ -290,7 +299,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 							SpaShop.class);
 					// 生成签名
 					String signature = WXPayUtil.generateSignature(resultMap, shop.getSecret());
-					logger.debug(resultMap.get("sign"), "签名对比", signature);
+					logger.debug(resultMap.get("sign"), "签名对比", signature,shop);
 					if (resultMap.get("sign").equals(signature)) {
 						spaMallOrderDao.updatePayStatus(orderId, appid, totalMoney);
 						String openid = resultMap.get("openid");// 用户openid
@@ -330,61 +339,63 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		if (0 < num) {
 			//启用新零售推广机制
 			List<SpaIncomeDetails> list = new ArrayList<SpaIncomeDetails>();
-			for (ShopBonus shopBonus : shop.getShopBonusList()) {
-				int bonusLevel = shopBonus.getBonusLevel();
-				String bonusType = shopBonus.getBonusType();
-				double bonusValue = shopBonus.getBonusValue();
-				String bonusOpenid = null;
-				SpaIncomeDetails details = new SpaIncomeDetails();
-				details.setBuyOpenid(member.getOpenid());
-				details.setAppid(member.getAppid());
-				details.setEid(member.getEid());
-				details.setName(member.getName());
-				details.setOrderId(order.getId());
-				double money = 0;
-				double totalMoney=order.getTotalMoney();//订单支付金额
-				double orderProfit=order.getOrderProfit();//订单利润
-				if (bonusLevel == 1) {
-					// 第一层推广收益
-					bonusOpenid = member.getRecommendOneId();
-				} else if (bonusLevel == 2) {
-					// 第二层推广收益
-					bonusOpenid = member.getRecommendTwoId();
-				} else if (bonusLevel == 3) {
-					// 第二层推广收益
-					bonusOpenid = member.getRecommendThreeId();
-				}
-				if(num >= bonusLevel && null != bonusOpenid){
-					//启用到这一级推广并存在这一级推广人员
-					details.setLevel(bonusLevel + "");
-					details.setOpenid(bonusOpenid);
-					if("1".equals(bonusType)){
-						money = bonusValue;
-					}else if ("2".equals(bonusType)) {
-						money = totalMoney * bonusValue / 100;
-					}else if ("3".equals(bonusType) && 0 < orderProfit) {
-						money = orderProfit  * bonusValue / 100;
+			List<ShopBonus> shopBonusList = shop.getShopBonusList();
+			if(shopBonusList != null && shopBonusList.size() > 0){
+				for (ShopBonus shopBonus : shop.getShopBonusList()) {
+					int bonusLevel = shopBonus.getBonusLevel();
+					String bonusType = shopBonus.getBonusType();
+					double bonusValue = shopBonus.getBonusValue();
+					String bonusOpenid = null;
+					SpaIncomeDetails details = new SpaIncomeDetails();
+					details.setBuyOpenid(member.getOpenid());
+					details.setAppid(member.getAppid());
+					details.setEid(member.getEid());
+					details.setName(member.getName());
+					details.setOrderId(order.getId());
+					double money = 0;
+					double totalMoney=order.getTotalMoney();//订单支付金额
+					double orderProfit=order.getOrderProfit();//订单利润
+					if (bonusLevel == 1) {
+						// 第一层推广收益
+						bonusOpenid = member.getRecommendOneId();
+					} else if (bonusLevel == 2) {
+						// 第二层推广收益
+						bonusOpenid = member.getRecommendTwoId();
+					} else if (bonusLevel == 3) {
+						// 第二层推广收益
+						bonusOpenid = member.getRecommendThreeId();
 					}
-					details.setMoney(money);
-					list.add(details);
-					logger.debug("huolishuju");
-
-					logger.debug(bonusValue+"");
-
-					logger.debug(money+"");
-
-					logger.debug(details.toString());
-					logger.debug(totalMoney+"");
-					logger.debug(orderProfit+"");
+					if(num >= bonusLevel && null != bonusOpenid){
+						//启用到这一级推广并存在这一级推广人员
+						details.setLevel(bonusLevel + "");
+						details.setOpenid(bonusOpenid);
+						if("1".equals(bonusType)){
+							money = bonusValue;
+						}else if ("2".equals(bonusType)) {
+							money = totalMoney * bonusValue / 100;
+						}else if ("3".equals(bonusType) && 0 < orderProfit) {
+							money = orderProfit  * bonusValue / 100;
+						}
+						details.setMoney(money);
+						list.add(details);
+						logger.debug("huolishuju");
+	
+						logger.debug(bonusValue+"");
+	
+						logger.debug(money+"");
+	
+						logger.debug(details.toString());
+						logger.debug(totalMoney+"");
+						logger.debug(orderProfit+"");
+					}
+				}
+				if(0 < list.size()){
+					//生成推广收益单
+					incomeDetailsDao.saveList(list);
+					//更新收益人 推荐总金额
+					memberDao.updateTotalMoney(list);
 				}
 			}
-			if(0 < list.size()){
-				//生成推广收益单
-				incomeDetailsDao.saveList(list);
-				//更新收益人 推荐总金额
-				memberDao.updateTotalMoney(list);
-			}
-			
 		}
 	}
 }

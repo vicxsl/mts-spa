@@ -115,11 +115,11 @@ public class MemberServiceImpl implements MemberService {
 		MetaData metaData = memberDao.getMallMetaData(query);//查询metaData信息
 		if(shopStr==null){
 			shop=metaData.getShop();
-//			添加到缓存中,两小时内有效
-			memcachedClient.delete(appid);
-			memcachedClient.add(appid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(shop));
 		}
 		metaData.setShop(shop);
+		//添加到缓存中,两小时内有效
+		memcachedClient.delete(appid);
+		memcachedClient.add(appid, ConfigConsts.MAX_META_DATA_INTERVAL, JSON.toJSONString(shop));
 		resp.setBody(metaData);
 		return resp;
 	}

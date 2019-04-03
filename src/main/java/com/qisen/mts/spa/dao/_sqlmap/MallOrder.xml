@@ -89,7 +89,7 @@
 	<!-- 查询待支付订单 -->
 	<select id="getOrder" resultType="com.qisen.mts.spa.model.entity.SpaMallOrder">
 	    <![CDATA[
-        	select  * from mallOrder where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '0'  
+        	select  * from mallOrder where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '1'  
         ]]>
 	</select>
 

@@ -390,6 +390,7 @@
 		<result property="depotAddressId" column="depotAddressId" />
 		<result property="bonusNum" column="bonusNum" />
 		<result property="mchId" column="mchId" />
+		<collection property="shopBonusList" column="{appid=appid,eid=eid}" ofType="com.qisen.mts.spa.model.entity.ShopBonus" javaType="ArrayList" select="getShopBonusList" />
 	</resultMap>
 
 	<select id="getAddress" parameterType="java.util.Map"
