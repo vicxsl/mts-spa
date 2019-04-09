@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.qisen.mts.common.model.request.PageRequest;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.model.entity.SpaGoods;
 import com.qisen.mts.spa.model.entity.SpaImg;
 import com.qisen.mts.spa.model.request.SpaRequest;
@@ -29,7 +31,7 @@ public class GoodsController {
 //	查询商品列表接口
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommObjResponse<List<SpaGoods>> list(@RequestBody SpaRequest<SpaGoods> req) throws Exception {
+	public PageResponse<List<SpaGoods>> list(@RequestBody PageRequest<SpaGoods> req) throws Exception {
 		return goodsService.list(req);
 	}
 	

@@ -21,8 +21,8 @@ import com.qisen.mts.spa.model.entity.SpaShop;
 import com.qisen.mts.spa.model.request.SpaRequest;
 
 @Service
-public class ShopServiceImpl implements ShopService{
-	
+public class ShopServiceImpl implements ShopService {
+
 	@Autowired
 	private ShopDao shopDao;
 	@Autowired
@@ -33,7 +33,7 @@ public class ShopServiceImpl implements ShopService{
 	private SpaImgDao spaImgDao;
 	@Value("#{configProperties['ImgCos']}")
 	private String ImgCos;
-	
+
 	/**
 	 * 查询spa商户
 	 */
@@ -42,11 +42,11 @@ public class ShopServiceImpl implements ShopService{
 		CommObjResponse<SpaShop> resp = new CommObjResponse<SpaShop>();
 		JSONObject obj = req.getBody();
 		String appid = obj.getString("appid");
-		if(!obj.isEmpty() && !appid.isEmpty()){
+		if (!obj.isEmpty() && !appid.isEmpty()) {
 			SpaShop shop = shopDao.queryByAppId(appid);
 			resp.setBody(shop);
-		}else{
-			resp.setCode(MsgCode.SHOP_NOT_EXIST);//商户不存在
+		} else {
+			resp.setCode(MsgCode.SHOP_NOT_EXIST);// 商户不存在
 		}
 		return resp;
 	}
@@ -60,11 +60,11 @@ public class ShopServiceImpl implements ShopService{
 		SpaShop query = new SpaShop();
 		query.setEid(req.getEid());
 		List<SpaShop> list = shopDao.list(query);
-		for(SpaShop shop: list){
+		for (SpaShop shop : list) {
 			List<SpaImg> shopImgs = shop.getShopImgs();
-			if(shopImgs != null && shopImgs.size() > 0){
-				for(SpaImg img : shopImgs){
-					img.setImgUrl(ImgCos+img.getImgUrl());
+			if (shopImgs != null && shopImgs.size() > 0) {
+				for (SpaImg img : shopImgs) {
+					img.setImgUrl(ImgCos + img.getImgUrl());
 				}
 			}
 		}
@@ -80,8 +80,8 @@ public class ShopServiceImpl implements ShopService{
 		CommObjResponse<List<SpaShop>> resp = new CommObjResponse<List<SpaShop>>();
 		SpaShop query = new SpaShop();
 		query.setEid(req.getEid());
-		SpaShop spa =  req.getBody();
-		shopDao.edit(spa);//编辑商品名称，提成层级
+		SpaShop spa = req.getBody();
+		shopDao.edit(spa);// 编辑商品名称，提成层级
 		List<MemberAddress> memberAddressList = new ArrayList<MemberAddress>();
 		memberAddressList.add(spa.getAddress());
 		memberAddressList.add(spa.getDepotAddress());
@@ -89,9 +89,9 @@ public class ShopServiceImpl implements ShopService{
 		List<ShopBonus> shopBonusList = spa.getShopBonusList();
 		shopBonusDao.updateList(shopBonusList);
 		List<SpaImg> imgs = spa.getShopImgs();
-		for(SpaImg img : imgs){
+		for (SpaImg img : imgs) {
 			String imgurl = img.getImgUrl();
-			if(imgurl.indexOf(ImgCos) != -1){
+			if (imgurl.indexOf(ImgCos) != -1) {
 				imgurl = imgurl.replace(ImgCos, "");
 				img.setImgUrl(imgurl);
 			}
@@ -100,11 +100,23 @@ public class ShopServiceImpl implements ShopService{
 		spaImg.setAppid(spa.getAppid());
 		spaImg.setType("0");
 		spaImgDao.deleteList(spaImg);
-		spaImgDao.saveList(imgs);
+
+		if (null != imgs && imgs.size() > 0) {
+			spaImgDao.saveList(imgs);
+		}
 		List<SpaShop> list = shopDao.list(query);
+		for (SpaShop shop : list) {
+			List<SpaImg> shopImgs = shop.getShopImgs();
+			if (shopImgs != null && shopImgs.size() > 0) {
+				for (SpaImg img : shopImgs) {
+					img.setImgUrl(ImgCos + img.getImgUrl());
+				}
+			}
+		}
 		resp.setBody(list);
 		return resp;
 	}
+
 	/**
 	 * 查询轮播图urls,按顺序返回
 	 */
@@ -112,9 +124,9 @@ public class ShopServiceImpl implements ShopService{
 	public CommObjResponse<List<SpaImg>> shopsImgList(SpaRequest<SpaImg> req) {
 		CommObjResponse<List<SpaImg>> resp = new CommObjResponse<List<SpaImg>>();
 		List<SpaImg> imgList = shopDao.shopsImgList(req.getBody());
-		if(imgList != null && imgList.size() > 0){
-			for(SpaImg img : imgList){
-				img.setImgUrl(ImgCos+img.getImgUrl());
+		if (imgList != null && imgList.size() > 0) {
+			for (SpaImg img : imgList) {
+				img.setImgUrl(ImgCos + img.getImgUrl());
 			}
 		}
 		resp.setBody(imgList);

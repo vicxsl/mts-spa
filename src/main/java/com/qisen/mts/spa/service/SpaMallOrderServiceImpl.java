@@ -199,7 +199,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 		dataMap.put("nonce_str", WXPayUtil.generateNonceStr()); // 随机字符串，长度要求在32位以内。
 		dataMap.put("body", body.getOpenid()); // 商品描述
 		dataMap.put("out_trade_no", orderId); // 商品订单号
-		dataMap.put("total_fee", String.valueOf(Math.round(body.getTotalMoney() * 100))); // 商品金
+		dataMap.put("total_fee", String.valueOf(Math.round(body.getRealFee() * 100))); // 商品金
 		dataMap.put("spbill_create_ip", InetAddress.getLocalHost().getHostAddress()); // 客户端ip
 		dataMap.put("notify_url", notify_url); // 通知地址(假设是百度)
 		dataMap.put("trade_type", "JSAPI"); // 交易类型
@@ -223,7 +223,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 
 		}else if(map.get("result_code").toString().equals("FAIL")) {
 			if(map.get("err_code_des").toString().equals("该订单已支付")){
-				spaMallOrderDao.updatePayStatus(orderId, appid, body.getTotalMoney()+"");
+				spaMallOrderDao.updatePayStatus(orderId, appid, body.getRealFee()+"");
 			}
 
 		}
@@ -287,9 +287,9 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 			// 判断是否支付成功
 			if (resultMap.get("result_code").equals("SUCCESS")) {// 回调成功
 				String appid = resultMap.get("appid");
-				String totalMoney = new DecimalFormat("0.00").format(Double.valueOf(resultMap.get("total_fee")) / 100);// 订单总金额单位由分转为元
+				String realFee = new DecimalFormat("0.00").format(Double.valueOf(resultMap.get("total_fee")) / 100);// 订单总金额单位由分转为元
 				String orderId = resultMap.get("out_trade_no");// 系统订单id
-				SpaMallOrder order = spaMallOrderDao.getOrder(orderId, appid, totalMoney);
+				SpaMallOrder order = spaMallOrderDao.getOrder(orderId, appid, realFee);
 				if (order == null || order.getId() == null) {
 					// 不存在此订单
 					returnStr = setXML("FAIL", "不存在此订单");
@@ -301,7 +301,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 					String signature = WXPayUtil.generateSignature(resultMap, shop.getSecret());
 					logger.debug(resultMap.get("sign"), "签名对比", signature,shop);
 					if (resultMap.get("sign").equals(signature)) {
-						spaMallOrderDao.updatePayStatus(orderId, appid, totalMoney);
+						spaMallOrderDao.updatePayStatus(orderId, appid, realFee);
 						String openid = resultMap.get("openid");// 用户openid
 						SpaMember member = new SpaMember();
 						member.setAppid(appid);
@@ -353,7 +353,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 					details.setName(member.getName());
 					details.setOrderId(order.getId());
 					double money = 0;
-					double totalMoney=order.getTotalMoney();//订单支付金额
+					double realFee=order.getRealFee();//订单支付金额
 					double orderProfit=order.getOrderProfit();//订单利润
 					if (bonusLevel == 1) {
 						// 第一层推广收益
@@ -372,7 +372,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 						if("1".equals(bonusType)){
 							money = bonusValue;
 						}else if ("2".equals(bonusType)) {
-							money = totalMoney * bonusValue / 100;
+							money = realFee * bonusValue / 100;
 						}else if ("3".equals(bonusType) && 0 < orderProfit) {
 							money = orderProfit  * bonusValue / 100;
 						}
@@ -385,7 +385,7 @@ public class SpaMallOrderServiceImpl implements SpaMallOrderService {
 						logger.debug(money+"");
 	
 						logger.debug(details.toString());
-						logger.debug(totalMoney+"");
+						logger.debug(realFee+"");
 						logger.debug(orderProfit+"");
 					}
 				}

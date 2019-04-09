@@ -7,8 +7,8 @@
 	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaMallOrder"
 		useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			insert into mallOrder(id,eid,appid,openid,totalMoney,preFee,expressCost,realFee,goodsCost,bonusCost,orderProfit,inOutDepotId,flowNo,createTime,status) 
-			values (#{id},#{eid},#{appid},#{openid},#{totalMoney},#{preFee},#{expressCost},#{realFee},#{goodsCost},#{bonusCost},#{orderProfit},#{inOutDepotId},#{flowNo},unix_timestamp(now())*1000,'1')
+			insert into mallOrder(id,eid,appid,openid,totalMoney,preFee,shopPreference,shopFeeName,shopFeeId,expressCost,realFee,goodsCost,bonusCost,orderProfit,inOutDepotId,flowNo,createTime,status) 
+			values (#{id},#{eid},#{appid},#{openid},#{totalMoney},#{preFee},#{shopPreference},#{shopFeeName},#{shopFeeId},#{expressCost},#{realFee},#{goodsCost},#{bonusCost},#{orderProfit},#{inOutDepotId},#{flowNo},unix_timestamp(now())*1000,'1')
 		]]>
 	</insert>
 
@@ -39,6 +39,9 @@
 		<result property="openid" column="openid" />
 		<result property="totalMoney" column="totalMoney" />
 		<result property="preFee" column="preFee" />
+		<result property="shopPreference" column="shopPreference" />
+		<result property="shopFeeName" column="shopFeeName" />
+		<result property="shopFeeId" column="shopFeeId" />
 		<result property="expressCost" column="expressCost" />
 		<result property="realFee" column="realFee" />
 		<result property="flowNo" column="flowNo" />
@@ -89,13 +92,13 @@
 	<!-- 查询待支付订单 -->
 	<select id="getOrder" resultType="com.qisen.mts.spa.model.entity.SpaMallOrder">
 	    <![CDATA[
-        	select  * from mallOrder where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '1'  
+        	select  * from mallOrder where appid=#{appid} and id = #{id} and realFee=#{realFee} and status = '1'  
         ]]>
 	</select>
 
 	<update id="updatePayStatus">
 	 <![CDATA[
-        	update mallOrder set status = '2' where appid=#{appid} and id = #{id} and totalMoney=#{totalMoney} and status = '1'  
+        	update mallOrder set status = '2' where appid=#{appid} and id = #{id} and realFee=#{realFee} and status = '1'  
         ]]>
 	</update>
 	<!-- 发货 -->

@@ -23,8 +23,8 @@ public interface SpaMallOrderDao {
 	
 	List<SpaMallOrder> list(@Param("body")SpaMallOrder record,@Param("startIndex") Integer startIndex,@Param("pageSize")Integer pageSize);
 	
-	SpaMallOrder getOrder(@Param("id") String id,@Param("appid") String appid,@Param("totalMoney") String totalMoney);
+	SpaMallOrder getOrder(@Param("id") String id,@Param("appid") String appid,@Param("realFee") String realFee);
 	//更新支付状态
-	void updatePayStatus(@Param("id") String id,@Param("appid") String appid,@Param("totalMoney") String totalMoney);
+	void updatePayStatus(@Param("id") String id,@Param("appid") String appid,@Param("realFee") String realFee);
 
 }

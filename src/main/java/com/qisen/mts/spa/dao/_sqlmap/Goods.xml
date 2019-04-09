@@ -3,35 +3,6 @@
 
 <mapper namespace="com.qisen.mts.spa.dao.GoodsDao">
 
-	<!-- 通过手机号码检测账号是否存在 -->
-	<select id="check" resultType="int"
-		parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
-		<![CDATA[
-			select count(id)  from  goods 
-		]]>
-		<where>
-			<if test="no != null and no !=''">
-				<![CDATA[
-					 no = #{no} 
-				]]>
-			</if>
-			<if test="name != null and name !=''">
-				<![CDATA[
-					and name = #{name} 
-				]]>
-			</if>
-			<if test="barCode != null and barCode !=''">
-				<![CDATA[
-					and barCode = #{barCode} 
-				]]>
-			</if>
-			<if test="id != null and id >0">
-				<![CDATA[
-					and id != #{id} 
-				]]>
-			</if>
-		</where>
-	</select>
 	<select id="getGoodsByPara" parameterType="com.qisen.mts.spa.model.entity.SpaGoods"
 		resultType="com.qisen.mts.spa.model.entity.SpaGoods">
 		select t.id,t.num,t.appid,t.eid
@@ -39,43 +10,26 @@
 		t.id=#{id} and t.eid=#{eid} and t.appid = #{appid}
 	</select>
 
-	<!--新增商品 -->
-	<insert id="create" parameterType="com.qisen.mts.spa.model.entity.SpaGoods">
-		<![CDATA[
-			insert into goods(eid,appid,name,no,barCode,type,unit,spec,num,saleNum,buyingPrice,costPrice,salePrice,preferencePrice,status,describeText,remark) 
-			values(#{eid},#{appid},#{name},#{no},#{barCode},#{type},#{unit},#{spec},#{num},#{saleNum},#{buyingPrice},#{costPrice},#{salePrice},#{preferencePrice},0,#{describeText},#{remark})
-		]]>
-	</insert>
 	
 	<!-- 新增或编辑商品 -->
 	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaGoods" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-		<selectKey keyProperty="eid" resultType="int"
+		<selectKey keyProperty="checkId" resultType="int"
 			order="BEFORE">
 			<![CDATA[
-				select count(id) as eid from goods
+				select count(id) as checkId from goods
 			]]>
 			<where>
 				<![CDATA[
 					 appid = #{appid} 
 				]]>
-			<if test="no != null and no !=''">
+			<if test="id != null and id !=''">
 				<![CDATA[
-					and no = #{no} 
-				]]>
-			</if>
-			<if test="name != null and name !=''">
-				<![CDATA[
-					and name = #{name} 
-				]]>
-			</if>
-			<if test="barCode != null and barCode !=''">
-				<![CDATA[
-					and barCode = #{barCode} 
+					and id = #{id} 
 				]]>
 			</if>
 		</where>
 		</selectKey>
-		<if test="eid == 1">
+		<if test="checkId == 1">
     		<![CDATA[
 			update goods
 		]]>
@@ -110,9 +64,9 @@
 					 barCode = #{barCode},
 				 ]]>
 			</if>
-			<if test="type != null and type !=''">
+			<if test="typeId != null and typeId !=''">
 				<![CDATA[
-					 type = #{type},
+					 typeId = #{typeId},
 				 ]]>
 			</if>
 			<if test="unit != null and unit !=''">
@@ -135,6 +89,64 @@
 					 preferencePrice = #{preferencePrice},
 				 ]]>
 			</if>
+			<if test="beginSaledNum != null and beginSaledNum !=''">
+				<![CDATA[
+					 beginSaledNum = #{beginSaledNum},
+				 ]]>
+			</if>
+			<if test="activityEnable != null and activityEnable !=''">
+				<![CDATA[
+					 activityEnable = #{activityEnable},
+				 ]]>
+			</if>
+			<if test="activityPrice != null and activityPrice !=''">
+				<![CDATA[
+					 activityPrice = #{activityPrice},
+				 ]]>
+			</if>
+			
+			<if test="discountStartTime != null and discountStartTime !=''">
+				<![CDATA[
+					 discountStartTime = #{discountStartTime},
+				 ]]>
+			</if>
+			<if test="discountEndTime != null and discountEndTime !=''">
+				<![CDATA[
+					 discountEndTime = #{discountEndTime},
+				 ]]>
+			</if><if test="shareEnable != null and shareEnable !=''">
+				<![CDATA[
+					 shareEnable = #{shareEnable},
+				 ]]>
+			</if>
+			<if test="shareReduce != null and shareReduce !=''">
+				<![CDATA[
+					 shareReduce = #{shareReduce},
+				 ]]>
+			</if>
+			<if test="groupBuyingEnable != null and groupBuyingEnable !=''">
+				<![CDATA[
+					 groupBuyingEnable = #{groupBuyingEnable},
+				 ]]>
+			</if>
+			<if test="groupBuyingNumber != null and groupBuyingNumber !=''">
+				<![CDATA[
+					 groupBuyingNumber = #{groupBuyingNumber},
+				 ]]>
+			</if><if test="groupBuyingPrice != null and groupBuyingPrice !=''">
+				<![CDATA[
+					 groupBuyingPrice = #{groupBuyingPrice},
+				 ]]>
+			</if>
+			<if test="groupBuyingTime != null and groupBuyingTime !=''">
+				<![CDATA[
+					 groupBuyingTime = #{groupBuyingTime},
+				 ]]>
+			</if><if test="groupBuyingOverTime != null and groupBuyingOverTime !=''">
+				<![CDATA[
+					 groupBuyingOverTime = #{groupBuyingOverTime},
+				 ]]>
+			</if>
 		</set>
 		<where>
 			<![CDATA[
@@ -142,10 +154,14 @@
 			]]>
 		</where>
 		</if>
-		<if test="eid == 0">
+		<if test="checkId == 0">
 		    <![CDATA[
-				insert into goods(eid,appid,name,no,barCode,type,unit,spec,num,saleNum,buyingPrice,costPrice,salePrice,preferencePrice,status,describeText,remark) 
-				values(#{eid},#{appid},#{name},#{no},#{barCode},#{type},#{unit},#{spec},#{num},#{saleNum},#{buyingPrice},#{costPrice},#{salePrice},#{preferencePrice},0,#{describeText},#{remark})
+				insert into goods(eid,appid,name,no,barCode,typeId,unit,spec,num,saleNum,beginSaledNum,buyingPrice,
+					costPrice,salePrice,preferencePrice,status,describeText,activityEnable,activityPrice,discountStartTime,discountEndTime,shareEnable,shareReduce,groupBuyingEnable,
+					groupBuyingNumber,groupBuyingPrice,groupBuyingTime,groupBuyingOverTime) 
+				values(#{eid},#{appid},#{name},#{no},#{barCode},#{typeId},#{unit},#{spec},#{num},#{saleNum},#{beginSaledNum},#{buyingPrice},
+					#{costPrice},#{salePrice},#{preferencePrice},0,#{describeText},#{activityEnable},#{activityPrice},#{discountStartTime},#{discountEndTime},#{shareEnable},#{shareReduce},#{groupBuyingEnable}
+					#{groupBuyingNumber},#{groupBuyingPrice},#{groupBuyingTime},#{groupBuyingOverTime})
 			]]>
 		</if>
 	</insert>
@@ -204,9 +220,9 @@
 					 barCode = #{barCode},
 				 ]]>
 			</if>
-			<if test="type != null and type !=''">
+			<if test="typeId != null and typeId !=''">
 				<![CDATA[
-					 type = #{type},
+					 typeId = #{typeId},
 				 ]]>
 			</if>
 			<if test="unit != null and unit !=''">
@@ -247,43 +263,43 @@
 		]]>
 		<where>
 			<![CDATA[
-				appid = #{appid}
+				appid = #{body.appid}
 			]]>
-			<if test="eid != null and eid !=''">
+			<if test="body.eid != null and body.eid !=''">
 				<![CDATA[
-					and eid = #{eid} 
+					and eid = #{body.eid} 
 				]]>
 			</if>
-			<if test="no != null and no !=''">
+			<if test="body.no != null and body.no !=''">
 				<![CDATA[
-					and no = #{no} 
+					and no = #{body.no} 
 				]]>
 			</if>
-			<if test="name != null and name !=''">
+			<if test="body.name != null and body.name !=''">
 				<![CDATA[
-					and name = #{name} 
+					and name = #{body.name} 
 				]]>
 			</if>
-			<if test="status != null and status !=''">
+			<if test="body.typeId != null and body.typeId !=''">
 				<![CDATA[
-					and status = #{status} 
+					and typeId = #{body.typeId} 
 				]]>
 			</if>
 			<choose>
-				<when test="status !=null and status != ''">
+				<when test="body.status !=null and body.status != ''">
 					<![CDATA[
-						and status = #{status}
+						and status = #{body.status}
 					]]>
 				</when>
 				<otherwise>
 					<![CDATA[
-						and status != "-1"
+						and status != "-1" 
 					]]>
 				</otherwise>
 			</choose>
 		</where>
 		<![CDATA[
-			order by no+0
+			order by typeId,no+0 limit #{startIndex},#{pageSize}
 		]]>
 	</select>
 	<resultMap type="com.qisen.mts.spa.model.entity.SpaGoods" id="goodsInfo">
@@ -293,7 +309,7 @@
 		<result property="name" column="name" />
 		<result property="no" column="no" />
 		<result property="barCode" column="barCode" />
-		<result property="type" column="type" />
+		<result property="typeId" column="typeId" />
 		<result property="unit" column="unit" />
 		<result property="spec" column="spec" />
 		<result property="num" column="num" />
@@ -327,7 +343,7 @@
 		]]>
 		<where>
 			<![CDATA[
-				appid = #{appid} and eid = #{eid} and type in ("1","2") and goodsId=#{goodsId}
+				appid = #{appid} and eid = #{eid} and typeId in ("1","2") and goodsId=#{goodsId}
 			]]>
 
 			<if test="status != null and status !=''">

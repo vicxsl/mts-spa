@@ -29,10 +29,10 @@
 	
 	<!-- 新增或编辑商品 -->
 	<insert id="saveOrUpdate" parameterType="com.qisen.mts.spa.model.entity.SpaShopPreferential" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-		<selectKey keyProperty="eid" resultType="int"
+		<selectKey keyProperty="status" resultType="String"
 			order="BEFORE">
 			<![CDATA[
-				select count(id) as eid from shopsPreferential
+				select (count(id) +'') as status from shopsPreferential
 			]]>
 			<where>
 				<![CDATA[
@@ -45,64 +45,64 @@
 			</if>
 		</where>
 		</selectKey>
-		<if test="eid == 1">
+		<if test="status == 1">
     		<![CDATA[
-			update shopsPreferential
-		]]>
-		<set>
-			<if test="name != null and name !=''">
-				<![CDATA[
-					 name = #{name},
-				 ]]>
-			</if>
-			<if test="startTime != null and startTime !=''">
-				<![CDATA[
-					 startTime = #{startTime},
-				 ]]>
-			</if>
-			<if test="describeText != null and describeText !=''">
-				<![CDATA[
-					 describeText = #{describeText},
-				 ]]>
-			</if>
-			<if test="endTime != null and endTime !=''">
-				<![CDATA[
-					 endTime = #{endTime},
-				 ]]>
-			</if>
-			<if test="type != null and type !=''">
-				<![CDATA[
-					 type = #{type},
-				 ]]>
-			</if>
-			<if test="num != null and num !=''">
-				<![CDATA[
-					 num = #{num},
-				 ]]>
-			</if>
-			<if test="discount != null and discount !=''">
-				<![CDATA[
-					 discount = #{discount},
-				 ]]>
-			</if>
-			<if test="maxMoney != null and maxMoney !=''">
-				<![CDATA[
-					 maxMoney = #{maxMoney},
-				 ]]>
-			</if>
-			<if test="preFee != null and preFee !=''">
-				<![CDATA[
-					 preFee = #{preFee},
-				 ]]>
-			</if>
-		</set>
-		<where>
-			<![CDATA[
-				 appid = #{appid} and id=#{id}
+				update shopsPreferential
 			]]>
-		</where>
+			<set>
+				<if test="name != null and name !=''">
+					<![CDATA[
+						 name = #{name},
+					 ]]>
+				</if>
+				<if test="startTime != null and startTime !=''">
+					<![CDATA[
+						 startTime = #{startTime},
+					 ]]>
+				</if>
+				<if test="describeText != null and describeText !=''">
+					<![CDATA[
+						 describeText = #{describeText},
+					 ]]>
+				</if>
+				<if test="endTime != null and endTime !=''">
+					<![CDATA[
+						 endTime = #{endTime},
+					 ]]>
+				</if>
+				<if test="type != null and type !=''">
+					<![CDATA[
+						 type = #{type},
+					 ]]>
+				</if>
+				<if test="num != null and num !=''">
+					<![CDATA[
+						 num = #{num},
+					 ]]>
+				</if>
+				<if test="discount != null and discount !=''">
+					<![CDATA[
+						 discount = #{discount},
+					 ]]>
+				</if>
+				<if test="maxMoney != null and maxMoney !=''">
+					<![CDATA[
+						 maxMoney = #{maxMoney},
+					 ]]>
+				</if>
+				<if test="preFee != null and preFee !=''">
+					<![CDATA[
+						 preFee = #{preFee},
+					 ]]>
+				</if>
+			</set>
+			<where>
+				<![CDATA[
+					 appid = #{appid} and id=#{id}
+				]]>
+			</where>																				
 		</if>
-		<if test="eid == 0">
+		<if test="status == 0">
 		    <![CDATA[
 				insert into shopsPreferential(eid,appid,name,startTime,endTime,type,maxMoney,preFee,num,discount,describeText,status) 
 				values(#{eid},#{appid},#{name},#{startTime},#{endTime},#{type},#{maxMoney},#{preFee},#{num},#{discount},#{describeText},'0')

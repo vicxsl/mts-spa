@@ -19,6 +19,9 @@ public class SpaMallOrder extends BaseEntity {
 	private String openid;
 	private double totalMoney;//订单金额
 	private double preFee;//优惠金额
+	private double shopPreference;//商户优惠金额
+	private String shopFeeName;//商户优惠名称
+	private Integer shopFeeId;//商户优惠id
 	private double expressCost;//运输费用
 	private double realFee;//结算金额
 	private double goodsCost;//商品总成本
@@ -39,13 +42,6 @@ public class SpaMallOrder extends BaseEntity {
 	}
 	public Integer getEid() {
 		return eid;
-	}
-	
-	public JSONObject getWxpayObject() {
-		return wxpayObject;
-	}
-	public void setWxpayObject(JSONObject wxpayObject) {
-		this.wxpayObject = wxpayObject;
 	}
 	public void setEid(Integer eid) {
 		this.eid = eid;
@@ -73,6 +69,24 @@ public class SpaMallOrder extends BaseEntity {
 	}
 	public void setPreFee(double preFee) {
 		this.preFee = preFee;
+	}
+	public double getShopPreference() {
+		return shopPreference;
+	}
+	public void setShopPreference(double shopPreference) {
+		this.shopPreference = shopPreference;
+	}
+	public String getShopFeeName() {
+		return shopFeeName;
+	}
+	public void setShopFeeName(String shopFeeName) {
+		this.shopFeeName = shopFeeName;
+	}
+	public Integer getShopFeeId() {
+		return shopFeeId;
+	}
+	public void setShopFeeId(Integer shopFeeId) {
+		this.shopFeeId = shopFeeId;
 	}
 	public double getExpressCost() {
 		return expressCost;
@@ -140,5 +154,10 @@ public class SpaMallOrder extends BaseEntity {
 	public void setMemberAddress(MemberAddress memberAddress) {
 		this.memberAddress = memberAddress;
 	}
-	
+	public JSONObject getWxpayObject() {
+		return wxpayObject;
+	}
+	public void setWxpayObject(JSONObject wxpayObject) {
+		this.wxpayObject = wxpayObject;
+	}
 }

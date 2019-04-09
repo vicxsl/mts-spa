@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.qisen.mts.common.model.MsgCode;
+import com.qisen.mts.common.model.request.PageRequest;
 import com.qisen.mts.common.model.response.CommObjResponse;
+import com.qisen.mts.common.model.response.PageResponse;
 import com.qisen.mts.spa.dao.GoodsDao;
 import com.qisen.mts.spa.dao.SpaImgDao;
 import com.qisen.mts.spa.model.entity.SpaGoods;
@@ -30,8 +32,8 @@ public class GoodsServiceImpl implements GoodsService{
 	 * 新增spa商品
 	 */
 	@Override
-	public CommObjResponse<List<SpaGoods>> save(SpaRequest<SpaGoods> req) {
-		CommObjResponse<List<SpaGoods>> resp = new CommObjResponse<List<SpaGoods>>();
+	public PageResponse<List<SpaGoods>> save(SpaRequest<SpaGoods> req) {
+		PageResponse<List<SpaGoods>> resp = new PageResponse<List<SpaGoods>>();
 		SpaGoods spaGoods = req.getBody();
 		SpaGoods queryGoods = new SpaGoods();
 		queryGoods.setEid(spaGoods.getEid());
@@ -39,20 +41,23 @@ public class GoodsServiceImpl implements GoodsService{
 		goodsDao.saveOrUpdate(spaGoods);
 		List<SpaImg> imgs = spaGoods.getGoodsImgs();
 		imgs.addAll(spaGoods.getGoodsDetailImgs());
-		for(SpaImg img : imgs){
-			String imgurl = img.getImgUrl();
-			if(imgurl.indexOf(ImgCos) != -1){
-				imgurl = imgurl.replace(ImgCos, "");
-				img.setImgUrl(imgurl);
-			}
-			img.setGoodsId(spaGoods.getId());
-		}
+		
 		SpaImg spaImg = new SpaImg();
 		spaImg.setAppid(spaGoods.getAppid());
 		spaImg.setGoodsId(spaGoods.getId());
 		spaImgDao.deleteList(spaImg);
-		spaImgDao.saveList(imgs);
-		List<SpaGoods>  goodsList = goodsDao.list(queryGoods);
+		if(null != imgs && imgs.size() > 0 ){
+			for(SpaImg img : imgs){
+				String imgurl = img.getImgUrl();
+				if(imgurl.indexOf(ImgCos) != -1){
+					imgurl = imgurl.replace(ImgCos, "");
+					img.setImgUrl(imgurl);
+				}
+				img.setGoodsId(spaGoods.getId());
+			}
+			spaImgDao.saveList(imgs);
+		}
+		List<SpaGoods>  goodsList = goodsDao.list(queryGoods,0,20);
 		for(SpaGoods goods: goodsList){
 			List<SpaImg> goodsImgs = goods.getGoodsImgs();
 			List<SpaImg> goodsDetailImgs = goods.getGoodsDetailImgs();
@@ -86,7 +91,7 @@ public class GoodsServiceImpl implements GoodsService{
 		if (count == 0 ) {
 			resp.setCode(MsgCode.COMMON_MOBILE_EXIST);
 		}else{
-			List<SpaGoods>  spaList = goodsDao.list(query);
+			List<SpaGoods>  spaList = goodsDao.list(query,0,20);
 			resp.setBody(spaList);
 		}
 		return resp;
@@ -96,10 +101,10 @@ public class GoodsServiceImpl implements GoodsService{
 	 * 查询spa商品
 	 */
 	@Override
-	public CommObjResponse<List<SpaGoods>> list(SpaRequest<SpaGoods> req) {
-		CommObjResponse<List<SpaGoods>> resp = new CommObjResponse<List<SpaGoods>>();
+	public PageResponse<List<SpaGoods>> list(PageRequest<SpaGoods> req) {
+		PageResponse<List<SpaGoods>> resp = new PageResponse<List<SpaGoods>>();
 		SpaGoods spaGoods = req.getBody();
-		List<SpaGoods>  spaList = goodsDao.list(spaGoods);
+		List<SpaGoods>  spaList = goodsDao.list(spaGoods,req.getStartIndex(),req.getPageSize());
 		for(SpaGoods goods: spaList){
 			List<SpaImg> goodsImgs = goods.getGoodsImgs();
 			List<SpaImg> goodsDetailImgs = goods.getGoodsDetailImgs();

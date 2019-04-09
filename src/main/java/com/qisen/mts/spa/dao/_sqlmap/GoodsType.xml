@@ -107,9 +107,21 @@
 					and status = #{status} 
 				]]>
 			</if>
+			<choose>
+				<when test="status !=null and status != ''">
+					<![CDATA[
+						and status = #{status}
+					]]>
+				</when>
+				<otherwise>
+					<![CDATA[
+						and status != "-1" 
+					]]>
+				</otherwise>
+			</choose>
 		</where>
 		<![CDATA[
-			ORDER BY typeNo
+			ORDER BY typeNo+0
 		]]>
 	</select>
 

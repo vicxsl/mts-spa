@@ -23,6 +23,10 @@ public class FileController {
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
 	public CommObjResponse<SpaImg> uploadImage(MultipartHttpServletRequest  request)throws Exception {
-		return tenXunCosService.saveImage(request);
+//		腾讯云
+//		return tenXunCosService.saveImage(request);
+//		七牛云
+		return qiniuService.saveImage(request);
+		
 	}
 }

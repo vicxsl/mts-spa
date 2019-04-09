@@ -2,6 +2,7 @@ package com.qisen.mts.spa.gateway;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import javax.servlet.FilterChain;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 
 import com.alibaba.fastjson.JSON;
@@ -46,18 +49,19 @@ public class TokenFilter extends OncePerRequestFilter {
 		String token = null;
 //		未知上传什么内容使用，先保留--chali
 		if (request.getRequestURI().contains("/spa/file/upload") || request.getRequestURI().contains("/spa/mallOrder/changePayStatus")) {
-			if (multipartResolver == null)
-				multipartResolver = (MultipartResolver) SpringContextUtil.getBean("multipartResolver");
-			String lang = null;
-			if (multipartResolver.isMultipart(request)) {
-				// 防止流读取一次后就没有了
-				requestWrapper = multipartResolver.resolveMultipart(request);
-				token = requestWrapper.getParameter("token");
-//				lang = requestWrapper.getParameter("lang");
-			} else {
-				token = request.getParameter("token");
-				lang = request.getParameter("lang");
-			}
+//			if (multipartResolver == null)
+//				multipartResolver = (MultipartResolver) SpringContextUtil.getBean("multipartResolver");
+//			String lang = null;
+//			if (multipartResolver.isMultipart(request)) {
+//				// 防止流读取一次后就没有了
+//				requestWrapper = multipartResolver.resolveMultipart(request);
+//				token = requestWrapper.getParameter("token");
+////				lang = requestWrapper.getParameter("lang");
+//			} else {
+//				token = request.getParameter("token");
+//				lang = request.getParameter("lang");
+//			}
+
 			requestWrapper = request;
 //			requestWrapper.setAttribute("lang", lang);
 //			requestWrapper = request;
